@@ -1,5 +1,4 @@
-# Uml editor
-## Y'all wanna try to come up with a name for this program?
+# CHECK IT GA3
 
 ### Implemented:
 * Class Blocks
