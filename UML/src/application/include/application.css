@@ -1,0 +1,117 @@
+.mainPanel
+{
+	-fx-background-size: 40px;
+	-fx-background-repeat: repeat;
+	-fx-border-width: 1, 0 1.5 1.5 0; 
+	-fx-min-height: 661;
+	-fx-min-width: 1151;
+	-fx-padding: 15;
+}
+
+.classBlock
+{
+	-fx-grid-lines-visible: true;
+    -fx-background-insets: 1, 0 1 1 0 ;
+	-fx-min-width: 100;
+}
+
+.classBlockTitle
+{
+    
+	-fx-text-alignment: center;
+	-fx-alignment: center;
+	-fx-min-width: 100%;
+	-fx-padding: 2;	
+}
+
+.classBlockPanel
+{
+    -fx-padding: 2;	
+}
+
+.componentBlock
+{
+	-fx-grid-lines-visible: true;
+    -fx-background-insets: 1, 0 1 1 0 ;
+	-fx-min-width: 100;
+	-fx-min-height: 100;
+	-fx-background-color:#ffffff;
+}
+
+.componentLabel
+{
+	-fx-text-alignment: center;
+	-fx-alignment: center;
+	-fx-min-width: 100%;
+	-fx-padding: 2;	
+}
+
+.componentBlockPanel
+{
+    -fx-padding: 2;
+    -fx-text-alignment: center;
+	-fx-alignment: center;	
+}
+
+.portBlockIn
+{
+	-fx-grid-lines-visible: true;
+    -fx-background-insets: 1, 0 1 1 0 ;
+	-fx-min-width: 10;
+	-fx-min-height: 10;
+	-fx-background-color:rgb(255,0,0);
+}
+
+.portBlockOut
+{
+	-fx-grid-lines-visible: true;
+    -fx-background-insets: 1, 0 1 1 0 ;
+	-fx-min-width: 10;
+	-fx-min-height: 10;
+	-fx-background-color:rgb(0,0,255);
+}
+
+.componentLabel
+{
+	-fx-text-alignment: center;
+	-fx-alignment: center;
+	-fx-min-width: 100%;
+	-fx-padding: 2;	
+}
+
+
+.toolbarButtons
+{
+	-fx-min-height: 50;
+	-fx-min-width: 50;
+	-fx-padding: 20px;
+	-fx-spacing:5px;
+	-fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.toolbarButtonsColor{
+
+	}
+
+.toolbarButtonsHalf
+{
+	-fx-max-height: 30;
+	-fx-min-width: 49.5;
+}
+
+.left
+{
+	-fx-max-width: 200;
+}
+
+.link
+{
+	-fx-stroke-width: 2;
+}
+
+.pad
+{
+	-fx-background-insets: 0, 1;
+	-fx-padding: 15px;
+}
