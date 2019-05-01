@@ -44,7 +44,13 @@ public class Port  {
 		}
 
 		this.element = e;
-		((Component) element).setPorts(this);
+		 if (this.element instanceof Component) {
+			 ((Component) element).setPorts(this);	
+		}
+		 else if(this.element instanceof ComponentImplementation) {
+			 ((ComponentImplementation) element).setPorts(this);
+		 }
+		
 	}
 
 	/*****************************

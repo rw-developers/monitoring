@@ -23,62 +23,63 @@ import monitoring.elements.Component;
 
 public class NewPortWindow extends Stage {
 	// Dialog box elements
-	private GridPane newClassInterface = new GridPane();
-	private Text newClassTitle = new Text();
-	private TextField newClassName = new TextField();
+	private GridPane newPortInterface = new GridPane();
+	private Text newPortTitle = new Text();
+	private TextField newPortName = new TextField();
 	private Text csptitle = new Text();
 	private TextField cspexp = new TextField();
 	private Label cspmessage = new Label();
 
-	public Button newClassSubmit = new Button("Submit");
+	public Button newPortSubmit = new Button("Submit");
 	public Button deleteClass = new Button("Delete");
 	public Button cspval = new Button("Check CSP");
 
+	private Text typeTitle = new Text();
 	ObservableList<String> options = FXCollections.observableArrayList("IN", "OUT");
 	private ComboBox<String> newPortType = new ComboBox<String>(options);
 
 	/**
 	 * Constructs a NewPortWindow instance
 	 * 
-	 * @param editIndex
-	 *            The index of the class being edited. If a new class is being
-	 *            created, this value is -1.
-	 * @param data
-	 *            The Model to write data to.
+	 * @param editIndex The index of the class being edited. If a new class is being
+	 *                  created, this value is -1.
+	 * @param data      The Model to write data to.
 	 */
-	public NewPortWindow(int editIndex, Model data,ArchitectureElement elem) {
+	public NewPortWindow(int editIndex, Model data, ArchitectureElement elem) {
 		// Set window title
-		newClassTitle.setText((editIndex == -1) ? "Create Port Block" : "Edit Port Block");
+		newPortTitle.setText((editIndex == -1) ? "Create Port Block" : "Edit Port Block");
+		typeTitle.setText("Type");
 		csptitle.setText("CSP Expression");
-        cspexp.setPromptText("CSP");
+		cspexp.setPromptText("CSP");
 
 		// Attach elements to window
 		if (editIndex == -1) {
-			newClassName.setPromptText("Port name...");
+			newPortName.setPromptText("Port name...");
 
 		} else {
-			newClassName.setText(data.getPortModel(editIndex).getName());
+			newPortName.setText(data.getPortModel(editIndex).getName());
 			cspexp.setText(data.getPortModel(editIndex).getCsp());
 			newPortType.getSelectionModel().select(data.getPortModel(editIndex).getType());
 
 		}
-		
-		// Place elements on stage
-		
-		newClassInterface.add(newClassTitle, 0, 0, 2, 1);
-		newClassInterface.add(newClassName, 0, 1, 2, 1);
-		newClassInterface.add(newPortType, 0, 2, 2, 1);
-		newClassInterface.add(csptitle, 0, 3, 2, 1);
-		newClassInterface.add(cspexp, 0, 4, 2, 1); newClassInterface.add(cspval, 7,4,2,1);
-		newClassInterface.add(newClassSubmit, 1, 5);
-		newClassInterface.add(cspmessage, 1 ,9);
 
-		// Check for new 
+		// Place elements on stage
+
+		newPortInterface.add(newPortTitle, 0, 0, 2, 1);
+		newPortInterface.add(newPortName, 0, 1, 2, 1);
+		newPortInterface.add(typeTitle, 0 , 2, 2, 1);
+		newPortInterface.add(newPortType,1, 2, 2, 1);
+		newPortInterface.add(csptitle, 0, 3, 2, 1);
+		newPortInterface.add(cspexp, 0, 4, 2, 1);
+		newPortInterface.add(cspval, 7, 4, 2, 1);
+		newPortInterface.add(newPortSubmit, 1, 5);
+		newPortInterface.add(cspmessage, 1, 9);
+
+		// Check for new
 		if (editIndex != -1) {
-			newClassInterface.add(deleteClass, 1, 7);
+			newPortInterface.add(deleteClass, 1, 7);
 		}
 
-		
 		// Handler to submit the selected class
 		EventHandler<ActionEvent> submitClassEvent = new EventHandler<ActionEvent>() {
 			@Override
@@ -87,40 +88,41 @@ public class NewPortWindow extends Stage {
 				data.clearRedoState();
 
 				if (editIndex == -1) {
-					if(checkcsp()==1)
-						{
+					if (checkcsp() == 1) {
 						Alert.display("Error", "CSP Invalid !!! ");
-						}else {
-							
-					data.addPortModel(new int[] { data.getPortTail(),((Component)elem).getXPos()+90,
-							((Component)elem).getYPos()+((Component)elem).getPorts().size()*20+10
-							, 100, 100 },
-							new String[] { newClassName.getText(), newPortType.getSelectionModel().getSelectedItem(),cspexp.getText() },elem);
-				}
-				} else {
-					if(checkcsp()==1)
-					{
-						Alert.display("Error", "CSP Invalid !!! ");
+					} else {
+
+						data.addPortModel(
+								new int[] { data.getPortTail(), ((Component) elem).getXPos() + 240,
+										((Component) elem).getYPos() + ((Component) elem).getPorts().size() * 25 + 15,
+										100, 100 },
+								new String[] { newPortName.getText(),
+										newPortType.getSelectionModel().getSelectedItem(), cspexp.getText() },
+								elem);
 					}
-				else {
-					data.getPortModel(editIndex).setName(newClassName.getText());
-					data.getPortModel(editIndex).setType(newPortType.getSelectionModel().getSelectedItem());
-					data.getPortModel(editIndex).setCsp(cspexp.getText());
-				}		
+				} else {
+					if (checkcsp() == 1) {
+						Alert.display("Error", "CSP Invalid !!! ");
+					} else {
+						data.getPortModel(editIndex).setName(newPortName.getText());
+						data.getPortModel(editIndex).setType(newPortType.getSelectionModel().getSelectedItem());
+						data.getPortModel(editIndex).setCsp(cspexp.getText());
+					}
 				}
 				closeWindow();
 				e.consume();
 			}
 		};
 
-	EventHandler<ActionEvent> cspvalidation=new EventHandler<ActionEvent>(){@Override public void handle(ActionEvent e){
+		EventHandler<ActionEvent> cspvalidation = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				checkcsp();
+			}
+		};
 
-	int checker=checkcsp();
-
-	}};
-
-	// Handler to delete the selected class
-	EventHandler<ActionEvent> deleteClassEvent = new EventHandler<ActionEvent>() {
+		// Handler to delete the selected class
+		EventHandler<ActionEvent> deleteClassEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				data.removePortModel(editIndex);
@@ -130,12 +132,13 @@ public class NewPortWindow extends Stage {
 		};
 
 		// Attach handlers to buttons
-		newClassSubmit.setOnAction(submitClassEvent);
+		newPortSubmit.setOnAction(submitClassEvent);
 		deleteClass.setOnAction(deleteClassEvent);
 		cspval.setOnAction(cspvalidation);
 
 		// Display scene
-	Scene scene = new Scene(newClassInterface, 300, 230);this.setScene(scene);
+		Scene scene = new Scene(newPortInterface, 300, 230);
+		this.setScene(scene);
 
 	}
 
@@ -186,6 +189,5 @@ public class NewPortWindow extends Stage {
 
 		}
 
-		
 	}
 }

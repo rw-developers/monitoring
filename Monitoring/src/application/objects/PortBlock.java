@@ -82,6 +82,10 @@ public class PortBlock extends VBox {
 	public PortNode getComponent() {
 		return component;
 	}
+	
+	public void setComponent(PortNode component) {
+		this.component = component;
+	}
 
 	/**
 	 * Updates the PortBlock's LinkNode with correct height & width, now that it

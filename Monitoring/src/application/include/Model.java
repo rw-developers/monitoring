@@ -12,6 +12,7 @@ import java.util.Stack;
 //import application.include.Model.classStackData;
 import application.objects.PortBlock;
 import application.objects.ComponentBlock;
+import application.objects.ImplementationBlock;
 import application.objects.Link;
 import application.view.ProgramWindow;
 //import application.view.context.PortMenu;
@@ -21,6 +22,7 @@ import javafx.collections.ObservableList;
 import javafx.util.Callback;
 import monitoring.elements.ArchitectureElement;
 import monitoring.elements.Component;
+import monitoring.elements.ComponentImplementation;
 import monitoring.elements.Connector;
 import monitoring.elements.Port;
 
@@ -56,10 +58,12 @@ public class Model {
 	
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;
+	private ObservableList<ComponentImplementation> implementationList;
 	private ObservableList<Connector> linkList;
 
 	private List<PortBlock> ports;
 	private List<ComponentBlock> components;
+	private List<ImplementationBlock> implementations;
 	private List<Link> links;
 	private boolean createLinkMode = false;
 
@@ -90,6 +94,13 @@ public class Model {
 				return new Observable[] { param.getNameProp() };
 			}
 		});
+		
+		implementationList = FXCollections.observableArrayList(new Callback<ComponentImplementation, Observable[]>() {
+			@Override
+			public Observable[] call(ComponentImplementation param) {
+				return new Observable[] { param.getNameProp() };
+			}
+		});
 
 
 		linkList = FXCollections.observableArrayList(new Callback<Connector, Observable[]>() {
@@ -101,6 +112,7 @@ public class Model {
 
 		ports = new ArrayList<PortBlock>();
 		components = new ArrayList<ComponentBlock>();
+		implementations = new ArrayList<ImplementationBlock>();
 		links = new ArrayList<Link>();
 	}
 
@@ -112,7 +124,9 @@ public class Model {
 		return componentList;
 	}
 
-	
+	public ObservableList<ComponentImplementation> getImplementationProperty() {
+		return implementationList;
+	}
 
 	public ObservableList<Connector> getLinkProperty() {
 		return linkList;
@@ -125,7 +139,10 @@ public class Model {
 	public int getComponentTail() {
 		return componentList.size();
 	}
-
+	
+	public int getImplementationTail() {
+		return implementationList.size();
+	}
 
 	public int getLinkTail() {
 		return linkList.size();
@@ -138,8 +155,10 @@ public class Model {
 	public Component getComponentModel(int i) {
 		return componentList.get(i);
 	}
-
-
+	
+	public ComponentImplementation getImplementationModel(int i) {
+		return implementationList.get(i);
+	}
 
 	public Connector getLinkModel(int i) {
 		return linkList.get(i);
@@ -151,6 +170,10 @@ public class Model {
 
 	public ComponentBlock getComponent(int i) {
 		return components.get(i);
+	}
+	
+	public ImplementationBlock getImplementation(int i) {
+		return implementations.get(i);
 	}
 
 	public Link getLink(int i) {
@@ -182,10 +205,19 @@ public class Model {
 		refreshPortBlocks();
 
 	}
-
 	
+	public int addImplementationModel(int[] ints, String name,Component parent) {
+		if (ints.length == 5) {
+			implementationList.add(new ComponentImplementation(ints, name,parent));
+		}
+		return (implementationList.size() - 1);
+	}
 
-	
+	public void removeImplementationModel(int i) {
+		implementationList.remove(i);
+		refreshPortBlocks();
+
+	}
 
 	public void refreshLines() {
 		for (Link link : links)
@@ -218,6 +250,21 @@ public class Model {
 					(int) (componentList.get(i).getXPos() + components.get(i).getWidth()),
 					(int) (componentList.get(i).getYPos()),
 					(int) (componentList.get(i).getYPos() + components.get(i).getHeight()));
+		}
+	}
+	
+	public void prepImplementationBlocks() {
+		for (ImplementationBlock imp : implementations)
+			imp.prepWidthHeight();
+	}
+
+	public void refreshImplementationBlocks() {
+		for (int i = 0; i < implementations.size(); i++) {
+			implementations.get(i).initWidthHeight();
+			implementations.get(i).getNode().setBounds((int) (implementationList.get(i).getXPos()),
+					(int) (implementationList.get(i).getXPos() + implementations.get(i).getWidth()),
+					(int) (implementationList.get(i).getYPos()),
+					(int) (implementationList.get(i).getYPos() + implementations.get(i).getHeight()));
 		}
 	}
 
@@ -267,6 +314,15 @@ public class Model {
 
 	public void removeComponent(int i) {
 		components.remove(i);
+		// menuUpdate(i);
+	}
+	
+	public void addImplementation(ImplementationBlock in) {
+		implementations.add(in);
+	}
+
+	public void removeImplementation(int i) {
+		implementations.remove(i);
 		// menuUpdate(i);
 	}
 
@@ -583,6 +639,19 @@ public class Model {
 		}
 		writer.write("COMPONENT_LIST_END\n");
 		
+		writer.write("IMPLEMENTATION_LIST_START\n");
+		writer.write(implementationList.size() + "\n");
+		for (int i = 0; i != implementationList.size(); ++i) {
+			writer.write(implementationList.get(i).getIndex() + " ");
+			writer.write(implementationList.get(i).getXPos() + " ");
+			writer.write(implementationList.get(i).getYPos() + " ");
+			writer.write(implementationList.get(i).getWidth() + " ");
+			writer.write(implementationList.get(i).getHeight() + " \n\n");
+			writer.write(implementationList.get(i).getName() + " \n\n");
+			writer.write(implementationList.get(i).getComponentType().getIndex()+"\n\n");
+		}
+		writer.write("IMPLEMENTATION_LIST_END\n");
+		
 		writer.write("PORT_LIST_START\n");
 		writer.write(portList.size() + "\n");
 		for (int i = 0; i != portList.size(); ++i) {
@@ -594,7 +663,14 @@ public class Model {
 			writer.write(portList.get(i).getName() + " ");
 			writer.write(portList.get(i).getType() + " ");
 			writer.write(portList.get(i).getCsp() + " \n\n");
-			writer.write(((Component)portList.get(i).getElement()).getIndex() + " \n\n");
+			if(portList.get(i).getElement() instanceof Component) {
+				writer.write("1 ");
+				writer.write(((Component)portList.get(i).getElement()).getIndex() + " \n\n");
+			}
+			else {
+					writer.write("2 ");
+					writer.write(((ComponentImplementation)portList.get(i).getElement()).getIndex() + " \n\n");
+			}
 
 		}
 		writer.write("PORT_LIST_END\n");
@@ -682,7 +758,6 @@ public class Model {
 	 * @throws IOException Throws if the file can't be read from.
 	 */
 	public void load(File file) throws IOException {
-		this.clearRedoState();
 
 		Scanner reader = new Scanner(file);
 		reader.next();
@@ -719,19 +794,49 @@ public class Model {
 			reader.useDelimiter("\n");
 			reader.next();
 			reader.next();
+			String name =  reader.next().trim() ;
+			//reader.next();
+			reader.next();
+			String id = reader.next().trim();
+		
+			implementationList.add(new ComponentImplementation(ints, name,componentList.get(Integer.parseInt(id))));
+			reader.useDelimiter("\n");
+			reader.next();
+
+		}
+		reader.next();
+		reader.next();
+		
+		size = Integer.parseInt(reader.next().trim());
+		for (int i = 0; i != size; ++i) {
+
+			reader.useDelimiter(" ");
+
+			int[] ints = { Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+					Integer.parseInt(reader.next().trim()) };
+			reader.useDelimiter("\n");
+			reader.next();
+			reader.next();
 			reader.useDelimiter(" ");
 			String[] strings = { reader.next().trim(), reader.next().trim(), reader.next().trim() };
 			reader.useDelimiter("\n");
 			reader.next();
 			reader.next();
+			reader.useDelimiter(" ");
+			String token = reader.next().trim();
 			String id = reader.next().trim();
-			
+			if(Integer.parseInt(token) == 1) {
 			portList.add(new Port(ints, strings,componentList.get(Integer.parseInt(id))));
-			
+			}
+			else {
+			portList.add(new Port(ints, strings,implementationList.get(Integer.parseInt(id))));	
+			}
 			reader.useDelimiter("\n");
 			reader.next();
 
 		}
+		reader.next();
 		reader.next();
 		reader.next();
 
@@ -752,6 +857,7 @@ public class Model {
 		}
 
 		reader.close();
+		
 	}
 
 	/**
