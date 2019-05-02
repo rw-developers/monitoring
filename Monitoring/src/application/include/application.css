@@ -9,6 +9,7 @@
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
 
+
 .classBlock
 {
 	-fx-grid-lines-visible: true;
@@ -49,11 +50,35 @@
 	-fx-min-width: 100%;
 	-fx-padding: 2;	
 }
-.ComponentLab{
-	-fx-text-alignment: center;
-}
 
 .componentBlockPanel
+{
+    -fx-padding: 2;
+    -fx-text-alignment: center;
+	-fx-alignment: center;	
+}
+
+.implementationBlock
+{
+	-fx-grid-lines-visible: true;
+    -fx-background-insets: 1, 0 1 1 0 ;
+	-fx-min-width: 250;
+	-fx-min-height: 150;
+	-fx-background-color:rgb(77,102,204);
+	-fx-background-radius: 10;
+	-fx-font-family: "Arial Black", Gadget, sans-serif;
+	-fx-text-alignment: center ;
+}
+
+.implementationLabel
+{
+	-fx-text-alignment: center;
+	-fx-alignment: center;
+	-fx-min-width: 100%;
+	-fx-padding: 2;	
+}
+
+.implementationBlockPanel
 {
     -fx-padding: 2;
     -fx-text-alignment: center;

@@ -12,7 +12,7 @@ public class ImplementationBlock extends VBox {
 	
 	public ImplementationBlock(ComponentImplementation compIn,Component parent) {
 		// Set initial variables
-				this.getStyleClass().add("componentBlock");
+				this.getStyleClass().add("implementationBlock");
 				this.setHeight(100);
 				this.setWidth(300);
 
@@ -22,8 +22,8 @@ public class ImplementationBlock extends VBox {
 				name.updateText(compIn.getName()+":"+parent.getName());
 				
 				
-				label.getStyleClass().add("componentBlockLabel");
-				name.getStyleClass().add("componentBlockPanel");
+				label.getStyleClass().add("implementationBlockLabel");
+				name.getStyleClass().add("implementationBlockPanel");
 				
 
 				this.getChildren().add(label);
@@ -32,8 +32,7 @@ public class ImplementationBlock extends VBox {
 				node.setX(compIn.getXPos());
 				node.setY(compIn.getYPos());
 		
-		//this.getStyleClass().clear();
-		this.getStyleClass().add("implementaionBlock");
+				
 		
 	}
 

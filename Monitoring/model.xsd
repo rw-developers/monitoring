@@ -5,11 +5,21 @@
 		<xs:sequence>
 			<xs:element ref="Component"  minOccurs="1" maxOccurs="unbounded"/>
 			<xs:element ref="Connector" minOccurs="1" maxOccurs="unbounded"/>
+			<xs:element ref="Implementation"  minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="Configuration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Component" type="Component" />
 	<xs:complexType name="Component">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
+			<xs:element ref="Port" minOccurs="1" maxOccurs="unbounded" />
+			<xs:element ref="Component"  minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element ref="Connector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Implementation" type="Implementation" />
+	<xs:complexType name="Implementation">
 		<xs:sequence>
 			<xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1" />
 			<xs:element ref="Port" minOccurs="1" maxOccurs="unbounded" />
