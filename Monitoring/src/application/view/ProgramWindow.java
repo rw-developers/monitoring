@@ -16,7 +16,9 @@ import application.objects.Label;
 import application.objects.Link;
 import application.objects.Multiplicity;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.print.PageLayout;
 import javafx.print.PageOrientation;
 import javafx.print.Paper;
@@ -27,21 +29,32 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+import monitoring.elements.Configuration;
 
-public class ProgramWindow extends Stage {
 
+public class ProgramWindow<MouseEvent> extends Stage {
+
+	private static final EventType MouseEvent = null;
 	final private double DEFAULT_HEIGHT = 720.0;
 	final private double DEFAULT_WIDTH = 1280.0;
 	private Model data;
@@ -50,9 +63,14 @@ public class ProgramWindow extends Stage {
 
 	// Main Window elements
 	private BorderPane root = new BorderPane();
-	private GridPane tools = new GridPane();
+	private ToolBar tools = new ToolBar(); 
 	private ScrollPane center = new ScrollPane();
+	private VBox top = new VBox();
 	public Pane mainPanel = new Pane();
+	public TabPane appPanel = new TabPane();
+	public Tab mainComponentTab = new Tab("Main Components");
+	public Pane mainComponentTabPanel = new Pane();
+
 	private MenuBar menu = new MenuBar();
 
 	// Define menu elements
@@ -73,10 +91,16 @@ public class ProgramWindow extends Stage {
 	public MenuItem redo = new MenuItem("Redo...");
 
 	// Define tool panel elements
-
 	public Button newComponent = new Button("Add component");
-	public Button newImplementation = new Button("Add component\nImplementation");
+	public Button newConfiguration = new Button("Add configuration");
+	public Button newImplementation = new Button("Add Implementation");
 	public Button verif = new Button("Check Architecture");
+	
+	// define Tree 
+	private TreeView<TreeView> tree = new TreeView<TreeView>();
+	private TreeItem mainTree = new TreeItem();
+	private TreeItem confTree = new TreeItem();
+	private TreeItem componentTree = new TreeItem();
 
 	// public Button removePort = new Button("Delete...");
 	// public Button newLink = new Button("New link...");
@@ -87,17 +111,29 @@ public class ProgramWindow extends Stage {
 	// public Button redo = new Button("Redo...");
 
 	public ProgramWindow(Model dataIn) {
+		
 		Stage ref = this;
 		Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		
 
 		ref.setTitle("CheckIt [beta version]");
 		data = dataIn;
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
+		mainTree.setValue("Project");
+		confTree.setValue("Configurations");
+		componentTree.setValue("Main Components");
+		
 		center.setContent(mainPanel);
+		top.getChildren().addAll(menu,tools);
+		mainPanel.getChildren().add(appPanel);
+		appPanel.getTabs().addAll(mainComponentTab);
+		mainComponentTab.setContent(mainComponentTabPanel);
 		root.getStyleClass().add("root");
 		center.getStyleClass().add("center");
 		mainPanel.getStyleClass().add("mainPanel");
+		appPanel.getStyleClass().add("appPanel");
+		
 		menu.getStyleClass().add("menuColors");
 		file.getStyleClass().add("menuColors");
 		edit.getStyleClass().add("menuColors");
@@ -120,30 +156,31 @@ public class ProgramWindow extends Stage {
 		menu.getMenus().addAll(file, edit, view);
 
 		// Construct tool panel
-		newComponent.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
-		newImplementation.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
-		verif.getStyleClass().addAll("toolbarButtons", "toolbarButtonsColor");
+		newComponent.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		newConfiguration.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		newImplementation.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		verif.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		linkMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 
-		tools.add(newComponent, 0, 0, 2, 1);
-		tools.add(newImplementation, 0, 1, 2, 1);
-		tools.add(verif, 0, 2, 2, 1);
-		tools.add(dragMode, 0, 3);
-		dragMode.setSelected(true);
-		tools.add(linkMode, 1, 3);
+		tools.getItems().add(newConfiguration);
+		tools.getItems().add(newComponent);
+		tools.getItems().add(newImplementation);
+		tools.getItems().add(verif);
+		tools.getItems().add(dragMode);
+		tools.getItems().add(linkMode);
 
-//
-		// Creates a new class dialog upon click
-//		EventHandler<ActionEvent> newPortEvent = new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent e) {
-//				NewPortWindow dialog = new NewPortWindow(-1, data,elem);
-//				dialog.initModality(Modality.APPLICATION_MODAL);
-//				dialog.show();
-//				e.consume();
-//			}
-//		};
+		
+		// Creates a new configuration dialog upon click
+				EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent e) {
+						NewConfigurationWindow dialog = new NewConfigurationWindow(-1, data);
+						dialog.initModality(Modality.APPLICATION_MODAL);
+						dialog.show();
+						e.consume();
+					}
+				};
 
 		// Creates a new component dialog upon click
 		EventHandler<ActionEvent> newComponentEvent = new EventHandler<ActionEvent>() {
@@ -279,7 +316,11 @@ public class ProgramWindow extends Stage {
 				File file = dialog.showOpenDialog(ref);
 
 				if (file != null) {
-					mainPanel.getChildren().clear();
+					mainComponentTabPanel.getChildren().clear();
+					((Pane)appPanel.getTabs().get(1).getContent()).getChildren().clear();
+					for(int i=2;i<appPanel.getTabs().size();i++) {
+						appPanel.getTabs().remove(i);
+					}
 					data.clear();
 					try {
 						data.load(file);
@@ -356,11 +397,39 @@ public class ProgramWindow extends Stage {
 				data.refreshLines();
 			}
 		};
+		
+		tree.setOnMouseClicked(new EventHandler<Event>() {
+			
+			@Override
+			public void handle(Event event) {
+				     try {
+	                      MultipleSelectionModel selectionModel = tree.getSelectionModel();
+	                      TreeItem selectedTreeItem = (TreeItem) selectionModel.getSelectedItem();
+
+                            appPanel.getTabs().forEach(t->{
+                            	if(t.getText()== selectedTreeItem.getValue()) {
+                            		SingleSelectionModel<Tab> singleselectionModel = appPanel.getSelectionModel();
+                            		singleselectionModel.select(t);
+                            	}
+                            });
+				     }
+				     catch(Exception e) {
+				    	 
+				     }
+	                      
+	              }
+			});
+			
+		
+				
+
+		
 
 		// Apply handlers
 		verif.setOnAction(verifEvent);
 		newComponent.setOnAction(newComponentEvent);
 		newImplementation.setOnAction(newImplementationEvent);
+		newConfiguration.setOnAction(newConfigurationEvent);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
 
@@ -393,8 +462,10 @@ public class ProgramWindow extends Stage {
 		undo.setDisable(true);
 
 		// Place items on stage
-		root.setTop(menu);
-		root.setLeft(tools);
+		mainTree.getChildren().addAll(componentTree,confTree);
+		tree.setRoot(mainTree);
+		root.setTop(top);
+		root.setLeft(tree);
 		root.setCenter(center);
 		root.getCenter().getStyleClass().add("pad");
 
@@ -452,35 +523,126 @@ public class ProgramWindow extends Stage {
 	}
 
 	public void addPort(PortBlock in) {
-		mainPanel.getChildren().add(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().add(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+					
+					((Pane) t.getContent()).getChildren().add(in);	
+				}
+			});
+			
+		
+		}
+		//mainPanel.getChildren().add(in);
+	}
+	
+    public void addConfiguration(Tab in) {
+		
+	    appPanel.getTabs().add(in);
+	    in.setContent(new Pane());
+	    TreeItem conf = new TreeItem();
+	    conf.setValue(in.getText());
+	    confTree.getChildren().add(conf);
+		
+	    
+		//mainPanel.getChildren().add(in);
 	}
 
 	public void addComponent(ComponentBlock in) {
-		mainPanel.getChildren().add(in);
+		
+	    mainComponentTabPanel.getChildren().add(in);
+	    TreeItem comp = new TreeItem();
+	    comp.setValue(in.getName());
+	    componentTree.getChildren().add(comp);
+	    
+		//mainPanel.getChildren().add(in);
 	}
 	
 	public void addImplementation(ImplementationBlock in) {
-		mainPanel.getChildren().add(in);
+		if(appPanel.getTabs().get(0).isSelected()) {
+			((Pane) appPanel.getTabs().get(1).getContent()).getChildren().add(in);
+			TreeItem imp = new TreeItem();
+			imp.setValue(in.getName());
+			((TreeItem)confTree.getChildren().get(0)).getChildren().add(imp);
+		}
+		for(int i=1;i<appPanel.getTabs().size();i++){
+			if(appPanel.getTabs().get(i).isSelected() ) {
+				
+				((Pane) appPanel.getTabs().get(i).getContent()).getChildren().add(in);
+				TreeItem imp = new TreeItem();
+				imp.setValue(in.getName());
+				((TreeItem)confTree.getChildren().get(i-1)).getChildren().add(imp);
+			return;	
+			}
+		};
+		//mainPanel.getChildren().add(in);
 	}
 
 	public void removePort(PortBlock in) {
-		mainPanel.getChildren().remove(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().remove(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+					
+					((Pane) t.getContent()).getChildren().remove(in);	
+				}
+			});
+			
+		
+		}
+		//mainPanel.getChildren().remove(in);
+	}
+	
+	public void removeConfiguration(int in) {
+		appPanel.getTabs().remove(in);
 	}
 
 	public void removeComponent(ComponentBlock in) {
-		mainPanel.getChildren().remove(in);
+		mainComponentTabPanel.getChildren().remove(in);
 	}
 	
 	public void removeImplementation(ImplementationBlock in) {
-		mainPanel.getChildren().remove(in);
+		appPanel.getTabs().forEach(t->{
+			if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+				
+				((Pane) t.getContent()).getChildren().remove(in);	
+			}
+		});
 	}
 
 	public void addLink(Link in) {
-		mainPanel.getChildren().add(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().add(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected()) {
+					
+					((Pane) t.getContent()).getChildren().add(in);	
+				}
+			});
+		}
+		//mainPanel.getChildren().add(in);
 	}
 
 	public void addArrow(Arrow in) {
-		mainPanel.getChildren().add(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().add(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+					
+					((Pane) t.getContent()).getChildren().add(in);	
+				}
+			});
+		}
+		//mainPanel.getChildren().add(in);
 	}
 
 	/**
@@ -509,8 +671,22 @@ public class ProgramWindow extends Stage {
 	 * @param in The element to be removed
 	 */
 	public void remove(Link in) {
-		mainPanel.getChildren().remove(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().remove(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+					
+					((Pane) t.getContent()).getChildren().remove(in);	
+				}
+			});
+			
+		
+		}
+		//mainPanel.getChildren().remove(in);
 	}
+	
 
 	/**
 	 * Hands the model this window temporarily so it can properly remove all Links.
@@ -528,7 +704,20 @@ public class ProgramWindow extends Stage {
 	 * @param in The element to be removed
 	 */
 	public void remove(Arrow in) {
-		mainPanel.getChildren().remove(in);
+		if(mainComponentTab.isSelected()) {
+			mainComponentTabPanel.getChildren().remove(in);
+		}
+		else {
+			appPanel.getTabs().forEach(t->{
+				if(t.isSelected() && !t.equals(appPanel.getTabs().get(0))) {
+					
+					((Pane) t.getContent()).getChildren().remove(in);	
+				}
+			});
+			
+		
+		}
+		//mainPanel.getChildren().remove(in);
 	}
 
 	/**
@@ -538,6 +727,7 @@ public class ProgramWindow extends Stage {
 	 */
 	public void remove(Multiplicity in) {
 		mainPanel.getChildren().remove(in);
+		
 	}
 
 	/**

@@ -11,6 +11,7 @@
 
 package application;
 
+
 import application.include.Alert;
 import application.include.Model;
 import application.objects.PortBlock;
@@ -25,20 +26,24 @@ import application.view.NewLinkWindow;
 import application.view.ProgramWindow;
 import application.view.context.PortMenu;
 import application.view.context.ComponentMenu;
+import application.view.context.ImplementationMenu;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.control.Tab;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
+import monitoring.elements.Configuration;
 import monitoring.elements.Connector;
 import monitoring.elements.Port;
 
@@ -62,8 +67,10 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
+		
+		
 		data.getPortProperty().addListener(portListener());
+		data.getConfigurationProperty().addListener(configurationListener());
 		data.getComponentProperty().addListener(componentListener());
 		data.getImplementationProperty().addListener(implementationListener());
 		data.getLinkProperty().addListener(linkListener());
@@ -72,6 +79,7 @@ public class Main extends Application {
 			/**
 			 * Make the main window visible
 			 */
+			prepare();
 			window.show();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -698,6 +706,91 @@ public class Main extends Application {
 		return componentListener;
 	}
 	
+
+	private ListChangeListener<Configuration> configurationListener() {
+		ListChangeListener<Configuration> componentListener = new ListChangeListener<Configuration>() {
+			@Override
+			public void onChanged(Change<? extends Configuration> c) {
+				updateButtons();
+				while (c.next()) {
+
+					/*****************************
+					 * ELEMENT MODIFIED
+					 *****************************/
+
+					if (c.wasUpdated()) {
+						
+					} else {
+						/*****************************
+						 * ELEMENT ADDED
+						 *****************************/
+
+						if (c.wasAdded()) {
+							for (Configuration added : c.getAddedSubList()) {
+								
+								Tab newConfiguration = new Tab(added.getName());
+								addConfiguration(newConfiguration);
+
+
+
+								
+								((Pane) newConfiguration.getContent()).setOnMouseClicked(new EventHandler<MouseEvent>() {
+									@Override
+									public void handle(MouseEvent e) {
+										if (e.getButton().equals(MouseButton.PRIMARY)) {
+
+											if (e.getClickCount() == 2) {
+
+												NewImplementationWindow dialog = new NewImplementationWindow(-1, data);
+												dialog.initModality(Modality.APPLICATION_MODAL);
+												dialog.show();
+											}
+
+															e.consume();
+							
+										} else if (e.getButton() == MouseButton.SECONDARY) {
+										}
+									}
+								});
+								
+								
+								window.applyCss();
+
+
+							}
+						}
+
+						/*****************************
+						 * ELEMENT REMOVED
+						 *****************************/
+
+						else if (c.wasRemoved()) {
+							if (c.getList().size() != 0) {
+								for (Configuration removed : c.getRemoved()) {
+									int pivot = removed.getIndex();
+									
+
+									
+									
+									for (int i = pivot; i != data.getComponentTail(); ++i) {
+										data.getConfigurationModel(i).setIndex(i);
+									}
+
+									// erase componentes (+2 because of main Component Tab and main Configuration Tab)
+									window.removeConfiguration(removed.getIndex()+2);
+								}
+							} else {
+
+							}
+						}
+					}
+				}
+			}
+
+		};
+		return componentListener;
+	}
+	
 	private ListChangeListener<ComponentImplementation> implementationListener() {
 		ListChangeListener<ComponentImplementation> componentListener = new ListChangeListener<ComponentImplementation>() {
 			@Override
@@ -726,7 +819,7 @@ public class Main extends Application {
 								ImplementationBlock newComponentImplementation = new ImplementationBlock(added,added.getComponentType());
 								newComponentImplementation.setLayoutX((double) added.getXPos());
 								newComponentImplementation.setLayoutY((double) added.getYPos());
-								ComponentMenu componentContextMenu = new ComponentMenu(added.getIndex(), data);
+								ImplementationMenu componentContextMenu = new ImplementationMenu(added.getIndex(), data);
 								// data.addMenu(added.getIndex(), componentContextMenu);
 								
 								
@@ -1300,6 +1393,10 @@ public class Main extends Application {
 		data.addPort(in);
 		window.addPort(in);
 	}
+	
+	private void addConfiguration(Tab in) {
+		window.addConfiguration(in);
+	}
 
 	private void addComponent(ComponentBlock in) {
 		data.addComponent(in);
@@ -1318,6 +1415,28 @@ public class Main extends Application {
 		window.addArrow(in.getArrow());
 		window.addMultiplicity(in.getSrcMultiplicity());
 		window.addMultiplicity(in.getDestMultiplicity());
+	}
+	
+	private void prepare() {
+		data.addConfigurationModel(data.getConfigurationTail(), "Main Configuration");				
+		((Pane) window.mainComponentTab.getContent()).setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				if (e.getButton().equals(MouseButton.PRIMARY)) {
+
+					if (e.getClickCount() == 2) {
+
+						NewComponentWindow dialog = new NewComponentWindow(-1, data);
+						dialog.initModality(Modality.APPLICATION_MODAL);
+						dialog.show();
+					}
+					e.consume();
+				} else if (e.getButton() == MouseButton.SECONDARY) {
+				}
+			}
+		});
+
+		
 	}
 
 	public static void main(String[] args) {

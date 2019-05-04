@@ -24,6 +24,10 @@ public class Panel extends HBox {
 	public void updateText(String in) {
 		text.setText(in);
 	}
+	
+	public Text getText() {
+		return text;
+	}
 
 	/**
 	 * Checks whether the panel stores any text or not

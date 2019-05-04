@@ -23,6 +23,7 @@ import javafx.util.Callback;
 import monitoring.elements.ArchitectureElement;
 import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
+import monitoring.elements.Configuration;
 import monitoring.elements.Connector;
 import monitoring.elements.Port;
 
@@ -55,7 +56,7 @@ public class Model {
 
 
 
-	
+	private ObservableList<Configuration> configurationList;
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;
 	private ObservableList<ComponentImplementation> implementationList;
@@ -81,10 +82,12 @@ public class Model {
 	 * @constructor
 	 */
 	public Model() {
-		portList = FXCollections.observableArrayList(new Callback<Port, Observable[]>() {
+
+		
+		configurationList = FXCollections.observableArrayList(new Callback<Configuration, Observable[]>() {
 			@Override
-			public Observable[] call(Port param) {
-				return new Observable[] { param.getNameProp(), param.getTypeProp() };
+			public Observable[] call(Configuration param) {
+				return new Observable[] { param.getNameProp() };
 			}
 		});
 
@@ -99,6 +102,13 @@ public class Model {
 			@Override
 			public Observable[] call(ComponentImplementation param) {
 				return new Observable[] { param.getNameProp() };
+			}
+		});
+		
+		portList = FXCollections.observableArrayList(new Callback<Port, Observable[]>() {
+			@Override
+			public Observable[] call(Port param) {
+				return new Observable[] { param.getNameProp(), param.getTypeProp() };
 			}
 		});
 
@@ -118,6 +128,10 @@ public class Model {
 
 	public ObservableList<Port> getPortProperty() {
 		return portList;
+	}
+	
+	public ObservableList<Configuration> getConfigurationProperty() {
+		return configurationList;
 	}
 
 	public ObservableList<Component> getComponentProperty() {
@@ -140,6 +154,10 @@ public class Model {
 		return componentList.size();
 	}
 	
+	public int getConfigurationTail() {
+		return configurationList.size();
+	}
+	
 	public int getImplementationTail() {
 		return implementationList.size();
 	}
@@ -152,6 +170,10 @@ public class Model {
 		return portList.get(i);
 	}
 
+	public Configuration getConfigurationModel(int i) {
+		return configurationList.get(i);
+	}
+	
 	public Component getComponentModel(int i) {
 		return componentList.get(i);
 	}
@@ -192,6 +214,17 @@ public class Model {
 
 		refreshLines();
 	}
+	
+	public int addConfigurationModel(int id,String name) {
+			configurationList.add(new Configuration(id,name));
+		return (configurationList.size() - 1);
+	}
+
+	public void removeConfigurationModel(int i) {
+		configurationList.remove(i);
+		//deleteImplementation
+
+	}
 
 	public int addComponentModel(int[] ints, String name) {
 		if (ints.length == 5) {
@@ -205,6 +238,8 @@ public class Model {
 		refreshPortBlocks();
 
 	}
+	
+	
 	
 	public int addImplementationModel(int[] ints, String name,Component parent) {
 		if (ints.length == 5) {

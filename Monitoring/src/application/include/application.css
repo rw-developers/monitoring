@@ -8,6 +8,15 @@
 	-fx-padding: 15;
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
+.appPanel{
+	-fx-background-size: 40px;
+	-fx-background-repeat: repeat;
+	-fx-border-width: 1, 0 1.5 1.5 0; 
+	-fx-min-height: 661;
+	-fx-min-width: 1151;
+	-fx-font-family: "Lucida Console", Monaco, monospace;
+}
+
 
 
 .classBlock

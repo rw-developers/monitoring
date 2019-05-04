@@ -35,6 +35,9 @@ public class ImplementationBlock extends VBox {
 				
 		
 	}
+	public String getName() {
+		return name.getText().getText();
+	}
 
 	public void setName(String nameIn) {
 		name.updateText(nameIn);

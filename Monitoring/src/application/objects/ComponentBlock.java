@@ -42,6 +42,10 @@ public class ComponentBlock extends VBox {
 		name.updateText(nameIn);
 	}
 	
+	public String getName() {
+		return name.getText().getText();
+	}
+	
 	/**
 	 * Returns the PortNode to attach ports to
 	 * 

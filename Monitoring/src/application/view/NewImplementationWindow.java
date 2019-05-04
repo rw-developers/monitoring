@@ -37,6 +37,8 @@ public class NewImplementationWindow extends Stage {
 
 			} else {
 				newImplementationName.setText(data.getImplementationModel(editIndex).getName());
+				parent = new ComboBox<Component>(data.getComponentProperty());
+				parent.getSelectionModel().select(data.getImplementationModel(editIndex).getComponentType());
 			}
 
 			// Place elements on stage

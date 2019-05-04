@@ -126,7 +126,6 @@ public class Component extends ArchitectureElement {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return this.getName();
 	}
 }
