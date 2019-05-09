@@ -2,6 +2,7 @@ package application.view.context;
 
 import application.include.Model;
 import application.view.NewImplementationWindow;
+import application.view.ProgramWindow;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -12,6 +13,7 @@ public class ImplementationMenu extends ContextMenu{
 	
 	int index;
 	Model data;
+	ProgramWindow window;
 	MenuItem edit = new MenuItem("Edit...");
 	MenuItem delete = new MenuItem("Delete");
 		
@@ -22,7 +24,7 @@ public class ImplementationMenu extends ContextMenu{
 	EventHandler<ActionEvent> editEvent = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent e) {
-			NewImplementationWindow dialog = new NewImplementationWindow(index, data);
+			NewImplementationWindow dialog = new NewImplementationWindow(index, data,window);
 			dialog.initModality(Modality.APPLICATION_MODAL);
 			dialog.show();
 			e.consume();
@@ -48,9 +50,10 @@ public class ImplementationMenu extends ContextMenu{
 	 * 
 	 * WARNING: index contains stale data (index is never updated, no easy way to update)
 	 */
-	public ImplementationMenu(int i, Model dataIn) {
+	public ImplementationMenu(int i, Model dataIn,ProgramWindow w) {
 		index = i;
 		data = dataIn;
+		window = w;
 
 		edit.setOnAction(editEvent);
 		delete.setOnAction(deleteEvent);

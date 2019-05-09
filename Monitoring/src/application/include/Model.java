@@ -47,14 +47,11 @@ public class Model {
 		private String name;
 		private String type;
 	}
-	
 
 	public class linkStackData {
 		private int[] intData = new int[8];
 		private String label;
 	}
-
-
 
 	private ObservableList<Configuration> configurationList;
 	private ObservableList<Port> portList;
@@ -70,10 +67,10 @@ public class Model {
 
 	/*
 	 * This class uses the portList and connectionList ports to represent all the
-	 * elements being stored in the diagram. Using two separate ports to store
-	 * this data will, I think, make it easier to extend if we get to the point
-	 * where we want to add additional features, as well as providing a relatively
-	 * simple structure to dump and reload in order to save and load files.
+	 * elements being stored in the diagram. Using two separate ports to store this
+	 * data will, I think, make it easier to extend if we get to the point where we
+	 * want to add additional features, as well as providing a relatively simple
+	 * structure to dump and reload in order to save and load files.
 	 */
 
 	/**
@@ -83,7 +80,6 @@ public class Model {
 	 */
 	public Model() {
 
-		
 		configurationList = FXCollections.observableArrayList(new Callback<Configuration, Observable[]>() {
 			@Override
 			public Observable[] call(Configuration param) {
@@ -97,21 +93,20 @@ public class Model {
 				return new Observable[] { param.getNameProp() };
 			}
 		});
-		
+
 		implementationList = FXCollections.observableArrayList(new Callback<ComponentImplementation, Observable[]>() {
 			@Override
 			public Observable[] call(ComponentImplementation param) {
 				return new Observable[] { param.getNameProp() };
 			}
 		});
-		
+
 		portList = FXCollections.observableArrayList(new Callback<Port, Observable[]>() {
 			@Override
 			public Observable[] call(Port param) {
 				return new Observable[] { param.getNameProp(), param.getTypeProp() };
 			}
 		});
-
 
 		linkList = FXCollections.observableArrayList(new Callback<Connector, Observable[]>() {
 			@Override
@@ -129,7 +124,7 @@ public class Model {
 	public ObservableList<Port> getPortProperty() {
 		return portList;
 	}
-	
+
 	public ObservableList<Configuration> getConfigurationProperty() {
 		return configurationList;
 	}
@@ -153,11 +148,11 @@ public class Model {
 	public int getComponentTail() {
 		return componentList.size();
 	}
-	
+
 	public int getConfigurationTail() {
 		return configurationList.size();
 	}
-	
+
 	public int getImplementationTail() {
 		return implementationList.size();
 	}
@@ -173,11 +168,11 @@ public class Model {
 	public Configuration getConfigurationModel(int i) {
 		return configurationList.get(i);
 	}
-	
+
 	public Component getComponentModel(int i) {
 		return componentList.get(i);
 	}
-	
+
 	public ComponentImplementation getImplementationModel(int i) {
 		return implementationList.get(i);
 	}
@@ -193,7 +188,7 @@ public class Model {
 	public ComponentBlock getComponent(int i) {
 		return components.get(i);
 	}
-	
+
 	public ImplementationBlock getImplementation(int i) {
 		return implementations.get(i);
 	}
@@ -214,15 +209,15 @@ public class Model {
 
 		refreshLines();
 	}
-	
-	public int addConfigurationModel(int id,String name) {
-			configurationList.add(new Configuration(id,name));
+
+	public int addConfigurationModel(int id, String name) {
+		configurationList.add(new Configuration(id, name));
 		return (configurationList.size() - 1);
 	}
 
 	public void removeConfigurationModel(int i) {
 		configurationList.remove(i);
-		//deleteImplementation
+		// deleteImplementation
 
 	}
 
@@ -238,12 +233,10 @@ public class Model {
 		refreshPortBlocks();
 
 	}
-	
-	
-	
-	public int addImplementationModel(int[] ints, String name,Component parent) {
+
+	public int addImplementationModel(int[] ints, String name, Component parent, Configuration conf) {
 		if (ints.length == 5) {
-			implementationList.add(new ComponentImplementation(ints, name,parent));
+			implementationList.add(new ComponentImplementation(ints, name, parent, conf));
 		}
 		return (implementationList.size() - 1);
 	}
@@ -287,7 +280,7 @@ public class Model {
 					(int) (componentList.get(i).getYPos() + components.get(i).getHeight()));
 		}
 	}
-	
+
 	public void prepImplementationBlocks() {
 		for (ImplementationBlock imp : implementations)
 			imp.prepWidthHeight();
@@ -302,8 +295,6 @@ public class Model {
 					(int) (implementationList.get(i).getYPos() + implementations.get(i).getHeight()));
 		}
 	}
-
-
 
 	/**
 	 * Removes the Connector object stored at index i and decrements later indices
@@ -327,9 +318,9 @@ public class Model {
 	 * @param label The label to be passed to the ConnectionModel constructor.
 	 * @return the index of the new ConnectionModel object
 	 */
-	public int addLinkModel(int[] ints, String label) {
+	public int addLinkModel(int[] ints, String label,Configuration config) {
 		if (ints.length == 8) {
-			linkList.add(new Connector(ints, label));
+			linkList.add(new Connector(ints, label,config));
 		}
 		return (linkList.size() - 1);
 	}
@@ -351,7 +342,7 @@ public class Model {
 		components.remove(i);
 		// menuUpdate(i);
 	}
-	
+
 	public void addImplementation(ImplementationBlock in) {
 		implementations.add(in);
 	}
@@ -360,8 +351,6 @@ public class Model {
 		implementations.remove(i);
 		// menuUpdate(i);
 	}
-
-
 
 	public void addLink(Link in) {
 		links.add(in);
@@ -611,7 +600,7 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label));
+				linkList.add(new Connector(ints, label,null));
 			}
 		}
 
@@ -647,7 +636,7 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label));
+				linkList.add(new Connector(ints, label,null));
 			}
 		}
 		duringRedo = false;
@@ -673,7 +662,7 @@ public class Model {
 			writer.write(componentList.get(i).getName() + " \n\n");
 		}
 		writer.write("COMPONENT_LIST_END\n");
-		
+
 		writer.write("IMPLEMENTATION_LIST_START\n");
 		writer.write(implementationList.size() + "\n");
 		for (int i = 0; i != implementationList.size(); ++i) {
@@ -683,10 +672,10 @@ public class Model {
 			writer.write(implementationList.get(i).getWidth() + " ");
 			writer.write(implementationList.get(i).getHeight() + " \n\n");
 			writer.write(implementationList.get(i).getName() + " \n\n");
-			writer.write(implementationList.get(i).getComponentType().getIndex()+"\n\n");
+			writer.write(implementationList.get(i).getComponentType().getIndex() + "\n\n");
 		}
 		writer.write("IMPLEMENTATION_LIST_END\n");
-		
+
 		writer.write("PORT_LIST_START\n");
 		writer.write(portList.size() + "\n");
 		for (int i = 0; i != portList.size(); ++i) {
@@ -698,18 +687,17 @@ public class Model {
 			writer.write(portList.get(i).getName() + " ");
 			writer.write(portList.get(i).getType() + " ");
 			writer.write(portList.get(i).getCsp() + " \n\n");
-			if(portList.get(i).getElement() instanceof Component) {
+			if (portList.get(i).getElement() instanceof Component) {
 				writer.write("1 ");
-				writer.write(((Component)portList.get(i).getElement()).getIndex() + " \n\n");
-			}
-			else {
-					writer.write("2 ");
-					writer.write(((ComponentImplementation)portList.get(i).getElement()).getIndex() + " \n\n");
+				writer.write(((Component) portList.get(i).getElement()).getIndex() + " \n\n");
+			} else {
+				writer.write("2 ");
+				writer.write(((ComponentImplementation) portList.get(i).getElement()).getIndex() + " \n\n");
 			}
 
 		}
 		writer.write("PORT_LIST_END\n");
-		
+
 		writer.write("LINKLIST_BEGIN\n");
 		writer.write(linkList.size() + "\n");
 		for (int i = 0; i != linkList.size(); ++i) {
@@ -728,18 +716,25 @@ public class Model {
 		writer.close();
 	}
 
-	public void saveXml(File file) throws IOException {
+	public void saveXml(File file,Configuration conf) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
-		writer.write("<Configuration>\n");
-		for (int i = 0; i != componentList.size(); ++i) {
-			writer.write("<Component>\n");
-			writer.write("<name>");
-			writer.write(componentList.get(i).getName());
-			writer.write("</name>\n");
-			componentList.get(i).getPorts().forEach(port -> {
-
+		writer.write("<Architecture>\n");
+		
+			try {
+				writer.write("<Configuration>\n");
+			} catch (Exception e) {
+			}
+			conf.getComponents().forEach(comp -> {
 				try {
+					writer.write("<Component>\n");
+					writer.write("<name>");
+					writer.write(comp.getName());
+					writer.write("</name>\n");
+				} catch (Exception e) {
+				}
+				comp.getPorts().forEach(port -> {
+					try {
 						writer.write("<Port>\n");
 						writer.write("<name>");
 						writer.write(port.getName());
@@ -748,41 +743,52 @@ public class Model {
 						writer.write(port.getType());
 						writer.write("</type>\n");
 						writer.write("</Port>\n");
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					} catch (Exception e) {
+					}
+				});
+				try {
+					writer.write("</Component>\n");
+				} catch (Exception e) {
 				}
-			});
 
-			writer.write("</Component>\n");
-		}
+			});
+			conf.getConnectors().forEach(c->{
+				try {
+					writer.write("<Connector>\n");
+					writer.write("<name>");
+					writer.write(portList.get(c.getSource()).getName() + "->"
+							+ portList.get(c.getDest()).getName());
+					writer.write("</name>\n");
+					writer.write("<Port_In>\n");
+					writer.write("<name>");
+					writer.write(portList.get(c.getDest()).getName());
+					writer.write("</name>\n");
+					writer.write("<type>");
+					writer.write(portList.get(c.getDest()).getType());
+					writer.write("</type>\n");
+					writer.write("</Port_In>\n");
+					writer.write("<Port_Out>\n");
+					writer.write("<name>");
+					writer.write(portList.get(c.getSource()).getName());
+					writer.write("</name>\n");
+					writer.write("<type>");
+					writer.write(portList.get(c.getDest()).getType());
+					writer.write("</type>\n");
+					writer.write("</Port_Out>\n");
+					writer.write("</Connector>\n");
+				} catch (Exception e) {
+				}	
+			});
+				
+			
+			try {
+				writer.write("</Configuration>\n");
+			} catch (Exception e) {
+			}
+
 		
-		for (int i = 0; i != linkList.size(); ++i) {
-			writer.write("<Connector>\n");
-			writer.write("<name>");
-			writer.write(portList.get(linkList.get(i).getSource()).getName() + "->"
-					+ portList.get(linkList.get(i).getDest()).getName());
-			writer.write("</name>\n");
-			writer.write("<Port_In>\n");
-			writer.write("<name>");
-			writer.write(portList.get(linkList.get(i).getDest()).getName());
-			writer.write("</name>\n");
-			writer.write("<type>");
-			writer.write(portList.get(linkList.get(i).getDest()).getType());
-			writer.write("</type>\n");
-			writer.write("</Port_In>\n");
-			writer.write("<Port_Out>\n");
-			writer.write("<name>");
-			writer.write(portList.get(linkList.get(i).getSource()).getName());
-			writer.write("</name>\n");
-			writer.write("<type>");
-			writer.write(portList.get(linkList.get(i).getDest()).getType());
-			writer.write("</type>\n");
-			writer.write("</Port_Out>\n");
-			writer.write("</Connector>\n");
-		}
-		writer.write("</Configuration>\n");
+		writer.write("</Architecture>\n");
+
 		writer.close();
 	}
 
@@ -808,8 +814,8 @@ public class Model {
 			reader.useDelimiter("\n");
 			reader.next();
 			reader.next();
-			String name =  reader.next().trim() ;
-		
+			String name = reader.next().trim();
+
 			componentList.add(new Component(ints, name));
 			reader.useDelimiter("\n");
 			reader.next();
@@ -817,7 +823,7 @@ public class Model {
 		}
 		reader.next();
 		reader.next();
-		
+
 		size = Integer.parseInt(reader.next().trim());
 		for (int i = 0; i != size; ++i) {
 
@@ -829,19 +835,20 @@ public class Model {
 			reader.useDelimiter("\n");
 			reader.next();
 			reader.next();
-			String name =  reader.next().trim() ;
-			//reader.next();
+			String name = reader.next().trim();
+			// reader.next();
 			reader.next();
 			String id = reader.next().trim();
-		
-			implementationList.add(new ComponentImplementation(ints, name,componentList.get(Integer.parseInt(id))));
+
+			// implementationList.add(new ComponentImplementation(ints,
+			// name,componentList.get(Integer.parseInt(id))));
 			reader.useDelimiter("\n");
 			reader.next();
 
 		}
 		reader.next();
 		reader.next();
-		
+
 		size = Integer.parseInt(reader.next().trim());
 		for (int i = 0; i != size; ++i) {
 
@@ -861,11 +868,10 @@ public class Model {
 			reader.useDelimiter(" ");
 			String token = reader.next().trim();
 			String id = reader.next().trim();
-			if(Integer.parseInt(token) == 1) {
-			portList.add(new Port(ints, strings,componentList.get(Integer.parseInt(id))));
-			}
-			else {
-			portList.add(new Port(ints, strings,implementationList.get(Integer.parseInt(id))));	
+			if (Integer.parseInt(token) == 1) {
+				portList.add(new Port(ints, strings, componentList.get(Integer.parseInt(id))));
+			} else {
+				portList.add(new Port(ints, strings, implementationList.get(Integer.parseInt(id))));
 			}
 			reader.useDelimiter("\n");
 			reader.next();
@@ -888,11 +894,11 @@ public class Model {
 			reader.next();
 			String label = reader.next().trim();
 
-			linkList.add(new Connector(ints, label));
+			linkList.add(new Connector(ints, label,null));
 		}
 
 		reader.close();
-		
+
 	}
 
 	/**

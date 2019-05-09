@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="Architecture" type="Architecture"/>
+	<xs:complexType name="Architecture">
+		<xs:sequence>
+			<xs:element ref="Configuration" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
 <xs:element name="Configuration" type="Configuration"/>
 	<xs:complexType name="Configuration">
 		<xs:sequence>
 			<xs:element ref="Component"  minOccurs="1" maxOccurs="unbounded"/>
 			<xs:element ref="Connector" minOccurs="1" maxOccurs="unbounded"/>
-			<xs:element ref="Implementation"  minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element ref="Configuration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>

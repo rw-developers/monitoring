@@ -39,7 +39,7 @@ public class NewLinkWindow extends Stage {
 	 * @param data
 	 *            The model to write data to
 	 */
-	public NewLinkWindow(int editIndex, Model data) {
+	public NewLinkWindow(int editIndex, Model data,ProgramWindow window) {
 
 
 		// Place elements on Dialog
@@ -70,14 +70,18 @@ public class NewLinkWindow extends Stage {
 
 					try {
 
-						
-
+						int confId = 0;
+						for (int i = 1; i < window.appPanel.getTabs().size(); i++) {
+							if (window.appPanel.getTabs().get(i).isSelected()) {
+								confId = i - 1;
+							}
+						}
 						if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
 							data.addLinkModel(
 									new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
 											srcIn, destIn, -2, -2, -2, -2
 											},
-									"");
+									"",data.getConfigurationModel(confId));
 						}
 					} catch (NumberFormatException ex) {
 					}

@@ -11,18 +11,21 @@ public class ComponentImplementation extends ArchitectureElement {
 	private int[] intData = new int[5];
 	private StringProperty name = new SimpleStringProperty();
 	private List<Port> ports = new ArrayList<Port>();
-	private List<Component>  components = new ArrayList<Component>();
+	private List<ComponentImplementation>  implementations = new ArrayList<ComponentImplementation>();
 	private Component componentType;
+	private Configuration configuration;
 	
 	private final int STEP = 1;
 	
-	public ComponentImplementation(int[] intsIn, String nameIn,Component parent) {
+	public ComponentImplementation(int[] intsIn, String nameIn,Component parent,Configuration conf) {
 		if (intsIn.length == 5) {
 			intData = intsIn;
 		}
 		name.set(nameIn);
 		this.componentType = parent;
 		this.componentType.setImplementations(this);
+		this.configuration = conf;
+		this.configuration.setImplementations(this);
 	}
 	/*****************************
 	 * SETTERS
@@ -64,8 +67,12 @@ public class ComponentImplementation extends ArchitectureElement {
 		this.ports.add(port);
 	}
 	
-	public void setComponents(Component component) {
-		this.components.add(component);
+	public void setImplementations(ComponentImplementation implementation) {
+		this.implementations.add(implementation);
+	}
+	
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
 	}
 	
 	/*****************************
@@ -105,8 +112,8 @@ public class ComponentImplementation extends ArchitectureElement {
 		return ports;
 	}
 	
-	public List<Component> getComponents() {
-		return components;
+	public List<ComponentImplementation> getImplementations() {
+		return implementations;
 	}
 	
 	@Override
@@ -120,5 +127,9 @@ public class ComponentImplementation extends ArchitectureElement {
 	
 	public Component getComponentType() {
 		return componentType;
+	}
+	
+	public Configuration getConfiguration() {
+		return configuration;
 	}
 }

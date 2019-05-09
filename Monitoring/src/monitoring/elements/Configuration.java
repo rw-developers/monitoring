@@ -18,7 +18,8 @@ public class Configuration extends ArchitectureElement {
 	 */
 	private int index;
 	private StringProperty name = new SimpleStringProperty();
-	private List<Component> components = new ArrayList<Component>();
+	private List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
+	private List<Connector> connectors = new ArrayList<Connector>();
 	private List<Configuration> configurations = new ArrayList<Configuration>();
 	
 
@@ -39,12 +40,16 @@ public class Configuration extends ArchitectureElement {
 		name.set(n);
 	}
 	
-	public void setComponents(Component component) {
-		this.components.add(component);
+	public void setImplementations(ComponentImplementation implementation) {
+		this.implementations.add(implementation);
 	}
 	
 	public void setConfigurations(Configuration configuration) {
 		this.configurations.add(configuration);
+	}
+	
+	public void setConnectors(Connector connector) {
+		this.connectors.add(connector);
 	}
 	
 	
@@ -64,17 +69,23 @@ public class Configuration extends ArchitectureElement {
 		return name;
 	}
 	
-	public List<Component> getComponents() {
-		return components;
+	public List<ComponentImplementation> getComponents() {
+		return implementations;
 	}
 	
 	public List<Configuration> getConfigurations() {
 		return configurations;
 	}
 	
+	public List<Connector> getConnectors() {
+		return connectors;
+	}
+	
 	@Override
 	public String toString() {
 		return this.getName();
 	}
+	
+	
 
 }

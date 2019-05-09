@@ -33,6 +33,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -118,8 +119,12 @@ public class Main extends Application {
 								    portNode = data.getComponent(idComp).getNode();
 								}
 								else {
+									int idconfig = ((ComponentImplementation)added.getElement()).getConfiguration().getIndex();
+									SingleSelectionModel<Tab> singleselectionModel = window.appPanel.getSelectionModel();
+                            		singleselectionModel.select(window.appPanel.getTabs().get(idconfig+1));
 									int idComp = ((ComponentImplementation) added.getElement()).getIndex();
 								    portNode = data.getImplementation(idComp).getNode();
+								    
 								}
 								
 								PortBlock newPort = new PortBlock(added, portNode);
@@ -283,7 +288,8 @@ public class Main extends Application {
 													added.getXPos() + e.getX(), added.getYPos() + e.getY());
 											line.setStroke(Color.GRAY);
 											line.getStrokeDashArray().addAll(3.0);
-											window.mainPanel.getChildren().add(line);
+											
+											((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().add(line);
 											line.toBack();
 										}
 									}
@@ -303,8 +309,8 @@ public class Main extends Application {
 												} else {
 													if (linkSrc != added.getIndex() && linkSrc != -1) {
 														// Create link window, with filled in src/dest
-														window.mainPanel.getChildren().remove(line);
-														NewLinkWindow dialog = new NewLinkWindow(-1, data);
+														((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().remove(line);
+														NewLinkWindow dialog = new NewLinkWindow(-1, data,window);
 														dialog.setSrc(linkSrc);
 														dialog.setDest(added.getIndex());
 														dialog.initModality(Modality.APPLICATION_MODAL);
@@ -322,12 +328,12 @@ public class Main extends Application {
 								});
 
 								// Handles erasing temp line on mouse release
-								window.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+								((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
 
-										if (window.mainPanel.getChildren().contains(line)) {
-											window.mainPanel.getChildren().remove(line);
+										if (((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().contains(line)) {
+											((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().remove(line);
 											window.applyCss();
 
 										}
@@ -340,7 +346,7 @@ public class Main extends Application {
 								// Display class
 								addPort(newPort);
 								newPort.toFront();
-								window.applyCss();
+								((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).applyCss();
 								newPort.initWidthHeight();
 
 								// Set the bounds of the PortBlock within the LinkNode
@@ -708,7 +714,7 @@ public class Main extends Application {
 	
 
 	private ListChangeListener<Configuration> configurationListener() {
-		ListChangeListener<Configuration> componentListener = new ListChangeListener<Configuration>() {
+		ListChangeListener<Configuration> configurationListener = new ListChangeListener<Configuration>() {
 			@Override
 			public void onChanged(Change<? extends Configuration> c) {
 				updateButtons();
@@ -716,6 +722,7 @@ public class Main extends Application {
 
 					/*****************************
 					 * ELEMENT MODIFIED
+					 * 
 					 *****************************/
 
 					if (c.wasUpdated()) {
@@ -741,7 +748,7 @@ public class Main extends Application {
 
 											if (e.getClickCount() == 2) {
 
-												NewImplementationWindow dialog = new NewImplementationWindow(-1, data);
+												NewImplementationWindow dialog = new NewImplementationWindow(-1, data,window);
 												dialog.initModality(Modality.APPLICATION_MODAL);
 												dialog.show();
 											}
@@ -788,7 +795,7 @@ public class Main extends Application {
 			}
 
 		};
-		return componentListener;
+		return configurationListener;
 	}
 	
 	private ListChangeListener<ComponentImplementation> implementationListener() {
@@ -819,7 +826,7 @@ public class Main extends Application {
 								ImplementationBlock newComponentImplementation = new ImplementationBlock(added,added.getComponentType());
 								newComponentImplementation.setLayoutX((double) added.getXPos());
 								newComponentImplementation.setLayoutY((double) added.getYPos());
-								ImplementationMenu componentContextMenu = new ImplementationMenu(added.getIndex(), data);
+								ImplementationMenu componentContextMenu = new ImplementationMenu(added.getIndex(), data,window);
 								// data.addMenu(added.getIndex(), componentContextMenu);
 								
 								
@@ -997,45 +1004,14 @@ public class Main extends Application {
 								newComponentImplementation.setOnMouseClicked(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
-										// Check for double click coming from primary mouse button
-										if (e.getButton().equals(MouseButton.PRIMARY)) {
-											if (e.getClickCount() == 1) {
-												// Launch component edit window
-												NewImplementationWindow dialog = new NewImplementationWindow(added.getIndex(),
-														data);
-												dialog.initModality(Modality.APPLICATION_MODAL);
-												dialog.show();
-											}
-											componentContextMenu.hide();
-											e.consume();
-										} else if (e.getButton() == MouseButton.SECONDARY) {
+									 if (e.getButton() == MouseButton.SECONDARY) {
 											componentContextMenu.show(newComponentImplementation, e.getScreenX(), e.getScreenY());
 										}
 
 									}
 								});
 
-								newComponentImplementation.setOnMouseClicked(new EventHandler<MouseEvent>() {
-									@Override
-									public void handle(MouseEvent e) {
-										if (e.getButton().equals(MouseButton.PRIMARY)) {
-
-											if (e.getClickCount() == 2) {
-
-												NewPortWindow dialog = new NewPortWindow(-1, data, added);
-												dialog.initModality(Modality.APPLICATION_MODAL);
-												dialog.show();
-											}
-
-											componentContextMenu.hide();
-											e.consume();
-							
-										} else if (e.getButton() == MouseButton.SECONDARY) {
-											componentContextMenu.show(newComponentImplementation, e.getScreenX(), e.getScreenY());
-										}
-									}
-								});
-
+								
 								// Display component
 								addImplementation(newComponentImplementation);
 								newComponentImplementation.toFront();
@@ -1282,7 +1258,7 @@ public class Main extends Application {
 										if (e.getButton().equals(MouseButton.PRIMARY)) {
 											if (e.getClickCount() == 2) {
 												// Launch link edit window
-												NewLinkWindow dialog = new NewLinkWindow(added.getIndex(), data);
+												NewLinkWindow dialog = new NewLinkWindow(added.getIndex(), data,window);
 												dialog.initModality(Modality.APPLICATION_MODAL);
 												dialog.show();
 											}

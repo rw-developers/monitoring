@@ -2,6 +2,8 @@ package application.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.xml.sax.SAXException;
 
@@ -32,6 +34,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
@@ -41,15 +44,15 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
-import monitoring.elements.Configuration;
 
 
 public class ProgramWindow<MouseEvent> extends Stage {
@@ -60,16 +63,19 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	private Model data;
 	public ArchitectureElement elem;
 	private int color = 0;
+	public int i=0;
 
 	// Main Window elements
 	private BorderPane root = new BorderPane();
 	private ToolBar tools = new ToolBar(); 
-	private ScrollPane center = new ScrollPane();
+	private SplitPane center = new SplitPane();
 	private VBox top = new VBox();
 	public Pane mainPanel = new Pane();
 	public TabPane appPanel = new TabPane();
 	public Tab mainComponentTab = new Tab("Main Components");
 	public Pane mainComponentTabPanel = new Pane();
+	
+	public Pane consolPanel = new Pane();
 
 	private MenuBar menu = new MenuBar();
 
@@ -77,11 +83,15 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	private Menu file = new Menu("File");
 	private Menu edit = new Menu("Edit");
 	private Menu view = new Menu("View");
+	private Menu newModel = new Menu("New ...");
 	public MenuItem save = new MenuItem("Save...");
 	public MenuItem load = new MenuItem("Load...");
 	public MenuItem export = new MenuItem("Export...");
 	public MenuItem clear = new MenuItem("Clear elements");
 	public MenuItem clearLinks = new MenuItem("Clear links");
+	public MenuItem newConfigMenu = new MenuItem("New Configuration");
+	public MenuItem newComponentMenu = new MenuItem("New Component");
+	public MenuItem newImplementMenu = new MenuItem("new Implementation");
 	public Menu skins = new Menu("Skins...");
 	public MenuItem normal = new MenuItem("Normal");
 	public MenuItem night = new MenuItem("Night Mode");
@@ -124,7 +134,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		confTree.setValue("Configurations");
 		componentTree.setValue("Main Components");
 		
-		center.setContent(mainPanel);
+		
+
 		top.getChildren().addAll(menu,tools);
 		mainPanel.getChildren().add(appPanel);
 		appPanel.getTabs().addAll(mainComponentTab);
@@ -132,7 +143,13 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		root.getStyleClass().add("root");
 		center.getStyleClass().add("center");
 		mainPanel.getStyleClass().add("mainPanel");
+		consolPanel.getStyleClass().add("consolPanel");
 		appPanel.getStyleClass().add("appPanel");
+		
+		SplitPane.setResizableWithParent(mainPanel, Boolean.TRUE);
+		center.getItems().addAll(mainPanel,consolPanel);
+		center.setOrientation(javafx.geometry.Orientation.VERTICAL);
+
 		
 		menu.getStyleClass().add("menuColors");
 		file.getStyleClass().add("menuColors");
@@ -148,11 +165,14 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		h4ck3r.getStyleClass().add("menuColors");
 		winxp.getStyleClass().add("menuColors");
 
+		center.resize(500, 500);
+		
 		// Construct Menu bar
-		file.getItems().addAll(save, load, export);
+		file.getItems().addAll(newModel,save, load, export);
 		edit.getItems().addAll(undo, redo, clear, clearLinks);
 		skins.getItems().addAll(normal, night, h4ck3r, winxp);
 		view.getItems().add(skins);
+		newModel.getItems().addAll(newConfigMenu,newComponentMenu,newImplementMenu);
 		menu.getMenus().addAll(file, edit, view);
 
 		// Construct tool panel
@@ -196,7 +216,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> newImplementationEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NewImplementationWindow dialog = new NewImplementationWindow(-1, data);
+				NewImplementationWindow dialog = new NewImplementationWindow(-1, data, new ProgramWindow(dataIn));
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
@@ -224,21 +244,47 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> verifEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				boolean flag = true;
-				String msg = "";
+				Text title = new Text("Structural verification report:\n");
+				title.relocate(5, 5);
+				consolPanel.getChildren().clear();
+				i=0;
+				List<Label> labels = new ArrayList<Label>();
+				data.getConfigurationProperty().forEach(conf->{
+					i+=30;
+					boolean flag = true;
+					String msg = "";
+				
 				try {
-					data.saveXml(new File("conf.xml"));
+					data.saveXml(new File("conf.xml"),conf);
 					Validator.validate("conf.xml", "model.xsd");
 				} catch (SAXException | IOException e1) {
 					flag = false;
 					msg = e1.getMessage();
 				}
 				if (flag == true) {
-					Alert.display("Message", "valid Configuration ");
+					Label configName = new  Label(conf.getName()+":\n");
+					Label message = new Label("Valid Configuration: ");
+					configName.relocate(10, i+20);
+					message.relocate(20, i+35);
+					message.setFill(Color.GREEN);
+					labels.add(configName);
+					labels.add(message);
+					
 				} else {
-					Alert.display("Message", "invalid Configuration: " + msg);
-				}
+					Label configName = new  Label(conf.getName()+":\n");
+					Label message = new Label("Invalid Configuration: " + msg);
+					configName.relocate(10, i+20);
+					message.relocate(20, i+35);
+					message.setFill(Color.RED);
+					labels.add(configName);
+					labels.add(message);
+					
+									}
+				});
+				consolPanel.getChildren().addAll(title);
+				consolPanel.getChildren().addAll(labels);
 			}
+			
 		};
 
 		// Clears the main panel upon click
@@ -412,6 +458,23 @@ public class ProgramWindow<MouseEvent> extends Stage {
                             		singleselectionModel.select(t);
                             	}
                             });
+//                            data.getComponentProperty().forEach(c->{
+//                            	if(c.getName().equals(selectedTreeItem.getValue())) {
+//                            		NewComponentWindow dialog = new NewComponentWindow(c.getIndex(), data);
+//                        			dialog.initModality(Modality.APPLICATION_MODAL);
+//                        			dialog.show();
+//                        			event.consume();
+//                            	}
+//                            });
+//                            
+//                            data.getImplementationProperty().forEach(c->{
+//                            	if(c.getName().equals(selectedTreeItem.getValue())) {
+//                            		NewImplementationWindow dialog = new NewImplementationWindow(c.getIndex(), data);
+//                        			dialog.initModality(Modality.APPLICATION_MODAL);
+//                        			dialog.show();
+//                        			event.consume();
+//                            	}
+//                            });
 				     }
 				     catch(Exception e) {
 				    	 
@@ -432,6 +495,11 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newConfiguration.setOnAction(newConfigurationEvent);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
+		
+		//menu
+		newComponentMenu.setOnAction(newComponentEvent);
+		newImplementMenu.setOnAction(newImplementationEvent);
+		newConfigMenu.setOnAction(newConfigurationEvent);
 
 		Image dragIcon = new Image(getClass().getResourceAsStream("/application/include/drag.png"));
 		ImageView i1 = new ImageView(dragIcon);
@@ -467,6 +535,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		root.setTop(top);
 		root.setLeft(tree);
 		root.setCenter(center);
+		
 		root.getCenter().getStyleClass().add("pad");
 
 		// mainPanel.prefHeightProperty().bind(scene.heightProperty());

@@ -3,6 +3,10 @@
 	-fx-background-color:rgb(255,255,255);
 	-fx-border-color: lightgrey, darkgrey;
 }
+.consolPanel
+{
+	-fx-background-color:rgb(255,255,255);
+}
 
 .classBlock
 {
