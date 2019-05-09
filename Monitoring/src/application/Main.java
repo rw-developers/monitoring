@@ -1394,6 +1394,7 @@ public class Main extends Application {
 	}
 	
 	private void prepare() {
+		//
 		data.addConfigurationModel(data.getConfigurationTail(), "Main Configuration");				
 		((Pane) window.mainComponentTab.getContent()).setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override

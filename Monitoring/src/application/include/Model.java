@@ -28,7 +28,7 @@ import monitoring.elements.Connector;
 import monitoring.elements.Port;
 
 public class Model {
-
+//
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
 	private Stack<Integer> classUndoStackSize = new Stack<Integer>();

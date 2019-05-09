@@ -53,7 +53,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
-
+//
 public class ProgramWindow<MouseEvent> extends Stage {
 
 	private static final EventType MouseEvent = null;
