@@ -12,6 +12,8 @@
 package application;
 
 
+import java.io.File;
+
 import application.include.Alert;
 import application.include.Model;
 import application.objects.PortBlock;
@@ -64,11 +66,10 @@ public class Main extends Application {
 	 * to the model to make passing information back into the model cleaner and
 	 * easier.
 	 */
-	static ProgramWindow window = new ProgramWindow(data);
+	static ProgramWindow<MouseEvent> window = new ProgramWindow<MouseEvent>(data);
 
 	@Override
 	public void start(Stage primaryStage) {
-		
 		
 		data.getPortProperty().addListener(portListener());
 		data.getConfigurationProperty().addListener(configurationListener());
@@ -334,7 +335,7 @@ public class Main extends Application {
 
 										if (((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().contains(line)) {
 											((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().remove(line);
-											window.applyCss();
+											((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).applyCss();
 
 										}
 
@@ -751,7 +752,7 @@ public class Main extends Application {
 												NewImplementationWindow dialog = new NewImplementationWindow(-1, data,window);
 												dialog.initModality(Modality.APPLICATION_MODAL);
 												dialog.show();
-											}
+																							}
 
 															e.consume();
 							
@@ -958,7 +959,13 @@ public class Main extends Application {
 											port.setXPos(
 													(int) (newComponentImplementation.getNode().getConnectedPort().get(i).getLayoutX()
 															+ e.getX() - delta.x));
+											data.getPortProperty().get(port.getIndex()).setXPos(
+													(int) (newComponentImplementation.getNode().getConnectedPort().get(i).getLayoutX()
+															+ e.getX() - delta.x));
 											port.setYPos(
+													(int) (newComponentImplementation.getNode().getConnectedPort().get(i).getLayoutY()
+															+ e.getY() - delta.y));
+											data.getPortProperty().get(port.getIndex()).setYPos(
 													(int) (newComponentImplementation.getNode().getConnectedPort().get(i).getLayoutY()
 															+ e.getY() - delta.y));
 

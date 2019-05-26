@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+
 import org.xml.sax.SAXException;
 
 import application.include.Alert;
@@ -34,6 +37,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -53,6 +57,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+
 //
 public class ProgramWindow<MouseEvent> extends Stage {
 
@@ -104,7 +109,11 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Button newComponent = new Button("Add component");
 	public Button newConfiguration = new Button("Add configuration");
 	public Button newImplementation = new Button("Add Implementation");
-	public Button verif = new Button("Check Architecture");
+	public Button NFAttr = new Button("Add NF Attributes");
+	public SplitMenuButton verif = new SplitMenuButton();
+	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
+	public MenuItem fVerif = new MenuItem("Fonctionel Verification");
+	public MenuItem nfVerif = new MenuItem("NF Verification");
 
 	// define Tree
 	private TreeView<TreeView> tree = new TreeView<TreeView>();
@@ -137,7 +146,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		mainComponentScroll.setContent(appPanel);
 		appPanel.getTabs().addAll(mainComponentTab);
 		mainComponentTab.setContent(mainComponentTabPanel);
-		
+
 		consol.setContent(consolPanel);
 
 		root.getStyleClass().add("root");
@@ -178,15 +187,21 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newConfiguration.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		newImplementation.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		verif.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		NFAttr.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		linkMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 
 		tools.getItems().add(newConfiguration);
 		tools.getItems().add(newComponent);
 		tools.getItems().add(newImplementation);
-		tools.getItems().add(verif);
+		tools.getItems().add(NFAttr);
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
+		tools.getItems().add(verif);
+
+		// Button
+		verif.setText("Check Architecture");
+		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif);
 
 		// Creates a new configuration dialog upon click
 		EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
@@ -214,6 +229,16 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				NewImplementationWindow dialog = new NewImplementationWindow(-1, data, new ProgramWindow(dataIn));
+				dialog.initModality(Modality.APPLICATION_MODAL);
+				dialog.show();
+				e.consume();
+			}
+		};
+
+		EventHandler<ActionEvent> NFEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				NFWindow dialog = new NFWindow(-1, data);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
@@ -335,14 +360,30 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> saveEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				FileChooser dialog = new FileChooser();
-				dialog.setTitle("Save file...");
-				File file = dialog.showSaveDialog(ref);
-				if (file != null) {
-					try {
-						data.save(file);
-					} catch (IOException ex) {
-						System.err.println("IO Failure: " + ex);
+				if (data.saved == false) {
+					NewProjectWindow dialog = new NewProjectWindow(-1, data);
+					dialog.initModality(Modality.APPLICATION_MODAL);
+					dialog.show();
+				} else {
+					String fileSeparator = System.getProperty("file.separator");
+					File file = new File(data.project_dir + fileSeparator + "mainComponent.comp");
+					if (file != null) {
+						try {
+							data.saveComponent(file);
+							data.getConfigurationProperty().forEach(conf->{
+							try {
+								File file2 = new File(data.project_dir + fileSeparator +conf.getName()+".conf"); 
+								if(file != null) {
+								data.save(file2, conf.getIndex());
+								}
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}	
+							});
+						} catch (IOException ex) {
+							System.err.println("IO Failure: " + ex);
+						}
 					}
 				}
 				e.consume();
@@ -354,22 +395,37 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 
-				FileChooser dialog = new FileChooser();
-				dialog.setTitle("Open UML file...");
-				File file = dialog.showOpenDialog(ref);
+				JFileChooser chooser = new JFileChooser();
+				String choosertitle = "";
+
+				chooser.setCurrentDirectory(new java.io.File("."));
+				chooser.setDialogTitle(choosertitle);
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				//
+				// disable the "All files" option.
+				//
+				chooser.setAcceptAllFileFilterUsed(false);
+				//
+				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					data.project_dir = chooser.getSelectedFile()+"" ;
+					File file = new File(data.project_dir+"\\"+"mainComponent.comp");
 
 				if (file != null) {
+					data.saved = true;
 					mainComponentTabPanel.getChildren().clear();
 					((Pane) appPanel.getTabs().get(1).getContent()).getChildren().clear();
-					for (int i = 2; i < appPanel.getTabs().size(); i++) {
+					for (int i = 1; i < appPanel.getTabs().size(); i++) {
 						appPanel.getTabs().remove(i);
 					}
 					data.clear();
 					try {
-						data.load(file);
-					} catch (IOException ex) {
+						data.loadComponent(file);
+						data.load(new File(data.project_dir+"\\"+"Main Configuration.conf"),appPanel);
+						
+					} catch (IOException  | NumberFormatException ex) {
 						System.err.println("IO Failure: " + ex);
 					}
+				}
 				}
 				e.consume();
 			}
@@ -484,6 +540,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newComponent.setOnAction(newComponentEvent);
 		newImplementation.setOnAction(newImplementationEvent);
 		newConfiguration.setOnAction(newConfigurationEvent);
+		NFAttr.setOnAction(NFEvent);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
 
@@ -546,7 +603,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 					File file = dialog.showSaveDialog(ref);
 					if (file != null) {
 						try {
-							data.save(file);
+							data.save(file,0);
 						} catch (IOException ex) {
 							System.err.println("IO Failure: " + ex);
 						}
@@ -796,6 +853,27 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public void applyCss() {
 		mainPanel.applyCss();
 		mainPanel.layout();
+	}
+
+	public void chooseFile() {
+		String choosertitle = "";
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new java.io.File("."));
+		chooser.setDialogTitle(choosertitle);
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		//
+		// disable the "All files" option.
+		//
+		chooser.setAcceptAllFileFilterUsed(false);
+		//
+		if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+
+			System.out.println("getCurrentDirectory(): " + chooser.getCurrentDirectory());
+			System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+			boolean success = (new File(chooser.getSelectedFile() + "dir")).mkdirs();
+		} else {
+			System.out.println("No Selection ");
+		}
 	}
 
 }

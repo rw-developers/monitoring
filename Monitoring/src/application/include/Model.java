@@ -19,16 +19,22 @@ import application.view.ProgramWindow;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.util.Callback;
 import monitoring.elements.ArchitectureElement;
 import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
 import monitoring.elements.Configuration;
 import monitoring.elements.Connector;
+//import monitoring.elements.Method;
 import monitoring.elements.Port;
+import nfattribute.ExecutionTime;
+import nfattribute.NFAttribute;
 
 public class Model {
-//
+
 	private Stack<classStackData> classUndoStack = new Stack<classStackData>();
 	private Stack<classStackData> classRedoStack = new Stack<classStackData>();
 	private Stack<Integer> classUndoStackSize = new Stack<Integer>();
@@ -41,6 +47,10 @@ public class Model {
 	private Boolean duringUndo = false;
 	private Boolean duringRedo = false;
 	private Boolean clearing = false;
+
+	// project
+	public boolean saved = false;
+	public String project_dir = new String();
 
 	public class classStackData {
 		private int[] intData = new int[5];
@@ -57,7 +67,9 @@ public class Model {
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;
 	private ObservableList<ComponentImplementation> implementationList;
+	//private ObservableList<Method> methodList;
 	private ObservableList<Connector> linkList;
+	private ObservableList<NFAttribute> nFAttributeList;
 
 	private List<PortBlock> ports;
 	private List<ComponentBlock> components;
@@ -140,6 +152,10 @@ public class Model {
 	public ObservableList<Connector> getLinkProperty() {
 		return linkList;
 	}
+	
+	public ObservableList<NFAttribute> getNFAttributeProperty() {
+		return nFAttributeList;
+	}
 
 	public int getPortTail() {
 		return portList.size();
@@ -160,6 +176,10 @@ public class Model {
 	public int getLinkTail() {
 		return linkList.size();
 	}
+	
+	public int getNFAttributeTail() {
+		return linkList.size();
+	}
 
 	public Port getPortModel(int i) {
 		return portList.get(i);
@@ -175,6 +195,10 @@ public class Model {
 
 	public ComponentImplementation getImplementationModel(int i) {
 		return implementationList.get(i);
+	}
+	
+	public NFAttribute getNFAttributeModel(int i) {
+		return nFAttributeList.get(i);
 	}
 
 	public Connector getLinkModel(int i) {
@@ -245,6 +269,15 @@ public class Model {
 		implementationList.remove(i);
 		refreshPortBlocks();
 
+	}
+	
+//	public int addNFAttributeETModel(int id, String name, String value, Method m) {
+//			nFAttributeList.add(new ExecutionTime(id,name,value,m));
+//		return (nFAttributeList.size() - 1);
+//	}
+
+	public void removeNFAttributeModel(int i) {
+		nFAttributeList.remove(i);
 	}
 
 	public void refreshLines() {
@@ -318,9 +351,9 @@ public class Model {
 	 * @param label The label to be passed to the ConnectionModel constructor.
 	 * @return the index of the new ConnectionModel object
 	 */
-	public int addLinkModel(int[] ints, String label,Configuration config) {
+	public int addLinkModel(int[] ints, String label, Configuration config) {
 		if (ints.length == 8) {
-			linkList.add(new Connector(ints, label,config));
+			linkList.add(new Connector(ints, label, config));
 		}
 		return (linkList.size() - 1);
 	}
@@ -600,7 +633,7 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label,null));
+				linkList.add(new Connector(ints, label, null));
 			}
 		}
 
@@ -636,7 +669,7 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label,null));
+				linkList.add(new Connector(ints, label, null));
 			}
 		}
 		duringRedo = false;
@@ -648,163 +681,53 @@ public class Model {
 	 * @param file The file to be written to.
 	 * @throws IOException Throws if the file can't be written to.
 	 */
-	public void save(File file) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	public void saveComponent(File file) throws IOException {
+		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
-		writer.write("COMPONENT_LIST_START\n");
-		writer.write(componentList.size() + "\n");
-		for (int i = 0; i != componentList.size(); ++i) {
-			writer.write(componentList.get(i).getIndex() + " ");
-			writer.write(componentList.get(i).getXPos() + " ");
-			writer.write(componentList.get(i).getYPos() + " ");
-			writer.write(componentList.get(i).getWidth() + " ");
-			writer.write(componentList.get(i).getHeight() + " \n\n");
-			writer.write(componentList.get(i).getName() + " \n\n");
-		}
-		writer.write("COMPONENT_LIST_END\n");
-
-		writer.write("IMPLEMENTATION_LIST_START\n");
-		writer.write(implementationList.size() + "\n");
-		for (int i = 0; i != implementationList.size(); ++i) {
-			writer.write(implementationList.get(i).getIndex() + " ");
-			writer.write(implementationList.get(i).getXPos() + " ");
-			writer.write(implementationList.get(i).getYPos() + " ");
-			writer.write(implementationList.get(i).getWidth() + " ");
-			writer.write(implementationList.get(i).getHeight() + " \n\n");
-			writer.write(implementationList.get(i).getName() + " \n\n");
-			writer.write(implementationList.get(i).getComponentType().getIndex() + "\n\n");
-		}
-		writer.write("IMPLEMENTATION_LIST_END\n");
-
-		writer.write("PORT_LIST_START\n");
-		writer.write(portList.size() + "\n");
-		for (int i = 0; i != portList.size(); ++i) {
-			writer.write(portList.get(i).getIndex() + " ");
-			writer.write(portList.get(i).getXPos() + " ");
-			writer.write(portList.get(i).getYPos() + " ");
-			writer.write(portList.get(i).getWidth() + " ");
-			writer.write(portList.get(i).getHeight() + " \n\n");
-			writer.write(portList.get(i).getName() + " ");
-			writer.write(portList.get(i).getType() + " ");
-			writer.write(portList.get(i).getCsp() + " \n\n");
-			if (portList.get(i).getElement() instanceof Component) {
-				writer.write("1 ");
-				writer.write(((Component) portList.get(i).getElement()).getIndex() + " \n\n");
-			} else {
-				writer.write("2 ");
-				writer.write(((ComponentImplementation) portList.get(i).getElement()).getIndex() + " \n\n");
-			}
-
-		}
-		writer.write("PORT_LIST_END\n");
-
-		writer.write("LINKLIST_BEGIN\n");
-		writer.write(linkList.size() + "\n");
-		for (int i = 0; i != linkList.size(); ++i) {
-			writer.write(linkList.get(i).getIndex() + " ");
-			writer.write(linkList.get(i).getType() + " ");
-			writer.write(linkList.get(i).getSource() + " ");
-			writer.write(linkList.get(i).getDest() + " ");
-			writer.write(linkList.get(i).getSourceMin() + " ");
-			writer.write(linkList.get(i).getSourceMax() + " ");
-			writer.write(linkList.get(i).getDestMin() + " ");
-			writer.write(linkList.get(i).getDestMax() + " \n");
-			writer.write(linkList.get(i).getLabel() + "\n");
-		}
-		writer.write("LINKLIST_END\n");
-
-		writer.close();
-	}
-
-	public void saveXml(File file,Configuration conf) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-
-		writer.write("<Architecture>\n");
-		
-			try {
-				writer.write("<Configuration>\n");
-			} catch (Exception e) {
-			}
-			conf.getComponents().forEach(comp -> {
-				try {
-					writer.write("<Component>\n");
-					writer.write("<name>");
-					writer.write(comp.getName());
-					writer.write("</name>\n");
-				} catch (Exception e) {
-				}
-				comp.getPorts().forEach(port -> {
+			writer.write("COMPONENT_LIST_START\n");
+			writer.write(componentList.size() + "\n");
+			for (int i = 0; i != componentList.size(); ++i) {
+				writer.write(componentList.get(i).getIndex() + " ");
+				writer.write(componentList.get(i).getXPos() + " ");
+				writer.write(componentList.get(i).getYPos() + " ");
+				writer.write(componentList.get(i).getWidth() + " ");
+				writer.write(componentList.get(i).getHeight() + " \n\n");
+				writer.write(componentList.get(i).getName() + " \n\n");
+				writer.write("PORT_LIST_START\n");
+				writer.write(componentList.get(i).getPorts().size() + "\n");
+				componentList.get(i).getPorts().forEach(p -> {
 					try {
-						writer.write("<Port>\n");
-						writer.write("<name>");
-						writer.write(port.getName());
-						writer.write("</name>\n");
-						writer.write("<type>");
-						writer.write(port.getType());
-						writer.write("</type>\n");
-						writer.write("</Port>\n");
-					} catch (Exception e) {
+						writer.write(p.getIndex() + " ");
+						writer.write(p.getXPos() + " ");
+						writer.write(p.getYPos() + " ");
+						writer.write(p.getWidth() + " ");
+						writer.write(p.getHeight() + " \n\n");
+						writer.write(p.getName() + " ");
+						writer.write(p.getType() + " ");
+						writer.write(p.getCsp() + " \n\n");
+						writer.write("1 ");
+						writer.write(((Component) p.getElement()).getIndex() + " \n\n");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+
 				});
-				try {
-					writer.write("</Component>\n");
-				} catch (Exception e) {
-				}
-
-			});
-			conf.getConnectors().forEach(c->{
-				try {
-					writer.write("<Connector>\n");
-					writer.write("<name>");
-					writer.write(portList.get(c.getSource()).getName() + "->"
-							+ portList.get(c.getDest()).getName());
-					writer.write("</name>\n");
-					writer.write("<Port_In>\n");
-					writer.write("<name>");
-					writer.write(portList.get(c.getDest()).getName());
-					writer.write("</name>\n");
-					writer.write("<type>");
-					writer.write(portList.get(c.getDest()).getType());
-					writer.write("</type>\n");
-					writer.write("</Port_In>\n");
-					writer.write("<Port_Out>\n");
-					writer.write("<name>");
-					writer.write(portList.get(c.getSource()).getName());
-					writer.write("</name>\n");
-					writer.write("<type>");
-					writer.write(portList.get(c.getDest()).getType());
-					writer.write("</type>\n");
-					writer.write("</Port_Out>\n");
-					writer.write("</Connector>\n");
-				} catch (Exception e) {
-				}	
-			});
-				
-			
-			try {
-				writer.write("</Configuration>\n");
-			} catch (Exception e) {
+				writer.write("PORT_LIST_END\n");
 			}
-
-		
-		writer.write("</Architecture>\n");
-
-		writer.close();
+			writer.write("COMPONENT_LIST_END\n");
+			writer.close();
+		}
 	}
-
-	/**
-	 * Reads in the model data and rebuilds the model.
-	 * 
-	 * @param file The file to be read from.
-	 * @throws IOException Throws if the file can't be read from.
-	 */
-	public void load(File file) throws IOException {
+	
+	public void loadComponent(File file) throws IOException {
 
 		Scanner reader = new Scanner(file);
 		reader.next();
 
-		int size = Integer.parseInt(reader.next().trim());
-		for (int i = 0; i != size; ++i) {
+		int compSize = Integer.parseInt(reader.next().trim());
+		for (int i = 0; i != compSize; i++) {
 
 			reader.useDelimiter(" ");
 
@@ -819,12 +742,152 @@ public class Model {
 			componentList.add(new Component(ints, name));
 			reader.useDelimiter("\n");
 			reader.next();
+			reader.next();
+			
+			int portSize = Integer.parseInt(reader.next().trim());
+			for (int j = 0; j != portSize; ++j) {
 
+				reader.useDelimiter(" ");
+
+				int[] ints2 = { Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+						Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+						Integer.parseInt(reader.next().trim()) };
+				reader.useDelimiter("\n");
+				reader.next();
+				reader.next();
+				reader.useDelimiter(" ");
+				String[] strings = { reader.next().trim(), reader.next().trim(), reader.next().trim() };
+				reader.useDelimiter("\n");
+				reader.next();
+				reader.next();
+				reader.useDelimiter(" ");
+				String token = reader.next().trim();
+				String id = reader.next().trim();
+				if (Integer.parseInt(token) == 1) {
+					portList.add(new Port(ints2, strings, componentList.get(Integer.parseInt(id))));
+				} 
+				reader.useDelimiter("\n");
+				reader.next();
+				reader.next();
+				
+	
+			}
+			reader.next();
 		}
+		reader.close();
+	}
+
+	public void save(File file,int index) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+		writer.write("CONFIGURATION_LIST_START\n");
+			writer.write(configurationList.get(index).getIndex() + " ");
+			writer.write(configurationList.get(index).getName() + " \n\n");
+		
+		writer.write("CONFIGURATION_LIST_END\n");
+
+		writer.write("IMPLEMENTATION_LIST_START\n");
+		writer.write(configurationList.get(index).getComponents().size() + "\n");
+		configurationList.get(index).getComponents().forEach(imp->{
+			try {
+			writer.write(imp.getIndex() + " ");
+			writer.write(imp.getXPos() + " ");
+			writer.write(imp.getYPos() + " ");
+			writer.write(imp.getWidth() + " ");
+			writer.write(imp.getHeight() + " \n\n");
+			writer.write(imp.getName() + " \n\n");
+			writer.write(imp.getComponentType().getIndex() + "\n\n");
+			writer.write("PORT_LIST_START\n");
+			writer.write(imp.getPorts().size() + "\n");
+			}catch (IOException e) {
+				// TODO: handle exception
+			}
+			imp.getPorts().forEach(p -> {
+				try {
+					writer.write(p.getIndex() + " ");
+					writer.write(p.getXPos() + " ");
+					writer.write(p.getYPos() + " ");
+					writer.write(p.getWidth() + " ");
+					writer.write(p.getHeight() + " \n\n");
+					writer.write(p.getName() + " ");
+					writer.write(p.getType() + " ");
+					writer.write(p.getCsp() + " \n\n");
+					writer.write("2 ");
+					writer.write(((ComponentImplementation) p.getElement()).getIndex() + " \n\n");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			});
+			try {
+				writer.write("PORT_LIST_END\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		writer.write("IMPLEMENTATION_LIST_END\n");
+	
+	
+
+		writer.write("LINKLIST_BEGIN\n");
+		writer.write(configurationList.get(index).getConnectors().size() + "\n");
+		configurationList.get(index).getConnectors().forEach(c->{
+			try {
+			writer.write(c.getIndex() + " ");
+			writer.write(c.getType() + " ");
+			writer.write(c.getSource() + " ");
+			writer.write(c.getDest() + " ");
+			writer.write(c.getSourceMin() + " ");
+			writer.write(c.getSourceMax() + " ");
+			writer.write(c.getDestMin() + " ");
+			writer.write(c.getDestMax() + " \n");
+			writer.write(c.getLabel() + "\n");
+			}catch (IOException e) {
+				// TODO: handle exception
+			}
+		});
+			
+		writer.write("LINKLIST_END\n");
+
+		writer.close();
+	}
+	
+	/**
+	 * Reads in the model data and rebuilds the model.
+	 * 
+	 * @param file The file to be read from.
+	 * @throws IOException Throws if the file can't be read from.
+	 */
+	public void load(File file,TabPane appPanel) throws IOException {
+
+		Scanner reader = new Scanner(file);
+		reader.next();
+		
+
+		
+		reader.useDelimiter(" ");
+		int index = Integer.parseInt(reader.next().trim());
+		reader.useDelimiter(" ");
+		String n = reader.next().trim();
+		configurationList.add(new Configuration(index, n));
+		
+		SingleSelectionModel<Tab> singleselectionModel = appPanel.getSelectionModel();
+		System.out.println(appPanel.getTabs().size());
+		singleselectionModel.select(appPanel.getTabs().get(index+1));
+
+		
+		
+		reader.useDelimiter("\n");
+		reader.next();
+		reader.next();
 		reader.next();
 		reader.next();
 
-		size = Integer.parseInt(reader.next().trim());
+
+
+		int size = Integer.parseInt(reader.next().trim());
 		for (int i = 0; i != size; ++i) {
 
 			reader.useDelimiter(" ");
@@ -839,45 +902,46 @@ public class Model {
 			// reader.next();
 			reader.next();
 			String id = reader.next().trim();
+			int confId = appPanel.getSelectionModel().getSelectedIndex()-1;
 
-			// implementationList.add(new ComponentImplementation(ints,
-			// name,componentList.get(Integer.parseInt(id))));
-			reader.useDelimiter("\n");
-			reader.next();
+			 implementationList.add(new ComponentImplementation(ints,
+			 name,componentList.get(Integer.parseInt(id)),configurationList.get(confId)));
+			 
+			 reader.useDelimiter("\n");
+				reader.next();
+				reader.next();
+				
+				int portSize = Integer.parseInt(reader.next().trim());
+				for (int j = 0; j != portSize; ++j) {
+
+					reader.useDelimiter(" ");
+
+					int[] ints2 = { Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+							Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
+							Integer.parseInt(reader.next().trim()) };
+					reader.useDelimiter("\n");
+					reader.next();
+					reader.next();
+					reader.useDelimiter(" ");
+					String[] strings = { reader.next().trim(), reader.next().trim(), reader.next().trim() };
+					reader.useDelimiter("\n");
+					reader.next();
+					reader.next();
+					reader.useDelimiter(" ");
+					String token = reader.next().trim();
+					String id2 = reader.next().trim();
+					if (Integer.parseInt(token) == 2) {
+						portList.add(new Port(ints2, strings, implementationList.get(Integer.parseInt(id2))));
+					} 
+					reader.useDelimiter("\n");
+					reader.next();
+					reader.next();
+					
+		
+				}
+				reader.next();
 
 		}
-		reader.next();
-		reader.next();
-
-		size = Integer.parseInt(reader.next().trim());
-		for (int i = 0; i != size; ++i) {
-
-			reader.useDelimiter(" ");
-
-			int[] ints = { Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
-					Integer.parseInt(reader.next().trim()), Integer.parseInt(reader.next().trim()),
-					Integer.parseInt(reader.next().trim()) };
-			reader.useDelimiter("\n");
-			reader.next();
-			reader.next();
-			reader.useDelimiter(" ");
-			String[] strings = { reader.next().trim(), reader.next().trim(), reader.next().trim() };
-			reader.useDelimiter("\n");
-			reader.next();
-			reader.next();
-			reader.useDelimiter(" ");
-			String token = reader.next().trim();
-			String id = reader.next().trim();
-			if (Integer.parseInt(token) == 1) {
-				portList.add(new Port(ints, strings, componentList.get(Integer.parseInt(id))));
-			} else {
-				portList.add(new Port(ints, strings, implementationList.get(Integer.parseInt(id))));
-			}
-			reader.useDelimiter("\n");
-			reader.next();
-
-		}
-		reader.next();
 		reader.next();
 		reader.next();
 
@@ -893,19 +957,97 @@ public class Model {
 			reader.useDelimiter("\n");
 			reader.next();
 			String label = reader.next().trim();
+			int confId = appPanel.getSelectionModel().getSelectedIndex()-1;
 
-			linkList.add(new Connector(ints, label,null));
+			linkList.add(new Connector(ints, label, configurationList.get(confId)));
 		}
 
 		reader.close();
 
 	}
 
+	public void saveXml(File file, Configuration conf) throws IOException {
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+		writer.write("<Architecture>\n");
+
+		try {
+			writer.write("<Configuration>\n");
+		} catch (Exception e) {
+		}
+		conf.getComponents().forEach(comp -> {
+			try {
+				writer.write("<Component>\n");
+				writer.write("<name>");
+				writer.write(comp.getName());
+				writer.write("</name>\n");
+			} catch (Exception e) {
+			}
+			comp.getPorts().forEach(port -> {
+				try {
+					writer.write("<Port>\n");
+					writer.write("<name>");
+					writer.write(port.getName());
+					writer.write("</name>\n");
+					writer.write("<type>");
+					writer.write(port.getType());
+					writer.write("</type>\n");
+					writer.write("</Port>\n");
+				} catch (Exception e) {
+				}
+			});
+			try {
+				writer.write("</Component>\n");
+			} catch (Exception e) {
+			}
+
+		});
+		conf.getConnectors().forEach(c -> {
+			try {
+				writer.write("<Connector>\n");
+				writer.write("<name>");
+				writer.write(portList.get(c.getSource()).getName() + "->" + portList.get(c.getDest()).getName());
+				writer.write("</name>\n");
+				writer.write("<Port_In>\n");
+				writer.write("<name>");
+				writer.write(portList.get(c.getDest()).getName());
+				writer.write("</name>\n");
+				writer.write("<type>");
+				writer.write(portList.get(c.getDest()).getType());
+				writer.write("</type>\n");
+				writer.write("</Port_In>\n");
+				writer.write("<Port_Out>\n");
+				writer.write("<name>");
+				writer.write(portList.get(c.getSource()).getName());
+				writer.write("</name>\n");
+				writer.write("<type>");
+				writer.write(portList.get(c.getDest()).getType());
+				writer.write("</type>\n");
+				writer.write("</Port_Out>\n");
+				writer.write("</Connector>\n");
+			} catch (Exception e) {
+			}
+		});
+
+		try {
+			writer.write("</Configuration>\n");
+		} catch (Exception e) {
+		}
+
+		writer.write("</Architecture>\n");
+
+		writer.close();
+	}
+
+	
+
 	/**
 	 * Clears the model of all data.
 	 */
 	public void clear() {
 		clearing = true;
+		configurationList.clear();
+		componentList.clear();
 		portList.clear();
 		ports.clear();
 		linkList.clear();

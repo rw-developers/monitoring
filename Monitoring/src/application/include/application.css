@@ -1,20 +1,20 @@
-#
+
 .mainPanel
 {
 	-fx-background-size: 40px;
 	-fx-background-repeat: repeat;
 	-fx-border-width: 1, 1.5 1.5 1.5 1.5; 
-	-fx-min-height: 461;
+	-fx-min-height: 20;
 	-fx-min-width: 400;
 	-fx-padding: 5;
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
 
 .consolPanel{
--fx-background-size: 40px;
+    -fx-background-size: 40px;
 	-fx-background-repeat: repeat;
 	-fx-border-width: 1, 1.5 1.5 1.5 1.5; 
-	-fx-min-height: 1800;
+	-fx-min-height: 10;
 	-fx-min-width: 400;
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
