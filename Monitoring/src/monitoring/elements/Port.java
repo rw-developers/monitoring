@@ -1,5 +1,7 @@
 package monitoring.elements;
 
+import java.util.ArrayList;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -18,10 +20,60 @@ public class Port  {
 	 * lists of entries can be expanded indefinitely.
 	 */
 	private int[] intData = new int[5];
-	private StringProperty name = new SimpleStringProperty();
+	public StringProperty name = new SimpleStringProperty();
 	private StringProperty type = new SimpleStringProperty();
-	private StringProperty csp =  new SimpleStringProperty();
+	private Csp csp =  new Csp();
+	public void setCsp(Csp csp) {
+		this.csp = csp;
+	}
+
 	private ArchitectureElement element;
+	    String nom ;
+	    public String getNom() {
+			return nom;
+		}
+
+		public void setNom(String nom) {
+			this.nom = nom;
+		}
+
+		public String getType1() {
+			return type1;
+		}
+
+		public void setType1(String type1) {
+			this.type1 = type1;
+		}
+
+		public Csp getCspExpression() {
+			return cspExpression;
+		}
+
+		public void setCspExpression(Csp cspExpression) {
+			this.cspExpression = cspExpression;
+		}
+
+		public Csp getCspExpressionModify() {
+			return cspExpressionModify;
+		}
+
+		public void setCspExpressionModify(Csp cspExpressionModify) {
+			this.cspExpressionModify = cspExpressionModify;
+		}
+
+		String type1;
+	    public Csp cspExpression=new Csp("","");
+	    public Csp cspExpressionModify;
+
+	    public static Port firstClickedPort =null;
+	    public static Port lastClickedPort =null;
+	    private Object parent;
+	    public String instanceParent ;
+	    public ArrayList<Arc> listArc = new ArrayList<>();
+	    public ArrayList<Arc> listArc2 = new ArrayList<>();
+	    public Arc arc;
+
+	    String evt;
 	
 	private final int STEP = 1;
 
@@ -40,7 +92,7 @@ public class Port  {
 		if (stringsIn.length == 3) {
 			name.set(stringsIn[0]);
 			type.set(stringsIn[1]);
-			csp.set(stringsIn[2]);
+			cspExpression = new Csp(stringsIn[0],stringsIn[2]);
 		}
 
 		this.element = e;
@@ -133,7 +185,7 @@ public class Port  {
 	}
 	
 	public void setCsp(String csp) {
-		this.csp.set(csp); 
+		//this.csp.set(csp); 
 	}
 
 	/*****************************
@@ -204,7 +256,7 @@ public class Port  {
 	}
 	
 	public String getCsp() {
-		return csp.get();
+		return "";
 	}
 
 	/**
@@ -230,6 +282,6 @@ public class Port  {
 	}
 	
 	public StringProperty getCspProp() {
-		return csp;
+		return null;
 	}
 }

@@ -91,7 +91,7 @@ public class NewPortWindow extends Stage {
 					if (checkcsp() == 1) {
 						Alert.display("Error", "CSP Invalid !!! ");
 					} else {
-
+                      Alert.display("", ((Component) elem).getName());
 						data.addPortModel(
 								new int[] { data.getPortTail(), ((Component) elem).getXPos() + 240,
 										((Component) elem).getYPos() + ((Component) elem).getPorts().size() * 25 + 15,

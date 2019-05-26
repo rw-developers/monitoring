@@ -18,7 +18,9 @@ import javafx.stage.Stage;
  * @author DELL INSPIRON
  */
 public class Alert {
+	
     static  boolean answer;
+    public  Alert() {}
     public static boolean display(String title,String message)
     {
         

@@ -1,0 +1,11 @@
+channel p1 : {0} 
+channel p2 : {0} 
+
+dvdkl_p1 = p1?x->dvdkl_p1
+dvdkl_p2 = p2?r->dvdkl_p2
+
+ert=p1?x->(dvdkl_p2|||p1?x->SKIP)
+
+GlobFormulla = dvdkl_p1|||dvdkl_p2
+
+assert GlobFormulla[T=ert

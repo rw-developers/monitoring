@@ -19,8 +19,24 @@ public class Component extends ArchitectureElement {
 	private StringProperty name = new SimpleStringProperty();
 	private List<Port> ports = new ArrayList<Port>();
 	private List<Component>  components = new ArrayList<Component>();
+	private List<Methode> Methodes = new ArrayList<Methode>();
 	private List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
+	public  Csp expGlobale=new Csp("","");
 	
+	public Csp getExpGlobale() {
+		return expGlobale;
+	}
+	public void ADDMethode(Methode m) {
+		Methodes.add(m);
+	}
+	public List<Methode> getMethode() {
+	  return this.Methodes;
+	}
+
+	public void setExpGlobale(Csp expGlobale) {
+		this.expGlobale = expGlobale;
+	}
+
 	private final int STEP = 1;
 	
 
@@ -128,4 +144,6 @@ public class Component extends ArchitectureElement {
 	public String toString() {
 		return this.getName();
 	}
+
+	
 }

@@ -1,7 +1,9 @@
 package application.view.context;
 
 import application.include.Model;
+import application.view.Cspglobale;
 import application.view.NewComponentWindow;
+import application.view.NewMethodeWindow;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -12,7 +14,8 @@ public class ComponentMenu extends ContextMenu {
 
 	int index;
 	Model data;
-	MenuItem edit = new MenuItem("Edit...");
+	MenuItem edit = new MenuItem("GLOBALE CSP");
+	MenuItem AddMethode = new MenuItem("Add Methode ");
 	MenuItem delete = new MenuItem("Delete");
 		
 
@@ -22,7 +25,20 @@ public class ComponentMenu extends ContextMenu {
 	EventHandler<ActionEvent> editEvent = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent e) {
-			NewComponentWindow dialog = new NewComponentWindow(index, data);
+			//NewComponentWindow dialog = new NewComponentWindow(index, data);
+			Cspglobale dialog = new Cspglobale(index, data);
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.show();
+			e.consume();
+		}
+	};
+	
+	
+	EventHandler<ActionEvent> ADDmethode = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent e) {
+			//NewComponentWindow dialog = new NewComponentWindow(index, data);
+			NewMethodeWindow dialog = new NewMethodeWindow(index, data);
 			dialog.initModality(Modality.APPLICATION_MODAL);
 			dialog.show();
 			e.consume();
@@ -54,9 +70,11 @@ public class ComponentMenu extends ContextMenu {
 
 		edit.setOnAction(editEvent);
 		delete.setOnAction(deleteEvent);
+		AddMethode.setOnAction(ADDmethode);
 
 		this.getItems().add(edit);
 		this.getItems().add(delete);
+		this.getItems().add(AddMethode);
 	}
 	
 	
