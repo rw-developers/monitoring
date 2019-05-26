@@ -1,19 +1,30 @@
+
 .mainPanel
 {
 	-fx-background-size: 40px;
 	-fx-background-repeat: repeat;
-	-fx-border-width: 1, 0 1.5 1.5 0; 
-	-fx-min-height: 661;
-	-fx-min-width: 1151;
-	-fx-padding: 15;
+	-fx-border-width: 1, 1.5 1.5 1.5 1.5; 
+	-fx-min-height: 20;
+	-fx-min-width: 400;
+	-fx-padding: 5;
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
-.appPanel{
+
+.consolPanel{
+    -fx-background-size: 40px;
+	-fx-background-repeat: repeat;
+	-fx-border-width: 1, 1.5 1.5 1.5 1.5; 
+	-fx-min-height: 10;
+	-fx-min-width: 400;
+	-fx-font-family: "Lucida Console", Monaco, monospace;
+}
+.tabPanel
+{
 	-fx-background-size: 40px;
 	-fx-background-repeat: repeat;
-	-fx-border-width: 1, 0 1.5 1.5 0; 
-	-fx-min-height: 661;
-	-fx-min-width: 1151;
+	-fx-border-width: 1, 1.5 1.5 1.5 1.5; 
+	-fx-min-height: 1800;
+	-fx-min-width: 1500;
 	-fx-font-family: "Lucida Console", Monaco, monospace;
 }
 
@@ -146,6 +157,10 @@
 .left
 {
 	-fx-max-width: 200;
+}
+.bottom
+{
+	-fx-max-height: 450;
 }
 
 .link

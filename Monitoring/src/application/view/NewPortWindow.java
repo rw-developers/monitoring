@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import monitoring.elements.ArchitectureElement;
 import monitoring.elements.Component;
+import monitoring.elements.ComponentImplementation;
 
 public class NewPortWindow extends Stage {
 	// Dialog box elements
@@ -99,6 +100,19 @@ public class NewPortWindow extends Stage {
 								new String[] { newPortName.getText(),
 										newPortType.getSelectionModel().getSelectedItem(), cspexp.getText() },
 								elem);
+						 
+						data.getImplementationProperty().forEach(i->{
+							if(i.getComponentType().getIndex() == ((Component)elem).getIndex() ) {
+								
+								data.addPortModel(
+										new int[] { data.getPortTail(), ((ComponentImplementation) i).getXPos() + 240,
+												((ComponentImplementation ) i).getYPos() + ((ComponentImplementation) i).getPorts().size() * 25 + 15,
+												100, 100 },
+										new String[] { newPortName.getText(),
+												newPortType.getSelectionModel().getSelectedItem(), cspexp.getText() },
+										i);
+							}
+						});
 					}
 				} else {
 					if (checkcsp() == 1) {

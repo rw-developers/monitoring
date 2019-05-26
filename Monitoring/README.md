@@ -1,16 +1,19 @@
-# Uml editor
-## Y'all wanna try to come up with a name for this program?
+# CheckIt 
+## Application of Dynamic Reconfiguration Monitoring for Component Based Architecture   
 
 ### Implemented:
-* Class Blocks
-* A rough model to store block data
-* A model to display blocks
-* Drag and drop (Mostly)
-* Blocks can be edited/deleted
+* Component block
+* Port
+* Configuration
+* Component Implementation
+* Connector
+* Method
+* Architecture elements can be edited/deleted
+* Console for configuration & reconfiguration results
 
 ### Started
 * Save/load functionality
-* Links
+
 
 ### To Be Implemented
 * Keep class blocks bound to the window when dragging

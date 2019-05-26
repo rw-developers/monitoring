@@ -14,94 +14,97 @@ import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
 
 public class NewImplementationWindow extends Stage {
-	
+
 	// Dialog box elements
-		private GridPane newImplementationInterface = new GridPane();
-		private Text newImplementationTitle = new Text();
-		private TextField newImplementationName = new TextField();
-		public Button newImplementationSubmit = new Button("Submit");
-		public Button deleteImplementation = new Button("Delete");
-		
-		
-		@SuppressWarnings("unused")
-		private ComboBox<Component> parent ;
+	private GridPane newImplementationInterface = new GridPane();
+	private Text newImplementationTitle = new Text();
+	private TextField newImplementationName = new TextField();
+	public Button newImplementationSubmit = new Button("Submit");
+	public Button deleteImplementation = new Button("Delete");
 
-		public NewImplementationWindow(int editIndex, Model data) {
-			// Set window title
-			newImplementationTitle.setText((editIndex == -1) ? "Create Implementation Block" : "Edit Implementation Block");
+	@SuppressWarnings("unused")
+	private ComboBox<Component> parent;
 
-			// Attach elements to window
-			if (editIndex == -1) {
-				newImplementationName.setPromptText("Implementation name...");
-				parent = new ComboBox<Component>(data.getComponentProperty());
+	public NewImplementationWindow(int editIndex, Model data, ProgramWindow window) {
+		// Set window title
+		newImplementationTitle.setText((editIndex == -1) ? "Create Implementation Block" : "Edit Implementation Block");
 
-			} else {
-				newImplementationName.setText(data.getImplementationModel(editIndex).getName());
-				parent = new ComboBox<Component>(data.getComponentProperty());
-				parent.getSelectionModel().select(data.getImplementationModel(editIndex).getComponentType());
-			}
+		// Attach elements to window
+		if (editIndex == -1) {
+			newImplementationName.setPromptText("Implementation name...");
+			parent = new ComboBox<Component>(data.getComponentProperty());
 
-			// Place elements on stage
-			newImplementationInterface.add(newImplementationTitle, 0, 0, 2, 1);
-			newImplementationInterface.add(newImplementationName, 0, 1, 2, 1);
-			newImplementationInterface.add(parent, 0, 2, 2, 1);
-			newImplementationInterface.add(newImplementationSubmit, 1, 6);
+		} else {
+			newImplementationName.setText(data.getImplementationModel(editIndex).getName());
+			parent = new ComboBox<Component>(data.getComponentProperty());
+			parent.getSelectionModel().select(data.getImplementationModel(editIndex).getComponentType());
+		}
 
-			// Check for new class
-			if (editIndex != -1) {
-				newImplementationInterface.add(deleteImplementation, 0, 6);
-			}
+		// Place elements on stage
+		newImplementationInterface.add(newImplementationTitle, 0, 0, 2, 1);
+		newImplementationInterface.add(newImplementationName, 0, 1, 2, 1);
+		newImplementationInterface.add(parent, 0, 2, 2, 1);
+		newImplementationInterface.add(newImplementationSubmit, 1, 6);
 
-			// Handler to submit the selected class
-			EventHandler<ActionEvent> submitImplementationEvent = new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					data.saveUndoState();
-					data.clearRedoState();
+		// Check for new class
+		if (editIndex != -1) {
+			newImplementationInterface.add(deleteImplementation, 0, 6);
+		}
 
-					if (editIndex == -1) {
-						int id = data.getImplementationTail();
-						data.addImplementationModel(new int[] { id, 0, 0, 100, 100 },
-								newImplementationName.getText(),parent.getSelectionModel().getSelectedItem());
-                        ComponentImplementation added = data.getImplementationProperty().get(id);
-						added.getComponentType().getPorts().forEach(p->{
-							data.addPortModel(
-									new int[] { data.getPortTail(), added.getXPos() + 240,
-											added.getYPos() + added.getPorts().size() * 25 + 15,
-											100, 100 },
-									new String[] { p.getName(),p.getType(),p.getCsp() },added);
-						});
-					} else {
-						data.getImplementationModel(editIndex).setName(newImplementationName.getText());
+		// Handler to submit the selected class
+		EventHandler<ActionEvent> submitImplementationEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.saveUndoState();
+				data.clearRedoState();
+
+				if (editIndex == -1) {
+					int confId = 0;
+					for (int i = 1; i < window.appPanel.getTabs().size(); i++) {
+						if (window.appPanel.getTabs().get(i).isSelected()) {
+							confId = i - 1;
+						}
 					}
-					closeWindow();
-					e.consume();
+					int id = data.getImplementationTail();
+					data.addImplementationModel(new int[] { id, 0, 0, 100, 100 }, newImplementationName.getText(),
+							parent.getSelectionModel().getSelectedItem(), data.getConfigurationModel(confId));
+
+					ComponentImplementation added = data.getImplementationProperty().get(id);
+					added.getComponentType().getPorts().forEach(p -> {
+						data.addPortModel(
+								new int[] { data.getPortTail(), added.getXPos() + 240,
+										added.getYPos() + added.getPorts().size() * 25 + 15, 100, 100 },
+								new String[] { p.getName(), p.getType(), p.getCsp() }, added);
+					});
+				} else {
+					data.getImplementationModel(editIndex).setName(newImplementationName.getText());
 				}
-			};
+				closeWindow();
+				e.consume();
+			}
+		};
 
-			// Handler to delete the selected class
-			EventHandler<ActionEvent> deleteImplementationEvent = new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent e) {
-					data.removeImplementationModel(editIndex);
-					closeWindow();
-					e.consume();
-				}
-			};
+		// Handler to delete the selected class
+		EventHandler<ActionEvent> deleteImplementationEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				data.removeImplementationModel(editIndex);
+				closeWindow();
+				e.consume();
+			}
+		};
 
-			// Attach handlers to buttons
-			newImplementationSubmit.setOnAction(submitImplementationEvent);
-			deleteImplementation.setOnAction(deleteImplementationEvent);
+		// Attach handlers to buttons
+		newImplementationSubmit.setOnAction(submitImplementationEvent);
+		deleteImplementation.setOnAction(deleteImplementationEvent);
 
-			// Display scene
-			Scene scene = new Scene(newImplementationInterface, 300, 230);
-			this.setScene(scene);
+		// Display scene
+		Scene scene = new Scene(newImplementationInterface, 300, 230);
+		this.setScene(scene);
 
-		}
+	}
 
-		private void closeWindow() {
-			this.close();
-		}
+	private void closeWindow() {
+		this.close();
+	}
 }
-
-

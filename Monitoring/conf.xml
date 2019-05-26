@@ -1,4 +1,6 @@
+<Architecture>
 <Configuration>
+<<<<<<< HEAD
 <Component>
 <name>g</name>
 <Port>
@@ -6,4 +8,7 @@
 <type>IN</type>
 </Port>
 </Component>
+=======
+>>>>>>> branch 'master' of https://github.com/rw-developers/monitoring.git
 </Configuration>
+</Architecture>

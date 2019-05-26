@@ -28,6 +28,7 @@ public class Connector extends ArchitectureElement {
 	private IntegerProperty destMax = new SimpleIntegerProperty();
 
 	private StringProperty label = new SimpleStringProperty();
+	private Configuration configuration ;
 
 	/**
 	 * Constructs an instance of Connector
@@ -36,7 +37,7 @@ public class Connector extends ArchitectureElement {
 	 * @param data the integral data to be stored
 	 * @param l    the label to be stored
 	 */
-	public Connector(int[] data, String l) {
+	public Connector(int[] data, String l,Configuration config) {
 		if (data.length == 8) {
 			index = data[0];
 			type.set(data[1]);
@@ -49,6 +50,9 @@ public class Connector extends ArchitectureElement {
 
 		}
 		label.set(l);
+		this.configuration = config;
+		this.configuration.setConnectors(this);
+				
 	}
 
 	/*****************************
