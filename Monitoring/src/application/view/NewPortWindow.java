@@ -59,7 +59,7 @@ public class NewPortWindow extends Stage {
 
 		} else {
 			newPortName.setText(data.getPortModel(editIndex).getName());
-			cspexp.setText(data.getPortModel(editIndex).getCsp());
+			cspexp.setText(data.getPortModel(editIndex).getCspExpression().getExpression());
 			newPortType.getSelectionModel().select(data.getPortModel(editIndex).getType());
 
 		}
