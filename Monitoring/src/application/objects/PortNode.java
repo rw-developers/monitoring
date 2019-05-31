@@ -18,7 +18,7 @@ public class PortNode {
 
 	public PortNode() {
 
-	}
+	} 
 
 	public PortNode(int x, int y) {
 		xPos.set(x);

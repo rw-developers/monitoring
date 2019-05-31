@@ -14,7 +14,7 @@ public class LinkNode {
 	private IntegerProperty xPosR = new SimpleIntegerProperty();
 	private IntegerProperty yPosU = new SimpleIntegerProperty();
 	private IntegerProperty yPosD = new SimpleIntegerProperty();
-
+ 
 	/**
 	 * Constructs an instance of LinkNode
 	 * 

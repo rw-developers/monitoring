@@ -6,7 +6,7 @@ import monitoring.elements.ComponentImplementation;
 
 public class ImplementationBlock extends VBox {
 
-	private Panel label = new Panel();
+	private Panel label = new Panel(); 
 	private Panel name = new Panel();
 	private PortNode node = new PortNode();
 	

@@ -13,7 +13,7 @@ public class Multiplicity extends Text {
 
 		multiType = type;
 		this.setText(multiType);
-	}
+	} 
 
 	/**
 	 * relocates the Text to a new location

@@ -6,7 +6,7 @@ public class Label extends Text {
 
 	private String labelText;
 	private double currentX;
-	private double currentY;
+	private double currentY; 
 	
 	public Label(String text) {
 		this.getStyleClass().add("label");

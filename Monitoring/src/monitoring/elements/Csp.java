@@ -1,7 +1,5 @@
 package monitoring.elements;
 
-import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;
-
 public class Csp {
 	 private String name;
 	    private String expression;
@@ -33,6 +31,4 @@ public class Csp {
 	    public String toString(){
 	        return name+expression;
 	    }
-	    
-	    
 }

@@ -99,6 +99,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public MenuItem newImplementMenu = new MenuItem("new Implementation");
 	public Menu skins = new Menu("Skins...");
 	public MenuItem normal = new MenuItem("Normal");
+	public MenuItem Shema = new MenuItem("Shema");
 	public MenuItem night = new MenuItem("Night Mode");
 	public MenuItem h4ck3r = new MenuItem("h4ck3r m0d3");
 	public MenuItem winxp = new MenuItem("Windows XP");
@@ -109,11 +110,13 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Button newComponent = new Button("Add component");
 	public Button newConfiguration = new Button("Add configuration");
 	public Button newImplementation = new Button("Add Implementation");
-	public Button NFAttr = new Button("Add NF Attributes");
+	public Button NFAttr = new Button("Non-Functional Attributes");
+	public Button NFConstraint = new Button("Non-Functional Constraint");
 	public SplitMenuButton verif = new SplitMenuButton();
 	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
-	public MenuItem fVerif = new MenuItem("Fonctionel Verification");
-	public MenuItem nfVerif = new MenuItem("NF Verification");
+	public MenuItem fVerif = new MenuItem("Functional Verification");
+	public MenuItem nfVerif = new MenuItem("Non-Functional Verification");
+	public MenuItem Conf = new MenuItem("Choose Configuration ");
 
 	// define Tree
 	private TreeView<TreeView> tree = new TreeView<TreeView>();
@@ -170,6 +173,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		clearLinks.getStyleClass().add("menuColors");
 		skins.getStyleClass().add("menuColors");
 		normal.getStyleClass().add("menuColors");
+		Shema.getStyleClass().add("menuColors");
 		night.getStyleClass().add("menuColors");
 		h4ck3r.getStyleClass().add("menuColors");
 		winxp.getStyleClass().add("menuColors");
@@ -178,7 +182,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		file.getItems().addAll(newModel, save, load, export);
 		edit.getItems().addAll(undo, redo, clear, clearLinks);
 		skins.getItems().addAll(normal, night, h4ck3r, winxp);
-		view.getItems().add(skins);
+		view.getItems().addAll(skins,Shema);
 		newModel.getItems().addAll(newConfigMenu, newComponentMenu, newImplementMenu);
 		menu.getMenus().addAll(file, edit, view);
 
@@ -188,6 +192,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newImplementation.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		verif.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		NFAttr.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		NFConstraint.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		linkMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 
@@ -195,13 +200,14 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		tools.getItems().add(newComponent);
 		tools.getItems().add(newImplementation);
 		tools.getItems().add(NFAttr);
+		tools.getItems().add(NFConstraint);
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
 		tools.getItems().add(verif);
 
 		// Button
 		verif.setText("Check Architecture");
-		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif);
+		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif,Conf);
 
 		// Creates a new configuration dialog upon click
 		EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
@@ -244,6 +250,15 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				e.consume();
 			}
 		};
+		EventHandler<ActionEvent> NFCEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ConstraintWindow dialog = new ConstraintWindow(-1, data);
+				dialog.initModality(Modality.APPLICATION_MODAL);
+				dialog.show();
+				e.consume();
+			}
+		};
 
 		// Creates a new link dialog upon click
 		EventHandler<ActionEvent> toggleLinkEvent = new EventHandler<ActionEvent>() {
@@ -261,11 +276,25 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.toggleLinkMode();
 				linkMode.setSelected(!linkMode.isSelected());
 			}
+		}; 
+		
+		EventHandler<ActionEvent> ChooseConf = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ReconfigurationWindow dialog = new ReconfigurationWindow(data);
+				dialog.initModality(Modality.APPLICATION_MODAL);
+				dialog.show();
+				e.consume();
+			}
 		};
 
 		EventHandler<ActionEvent> verifEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+			
+				
+				
+				
 				Text title = new Text("Structural verification report:\n");
 				title.relocate(5, 5);
 				consolPanel.getChildren().clear();
@@ -460,6 +489,16 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.refreshLines();
 			}
 		};
+		EventHandler<ActionEvent> ShemaEvent = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				ShemaWindow dialog = new ShemaWindow();
+				dialog.initModality(Modality.APPLICATION_MODAL);
+				dialog.show();
+			
+				
+			}
+		};
 
 		EventHandler<ActionEvent> nightEvent = new EventHandler<ActionEvent>() {
 			@Override
@@ -541,6 +580,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newImplementation.setOnAction(newImplementationEvent);
 		newConfiguration.setOnAction(newConfigurationEvent);
 		NFAttr.setOnAction(NFEvent);
+		NFConstraint.setOnAction(NFCEvent);
+		Conf.setOnAction(ChooseConf);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
 
@@ -569,6 +610,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		save.setOnAction(saveEvent);
 		load.setOnAction(loadEvent);
 		export.setOnAction(exportEvent);
+		Shema.setOnAction(ShemaEvent);
 		normal.setOnAction(normalEvent);
 		night.setOnAction(nightEvent);
 		h4ck3r.setOnAction(h4ck3rEvent);

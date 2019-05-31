@@ -23,6 +23,7 @@ import application.objects.ImplementationBlock;
 import application.objects.Link;
 import application.view.NewPortWindow;
 import application.view.NewComponentWindow;
+import application.view.NewConnectorWindow;
 import application.view.NewImplementationWindow;
 import application.view.NewLinkWindow;
 import application.view.ProgramWindow;
@@ -300,6 +301,7 @@ public class Main extends Application {
 								newPort.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
 									@Override
 									public void handle(MouseEvent e) {
+										
 										if (data.isLinkable()) {
 											if (data.getPortModel(linkSrc).getType().equals(added.getType())) {
 												Alert.display("Error !!", "Invalid connection of ports");
@@ -311,8 +313,10 @@ public class Main extends Application {
 													if (linkSrc != added.getIndex() && linkSrc != -1) {
 														// Create link window, with filled in src/dest
 														((Pane) window.appPanel.getSelectionModel().getSelectedItem().getContent()).getChildren().remove(line);
-														NewLinkWindow dialog = new NewLinkWindow(-1, data,window);
+														//NewLinkWindow dialog = new NewLinkWindow(-1, data,window);
+														NewConnectorWindow dialog = new NewConnectorWindow(-1, data,window,data.getPortModel(linkSrc),added);
 														dialog.setSrc(linkSrc);
+													 
 														dialog.setDest(added.getIndex());
 														dialog.initModality(Modality.APPLICATION_MODAL);
 														dialog.show();

@@ -23,9 +23,28 @@ public class Port  {
 	public StringProperty name = new SimpleStringProperty();
 	private StringProperty type = new SimpleStringProperty();
 	private Csp csp =  new Csp();
+	String type1;
+    public Csp cspExpression=new Csp("","");
+    public Csp cspExpressionModify;
+
+    public static Port firstClickedPort =null;
+    public static Port lastClickedPort =null;
+    private Object parent;
+    public String instanceParent ;
+    public ArrayList<Arc> listArc = new ArrayList<>();
+    public ArrayList<Arc> listArc2 = new ArrayList<>();
+    public Arc arc;
+
+    String evt;
+
+private final int STEP = 1;
+	
+	
+	
 	public void setCsp(Csp csp) {
 		this.csp = csp;
 	}
+	
 
 	private ArchitectureElement element;
 	    String nom ;
@@ -61,21 +80,7 @@ public class Port  {
 			this.cspExpressionModify = cspExpressionModify;
 		}
 
-		String type1;
-	    public Csp cspExpression=new Csp("","");
-	    public Csp cspExpressionModify;
-
-	    public static Port firstClickedPort =null;
-	    public static Port lastClickedPort =null;
-	    private Object parent;
-	    public String instanceParent ;
-	    public ArrayList<Arc> listArc = new ArrayList<>();
-	    public ArrayList<Arc> listArc2 = new ArrayList<>();
-	    public Arc arc;
-
-	    String evt;
 	
-	private final int STEP = 1;
 
 	/**
 	 * Constructs an instance of Port
@@ -100,6 +105,7 @@ public class Port  {
 			 ((Component) element).setPorts(this);	
 		}
 		 else if(this.element instanceof ComponentImplementation) {
+			 this.instanceParent = ((ComponentImplementation) element).getName();
 			 ((ComponentImplementation) element).setPorts(this);
 		 }
 		

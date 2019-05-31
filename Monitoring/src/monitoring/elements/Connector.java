@@ -4,6 +4,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.shape.Line;
+
 
 public class Connector extends ArchitectureElement {
 	/*
@@ -26,6 +28,43 @@ public class Connector extends ArchitectureElement {
 	private IntegerProperty srcMax = new SimpleIntegerProperty();
 	private IntegerProperty destMin = new SimpleIntegerProperty();
 	private IntegerProperty destMax = new SimpleIntegerProperty();
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	public    Port outPort;
+	public    Port inPort;
+	 
+
+
+
+	    public Csp formule=new Csp("","");
+	    public void setOutPort(Port outPort){
+	        this.outPort = outPort;
+
+	    }
+
+	    public Csp getFormule() {
+			return formule;
+		}
+
+		public void setFormule(Csp formule) {
+			this.formule = formule;
+		}
+
+		public Port getOutPort() {
+			return outPort;
+		}
+
+		public Port getInPort() {
+			return inPort;
+		}
+
+		public void setInPort(Port inPort){
+	        this.inPort = inPort;
+	    }
+	
+	
+
+
 
 	private StringProperty label = new SimpleStringProperty();
 	private Configuration configuration ;

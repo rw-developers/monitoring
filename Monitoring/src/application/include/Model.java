@@ -60,7 +60,7 @@ public class Model {
 
 	public class linkStackData {
 		private int[] intData = new int[8];
-		private String label;
+		private String label;  
 	}
 
 	private ObservableList<Configuration> configurationList;

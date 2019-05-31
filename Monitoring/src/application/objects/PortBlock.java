@@ -14,7 +14,7 @@ public class PortBlock extends VBox {
 	private PortNode component = new PortNode();
 	private LinkNode node = new LinkNode();
 
-	/**
+	/** 
 	 * Constructs a PortBlock object using the data stored in modelIn
 	 * 
 	 * @param modelIn

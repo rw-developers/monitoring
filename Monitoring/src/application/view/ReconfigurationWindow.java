@@ -3,25 +3,35 @@ package application.view;
 
 import java.lang.*;
 import java.util.*;
+
+import application.include.Model;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import monitoring.elements.Configuration;
 
 public  class ReconfigurationWindow extends Stage {
 
-    protected final Button button;
-    protected final ChoiceBox choiceBox;
-    protected final ChoiceBox choiceBox0;
-    protected final Label label;
-    protected final Label label0;
+    protected  Button button;
+    protected  ChoiceBox<Configuration> choiceBox;
+    protected  ChoiceBox<Configuration> choiceBox0;
+    protected  Label label;
+    protected  Label label0;
     protected AnchorPane p ;
-   
-    public ReconfigurationWindow() {
+    
+    
+    public ReconfigurationWindow() {}
+    public ReconfigurationWindow(Model data) {
+    	
+    
+			choiceBox = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
+			choiceBox0 = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
+			
+		
 
         button = new Button();
-        choiceBox = new ChoiceBox();
-        choiceBox0 = new ChoiceBox();
+     
         label = new Label();
         label0 = new Label();
       p = new AnchorPane();
@@ -57,8 +67,12 @@ public  class ReconfigurationWindow extends Stage {
         p.getChildren().add(choiceBox0);
         p.getChildren().add(label);
         p.getChildren().add(label0);
-        Scene scene = new Scene(p, 670,460);
+        Scene scene = new Scene(p, 600,185);
 		this.setScene(scene);
+		
+		
 
     }
+
+	
 }

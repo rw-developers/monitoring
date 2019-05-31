@@ -6,7 +6,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 // import javafx.scene.shape.Polygon;
 
-public class Arrow extends Path {
+public class Arrow extends Path { 
 
 	private int x;
 	private int y;

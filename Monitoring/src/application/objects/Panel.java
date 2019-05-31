@@ -14,7 +14,7 @@ public class Panel extends HBox {
 	public Panel() {
 		this.getChildren().add(text);
 		text.getStyleClass().add("textColor");
-	}
+	} 
 
 	/**
 	 * Updates the text stored by the panel

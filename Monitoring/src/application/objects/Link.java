@@ -5,7 +5,7 @@ import javafx.scene.shape.Line;
 public class Link extends Line {
 
 	// how many pixels a line connecting to source or destination should be offset
-	// from their neighbors
+	// from their neighbors 
 	private static final int SOURCE_OFFSET = 14;
 	private static final int DESTINATION_OFFSET = 14;
 

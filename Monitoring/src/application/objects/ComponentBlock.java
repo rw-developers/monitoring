@@ -3,7 +3,7 @@ package application.objects;
 import javafx.scene.layout.VBox;
 import monitoring.elements.Component;
 
-public class ComponentBlock extends VBox {
+public class ComponentBlock extends VBox { 
 	
 	/*
 	 * Private variables stored in the ComponentBlock object
