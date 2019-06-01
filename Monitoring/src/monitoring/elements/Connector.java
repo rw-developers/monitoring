@@ -32,6 +32,7 @@ public class Connector extends ArchitectureElement {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public    Port outPort;
 	public    Port inPort;
+	public int Bandwidth;
 	 
 
 
@@ -45,6 +46,7 @@ public class Connector extends ArchitectureElement {
 	    public Csp getFormule() {
 			return formule;
 		}
+	    public Csp getCSpArc() {return formule;}
 
 		public void setFormule(Csp formule) {
 			this.formule = formule;
@@ -76,7 +78,7 @@ public class Connector extends ArchitectureElement {
 	 * @param data the integral data to be stored
 	 * @param l    the label to be stored
 	 */
-	public Connector(int[] data, String l,Configuration config) {
+	public Connector(int[] data, String l,Configuration config,Csp csp,int bandwidth,Port in ,Port out) {
 		if (data.length == 8) {
 			index = data[0];
 			type.set(data[1]);
@@ -91,12 +93,20 @@ public class Connector extends ArchitectureElement {
 		label.set(l);
 		this.configuration = config;
 		this.configuration.setConnectors(this);
+		this.formule = csp;
+		this.Bandwidth = bandwidth;
+		this.inPort = in;
+		this.outPort = out;
 				
 	}
 
 	/*****************************
 	 * SETTERS
 	 ****************************/
+
+	public Connector() {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Sets the index value of the Connector

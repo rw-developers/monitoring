@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import application.include.Alert;
+
 import uk.ac.ox.cs.fdr.Assertion;
 import uk.ac.ox.cs.fdr.FileLoadError;
 import uk.ac.ox.cs.fdr.InputFileError;
@@ -51,6 +52,455 @@ public class VerificationFDR {
 
 	        return new boolean[]{false};
 	    }
+	    
+	    
+	    
+	    
+	    
+	    public void ValidateConfiguration(Configuration conf){
+	        File fichCSP=new File("testFDR.csp");
+	        String Text ="";
+	        String channels ="";
+	        String AllFormulla ="";
+	        String AllFormullaSeq="";
+	        String GlobaleFormulla ="GlobaleFormulla = ";
+	        String GlobaleFormullaConf ="";
+	        Csp formullaPort = null;
+	        String formulla="";
+	        String formullaConcat ="";
+	        String formullaConcatConf ="";
+	        String CspArc ="";
+	        String CspArcConf ="";
+	        String ComAction ="";
+	        String ComActionConf ="";
+	        String formulaConf;
+	        String channelsConf="";
+	        String modBoucleConf="";
+	        String allformulaConf="";
+	        String textConf = "";
+	        String confName;
+	        String globalFormulaSeq="";
+	        String AllFormullaSeqConf="";
+	        String globalFormulaSeqConf="";
+	        ArrayList<String> arrayChannel = new ArrayList<>();
+
+
+	        // liste pour diffirencier les arcs
+	        ArrayList<String> BindInOutimplementations = new ArrayList<>();
+	        int Compteur=0;
+	        try{
+	            //pour chaque instance on recupere les csp des prots de son composant type
+	            for(int i =0;i<conf.implementations.size();i++){
+	                String nameComposant =conf.implementations.get(i).getComponentType().getName();
+	                for (int j = 0;j<conf.implementations.get(i).getComponentType().getPorts().size()-1;j++) {
+	                    Port p = conf.implementations.get(i).getComponentType().getPorts().get(j);
+	                    // recuperer la formulle du port
+	                    formullaPort = p.getCspExpression();
+	                    // le nom de l'instance + le ports
+	                    formulla = conf.implementations.get(i).getName()+"_"+formullaPort.getName();
+	                    formulaConf=formullaPort.getName();
+	                    // recuprer tt les channel
+	                    channels += "channel " +  formulla + " : {0} \n";
+	                    //recuperer tt le channel sans redandence pour tester la reconfig
+	                    boolean channelExist = false;
+	                    boolean channelExistAll = false;
+	                    for(int s = 0 ;s<arrayChannel.size();s++ ){
+	                        if(arrayChannel.get(s).equals(formulaConf))channelExist=true;
+	                    }
+	                    if(channelExist == false)
+	                    {channelsConf += "channel " +  formulaConf + " : {0} \n";
+	                        String chan = "channel " +  formulaConf + " : {0} \n";
+	                        for(int g= 0 ; g<Allchannel.size();g++){
+	                            if(Allchannel.get(g).equals(chan)) channelExistAll=true;
+	                        }
+	                        if(channelExistAll==false)
+	                        {   AllchannelS+=chan;
+	                            Allchannel.add(chan);}
+	                    }
+	                    arrayChannel.add(formulaConf);
+	                    // recuperer tt les formulles csp
+	                    // si le port out ou in je fait des modif sur la formulla csp
+	                    String[] tabOut = p.getCspExpressionModify().getExpression().split("->");
+	                    String[]split3 = tabOut[tabOut.length-1].split("_");
+	                    String modBoucle = nameComposant+"_"+conf.implementations.get(i).getName() + "_" + split3[1];//reste a verifier
+	                    modBoucleConf=conf.name+"_"+modBoucle;
+	                    String restTab ="";
+	                    String restTabConf="";
+	                    for (int d =0;d<tabOut.length-1;d++){
+	                        restTab+=conf.implementations.get(i).getName() + "_"+tabOut[d]+"->";
+	                        restTabConf+=tabOut[d]+"->";
+	                    }
+	                    AllFormulla += nameComposant+"_"+conf.implementations.get(i).getName() + "_" + p.getCspExpression().getName() + " = " + restTab+modBoucle+ "\n";
+
+	                    allformulaConf += conf.name+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + p.getCspExpression().getName()+"="+restTabConf+modBoucleConf+"\n";
+	                }
+	                    // modifer le nom des channels  de l'exp globale de l'instance
+	                    ArrayList<String> list1= new ArrayList<>();
+	                    ArrayList<String> list2= new ArrayList<>();
+	                    ArrayList<String> list6= new ArrayList<>();
+	                    ArrayList<String> list2Conf= new ArrayList<>();
+	                    String formuleGlobalUser = conf.implementations.get(i).getComponentType().getExpGlobale().getExpression();
+	                    String formuleGlobalUserConf = conf.implementations.get(i).getComponentType().getExpGlobale().getExpression();
+	                    Pattern formulasplit1 = Pattern.compile("([a-zA-Z]+[0-9]*[_][a-zA-Z]+[0-9]*)(?=\\|~\\||\\[\\]|;|[|]{3}|\\)|$)|([a-zA-Z]+[0-9]*[!][a-zA-Z]+[0-9]*)(?=[-]>)|([a-zA-Z]+[0-9]*[?][a-zA-Z]+[0-9]*)(?=[-]>)");
+	                    Matcher formulasplitMatcher = formulasplit1.matcher(formuleGlobalUser);
+	                    //ce test pour l autoformula psq il faut prendre la fin $
+	                if(conf.implementations.get(i).getComponentType().getExpGlobale().getName()=="autoFormula"){
+	                    String newAutoFormula ="";
+	                    Pattern formulasplit2 = Pattern.compile("([a-zA-Z]+[0-9]*[_][a-zA-Z]+[0-9]*)(?=\\|~\\||\\[\\]|;|[|]{3}|$)");
+	                    Matcher formulasplitMatcher2 = formulasplit2.matcher(formuleGlobalUser);
+	                    while(formulasplitMatcher2.find()) {
+	                        String[] split6 = formulasplitMatcher2.group(1).split("_");
+	                        formuleGlobalUser=formuleGlobalUser.replaceAll(formulasplitMatcher2.group(1),nameComposant+"_"+conf.implementations.get(i).getName()+"_"+split6[1]);
+	                        formuleGlobalUserConf=formuleGlobalUserConf.replaceAll(formulasplitMatcher2.group(1),conf.name+"_"+nameComposant+"_"+conf.implementations.get(i).getName()+"_"+split6[1]);
+	                    }
+	                }
+	                else {
+	                    while (formulasplitMatcher.find()) {
+	                        if (formulasplitMatcher.group(1) != null) {
+	                            String[] nameex = formulasplitMatcher.group(1).split("_");
+	                            list1.add(formulasplitMatcher.group(1));
+	                            list2.add(conf.implementations.get(i).getComponentType().getName() + "_" + conf.implementations.get(i).getName() + "_" + nameex[1]);
+	                            list6.add(conf.name+"_"+conf.implementations.get(i).getComponentType().getName() + "_" + conf.implementations.get(i).getName() + "_" + nameex[1]);
+	                        } else if (formulasplitMatcher.group(2) != null) {
+	                            String[] nameex = formulasplitMatcher.group(2).split("\\!");
+	                            list1.add(formulasplitMatcher.group(2));
+	                            list2.add(conf.implementations.get(i).getName() + "_" + nameex[0] + "!0");
+	                            list6.add(nameex[0] + "!0");
+	                        } else if (formulasplitMatcher.group(3) != null) {
+
+	                            String[] nameex = formulasplitMatcher.group(3).split("\\?");
+	                            list1.add(nameex[0] + "\\?" + nameex[1]);
+	                            list2.add(conf.implementations.get(i).getName() + "_" + nameex[0] + "\\?" + nameex[1]);
+	                            list6.add(nameex[0] + "\\?" + nameex[1]);
+
+	                        }
+	                    }
+
+
+	                    for (int z = 0; z < list1.size(); z++) {
+	                        formuleGlobalUser = formuleGlobalUser.replaceAll(list1.get(z), list2.get(z));
+	                        formuleGlobalUserConf = formuleGlobalUserConf.replaceAll(list1.get(z), list6.get(z));                    }
+	                    System.out.println("\n\n\n\n");
+
+	                }
+
+	                AllFormulla +=nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
+	                        + "= "+formuleGlobalUser +"\n" ;
+	                if(i<conf.implementations.size()-1) {
+	                    AllFormullaSeq += nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName();
+	                    AllFormullaSeq += ";";
+	                   // AllFormullaSeqConf+=conf.name+"_"+AllFormullaSeq;
+
+	                }
+	                else  {
+	                    AllFormullaSeq += nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName();
+	                   // AllFormullaSeqConf+=conf.name+"_"+AllFormullaSeq;
+	                }
+	                System.out.println(AllFormullaSeq);
+	                allformulaConf+=conf.name+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
+	                        + "= "+formuleGlobalUserConf +"\n" ;
+	                System.out.println(conf.name+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
+	                        + "= "+formuleGlobalUserConf +"\n");
+
+	                // fin de modification
+
+	                /// arcs des ports des implementations
+	                for (int s = 0 ;s< conf.implementations.get(i).getPorts().size()-1;s++) {
+	                    Port port = conf.implementations.get(i).getPorts().get(s);
+	                    for (int m = 0; m < port.getListArc2().size(); m++) {
+	                        Connector arc = port.getListArc2().get(m);
+	                        // modifier dans l exp de binding pour remplacer !x par !0
+	                        // String default1="znn_p2!x->znn_p1?x->znn_p1!x->znn_p2?x->bind";
+	                        String[] splitbind2 = arc.getCSpArc().getExpression().split("->");
+	                        String concatBind = "";
+	                        String concatBinConf="";
+	                        Pattern arcNamePattern = Pattern.compile("(([a-zA-Z]+[0-9]*)[_]([a-zA-Z]+[0-9]*))[!]([a-zA-Z]+[0-9]*)");
+	                        for(int d = 0 ; d<splitbind2.length-1;d++){
+	                            Matcher arcNameMatcher=arcNamePattern.matcher(splitbind2[d]);
+	                            if (arcNameMatcher.matches()) {
+	                                String arcname = arcNameMatcher.group(1);
+	                                concatBind += arcname + "!0->";
+	                                String[] splitbind3 = arcNameMatcher.group(1).split("_");
+	                                concatBinConf += splitbind3[1] + "!0->";
+	                            } else {
+	                                concatBind += splitbind2[d] + "->";
+	                                String[] splitbind3 = splitbind2[d].split("_");
+	                                concatBinConf += splitbind3[1] + "->";
+	                            }
+	                        }
+	                        concatBind+=conf.implementations.get(i).getName()+"_"+splitbind2[splitbind2.length-1];
+	                        concatBinConf+=conf.name+"_"+conf.implementations.get(i).getName()+"_"+splitbind2[splitbind2.length-1];
+	                        // fin remplacement
+	                        // pour remplacer les ? et ! par des points (les actions com )
+	                        ArrayList<String> list3= new ArrayList<>();
+	                        ArrayList<String> list4= new ArrayList<>();
+	                        String[] splitAction = concatBind.split("->");
+
+	                        //String[] splitActionConf = concatBinConf.split("->");
+
+
+	                        Pattern formulaComPatern = Pattern.compile("([a-zA-Z]+[0-9]*[_][a-zA-Z]+[0-9]*)(?=!|\\?)");
+	                        String [] splitactCom=null;
+	                        ArrayList<String> ComActionArray = new ArrayList<>();
+	                        ArrayList<String> ComActionConfArray = new ArrayList<>();
+	                        for (int z = 0; z < splitAction.length -2; z++) {
+	                            Matcher formulaComMatcher = formulaComPatern.matcher(splitAction[z]);
+	                            while (formulaComMatcher.find()) {
+	                                ComActionArray.add(formulaComMatcher.group(1) + ".0");
+	                                splitactCom = formulaComMatcher.group(1).split("_");
+	                                ComActionConfArray.add(splitactCom[1] + ".0");
+
+	                            }
+	                        }
+	                        Matcher formulaComMatcher = formulaComPatern.matcher(splitAction[splitAction.length-2]);
+	                        while(formulaComMatcher.find()) {
+	                            ComActionArray.add(formulaComMatcher.group(1) + ".0");
+	                            splitactCom = formulaComMatcher.group(1).split("_");
+	                            ComActionConfArray.add(splitactCom[1] + ".0");
+	                        }
+
+	                        for (int z=0;z<ComActionArray.size()-1;z++){
+	                            if(Search(ComActionArray,ComActionArray.get(z),z)==false)ComAction+=ComActionArray.get(z)+",";
+	                            if(Search(ComActionConfArray,ComActionConfArray.get(z),z)==false) ComActionConf+=ComActionConfArray.get(z)+",";
+	                        }
+	                        ComAction+=ComActionArray.get(ComActionArray.size()-1);
+	                        ComActionConf+=ComActionConfArray.get(ComActionConfArray.size()-1);
+
+
+	                        /// fin remplacement
+
+
+	                        // tester avant si l'arc est deja presenté
+	                        ComponentImplementation arcIn = (ComponentImplementation) arc.getInPort().getParent();
+	                        ComponentImplementation arcOut = (ComponentImplementation) arc.getOutPort().getParent();
+	                        String arcInOut = arcIn.getName()+"_"+arc.getInPort().getNom() + "." + arcOut.getName()+"_"+arc.getOutPort().getNom();
+	                        String arcOutIn = arcOut.getName()+"_"+arc.getOutPort().getNom() + "." + arcIn.getName()+"_"+arc.getInPort().getNom();
+	                        boolean notexistBind = true;
+	                        for (int c = 0; c < BindInOutimplementations.size(); c++) {
+	                            if (BindInOutimplementations.get(c).equals(arcInOut) || BindInOutimplementations.get(c).equals(arcOutIn)) {
+	                                notexistBind = false;
+	                            }
+	                        }
+	                        if(notexistBind){
+	                            BindInOutimplementations.add(arcInOut);
+	                            BindInOutimplementations.add(arcOutIn);
+	                            AllFormulla += conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName() + "=" + concatBind + "\n";
+	                            allformulaConf+=conf.name+"_"+conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName()  + "=" + concatBinConf+ "\n";
+
+	                            formullaConcat += "formula" +Compteur+ ",";
+	                            String ExpInstance2 ="";
+	                            String expInstance2Conf ="";
+
+	                            if(arc.getInPort().getNom().equals(port.getNom()))
+	                            {
+	                                ExpInstance2 =arcOut.getComponentType().getName()+"_"+arcOut.getName()+"_"+arcOut.getComponentType().getExpGlobale().getName();
+	                                expInstance2Conf=conf.name+"_"+arcOut.getComponentType().getName()+"_"+arcOut.getName()+"_"+arcOut.getComponentType().getExpGlobale().getName();
+
+	                            }
+	                            else
+	                            {
+	                                ExpInstance2 =arcIn.getComponentType().getName()+"_"+arcIn.getName()+"_"+arcIn.getComponentType().getExpGlobale().getName();
+	                                expInstance2Conf=conf.name+"_"+arcIn.getComponentType().getName()+"_"+arcIn.getName()+"_"+arcIn.getComponentType().getExpGlobale().getName();
+	                            }
+	                            CspArc += "formula" +Compteur+ "="
+	                                    + "(" + nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName() + "|||"
+	                                    +ExpInstance2+")[|{" + ComAction + "}|]" + conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName() + "\n";
+
+	                            CspArcConf+=conf.name+"_"+"formula" +Compteur+ "="
+	                                    + "(" +conf.name+"_"+ nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName() + "|||"
+	                                    +expInstance2Conf+")[|{" + ComActionConf + "}|]" + conf.name+"_"+conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName() + "\n";
+	                            Compteur++;
+
+	                        }
+	                        // mettre le vide dedans pour recharger les nvx actions coms
+	                        ComAction = "";
+	                        ComActionConf="";
+	                    }
+	                }
+
+	                AllFormulla +="\n\n\n\n";
+	                allformulaConf+="\n\n\n\n";
+
+
+
+	            }
+	            globalFormulaSeq="sequentiel"+"="+AllFormullaSeq;
+	            //globalFormulaSeqConf=""+"="+AllFormullaSeqConf;
+	            //GlobaleFormullaConf
+	            // mettre le ||| entre les formulles (formulle golbale )
+	            String [] TabNameForm= formullaConcat.split(",");
+	            if(TabNameForm.length==1){
+	                GlobaleFormulla += TabNameForm[0];
+	                GlobaleFormullaConf+=conf.name+"_"+TabNameForm[0];
+	            }
+	            else {
+	                GlobaleFormulla +=TabNameForm[0];
+	                GlobaleFormullaConf+=conf.name+"_"+TabNameForm[0];
+	                for (int m = 1 ; m< TabNameForm.length; m++){
+	                    GlobaleFormulla += "|||"+TabNameForm[m];
+	                    GlobaleFormullaConf+="|||"+conf.name+"_"+TabNameForm[m];
+	                }
+	            }
+
+	            String Assert = "assert  GlobaleFormulla :[deadlock free [F]]";
+	            String assertSeq= "assert  sequentiel :[deadlock free [F]]";
+	            String AssertConf ="assert "+conf.name+"_GlobaleFormulla :[deadlock free [F]]";
+	            // pour le raffinement par trace
+	            // assert Spec[T= Impl
+
+	            Text = channels+"\n"+AllFormulla+"\n"+CspArc+"\n\n"+GlobaleFormulla+"\n\n"+Assert+"\n\n"+globalFormulaSeq+"\n\n"+assertSeq;
+	            textConf= allformulaConf+"\n"+CspArcConf+ conf.name+"_GlobaleFormulla  = "+GlobaleFormullaConf+"\n\n";
+	            //affecter le textConfig a la config;
+	            conf.TextConfig=textConf;
+
+	            //System.out.println(textConf);
+	            //Text = "channel \n ccc \n";
+	            FileWriter ffw=new FileWriter(fichCSP);
+	            ffw.write(Text);
+
+	            System.out.println("rahoo yekteb fel fichier");
+	            ffw.flush();
+	            boolean[] result=testFDR("testFDR.csp");
+
+	            if(result[0])  {
+	            
+	                Alert.display("Test FDR", " parallel: successful !  ");
+	            }
+	            else {
+	            
+	                
+	                Alert.display("Test FDR", " executing configuration intances in parallel can't be done   ");
+	            }
+	            if(result[1])  {
+	           
+	                Alert.display("Test FDR", " sequential: successful!  ");
+	            }
+	            else {
+	              
+	                Alert.display("Test FDR", "executing configuration intances in sequence can't be done ");
+	            }
+
+
+	        }
+	        catch(Exception e1){
+	            e1.printStackTrace();
+	        }
+
+	    }
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
 	 public void valideCspComponent(Component componenet ){
 	        File fichCSP=new File("testFDR.csp");
 	        String Text ="";

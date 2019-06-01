@@ -22,28 +22,51 @@ public class Port  {
 	private int[] intData = new int[5];
 	public StringProperty name = new SimpleStringProperty();
 	private StringProperty type = new SimpleStringProperty();
-	private Csp csp =  new Csp();
+	
 	String type1;
     public Csp cspExpression=new Csp("","");
-    public Csp cspExpressionModify;
+    public Csp cspExpressionModify =new Csp("","");
 
     public static Port firstClickedPort =null;
     public static Port lastClickedPort =null;
     private Object parent;
-    public String instanceParent ;
-    public ArrayList<Arc> listArc = new ArrayList<>();
-    public ArrayList<Arc> listArc2 = new ArrayList<>();
-    public Arc arc;
+    public Object getParent() {
+		return parent;
+	}
+
+	public void setParent(Object parent) {
+		this.parent = parent;
+	}
+
+	public String instanceParent ;
+    public ArrayList<Connector> listArc = new ArrayList<>();
+    public ArrayList<Connector> listArc2 = new ArrayList<>();
+    public ArrayList<Connector> getListArc() {
+		return listArc;
+	}
+
+	public void setListArc(ArrayList<Connector> listArc) {
+		this.listArc = listArc;
+	}
+
+	public ArrayList<Connector> getListArc2() {
+		return listArc2;
+	}
+
+	public void setListArc2(ArrayList<Connector> listArc2) {
+		this.listArc2 = listArc2;
+	}
+
+	public Arc arc;
 
     String evt;
+    
 
 private final int STEP = 1;
 	
 	
 	
-	public void setCsp(Csp csp) {
-		this.csp = csp;
-	}
+	
 	
 
 	private ArchitectureElement element;

@@ -46,7 +46,7 @@ public  class NewConnectorWindow extends Stage {
     
     public static Port port;
     public static Port firsPort, secondPort;
-    public static Connector arc;
+    public static Connector arc = new Connector();;
     public static ComponentImplementation instance;
     String port1, port2,instance1,instance2;
 
@@ -74,7 +74,11 @@ public  class NewConnectorWindow extends Stage {
         separator0 = new Separator();
         button = new Button();
         button0 = new Button();
-Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
+
+      firsPort = s1;
+      secondPort = s2 ;
+        textField2.setText(data.getPortModel(s1.getIndex()).getCspExpression().getExpression());
+		textField3.setText(data.getPortModel(s2.getIndex()).getCspExpression().getExpression());
         p.setId("AnchorPane");
         p.setPrefHeight(344.0);
         p.setPrefWidth(600.0);
@@ -167,7 +171,7 @@ Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
 			public void handle(ActionEvent e) {
 				data.saveUndoState();
 				data.clearRedoState();
-				
+				/*
 				if(editIndex == -1)
 				{
 
@@ -191,7 +195,7 @@ Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
 				} else {
 					data.getLinkModel(editIndex).setType(newLinkArrow.getSelectionModel().getSelectedIndex());
 				
-				}				
+				}*/				
 				//closeWindow();
 				e.consume();
 			}
@@ -219,25 +223,59 @@ Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
 				public void handle(ActionEvent e) {
 					
 					      port1 = firsPort.getName();
-					      
-				     //   instance1=firsPort.getInstanceParent();
+					 
+				      instance1=firsPort.instanceParent;
 				        port2 = secondPort.getName();
-				     //   instance2=secondPort.getInstanceParent();	
-					
-					
-					
+				      instance2=secondPort.instanceParent;	
+				      arc.formule = null;
 					
 					checkCsp();
+					
+						
+						
+						
+						
+						if(editIndex == -1)
+						{
+Alert.display("", textField2.getText());
+							try {
+
+								int confId = 0;
+								for (int i = 1; i < window.appPanel.getTabs().size(); i++) {
+									if (window.appPanel.getTabs().get(i).isSelected()) {
+										confId = i - 1;
+									}
+								}
+								if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
+									data.addLinkModel(
+											new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
+													srcIn, destIn, -2, -2, -2, -2
+													},
+											"",data.getConfigurationModel(confId),arc.formule,Integer.parseInt(textField1.getText()),s2,s1);
+								}
+							} catch (NumberFormatException ex) {
+								Alert.display("", "bfdbfd");
+							}
+						} else {
+							data.getLinkModel(editIndex).setType(newLinkArrow.getSelectionModel().getSelectedIndex());
+						
+						}
+						
+						
+						
+						
+						
+						
+					
 					
 					//closeWindow();
 					e.consume();
 				}
 			};
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		button.setOnAction(submitLinkEvent);
+		button.setOnAction(ValidateCSPEvent);
 		button0.setOnAction(deleteLinkEvent);
-		textField2.setText(""+srcIn);
-		textField3.setText(""+destIn);
+		
 		Scene scene = new Scene(p, 600,344);
 		this.setScene(scene);
 
@@ -287,8 +325,9 @@ Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
             Matcher secondGroupPortNameMatcher = secondGroupPortNamePattern.matcher(secondPartExp);
             while (secondGroupPortNameMatcher.find()) {
                 portsInCspExpression.add(secondGroupPortNameMatcher.group(1));
-                newPortsInCspExpression.add(instance.getName()+"_"+secondGroupPortNameMatcher.group(1));
+                newPortsInCspExpression.add("_"+secondGroupPortNameMatcher.group(1));
             }
+            //instance.getName()+
             System.out.println(port1+" "+port2);
             System.out.println("yo je ss la liste des ports"+portsInCspExpression);
             int l;
@@ -308,6 +347,7 @@ Alert.display(s1.getName()+""+s1.instanceParent, s2.getName());
                 cspFormule = cspFormule.replaceAll(portsInCspExpression.get(index2), instance2 + "_" + port2);
 
                 arc.formule = new Csp(cspName, cspFormule);
+        
                 System.out.println(newPortsInCspExpression);
                 System.out.println(arc.formule.toString());
             }

@@ -74,7 +74,7 @@ public class NewImplementationWindow extends Stage {
 						data.addPortModel(
 								new int[] { data.getPortTail(), added.getXPos() + 240,
 										added.getYPos() + added.getPorts().size() * 25 + 15, 100, 100 },
-								new String[] { p.getName(), p.getType(), p.getCsp() }, added);
+								new String[] { p.getName(), p.getType(), p.getCspExpression().getExpression() }, added);
 					});
 				} else {
 					data.getImplementationModel(editIndex).setName(newImplementationName.getText());

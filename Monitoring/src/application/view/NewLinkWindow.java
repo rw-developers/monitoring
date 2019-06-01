@@ -77,11 +77,11 @@ public class NewLinkWindow extends Stage {
 							}
 						}
 						if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
-							data.addLinkModel(
+						/*	data.addLinkModel(
 									new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
 											srcIn, destIn, -2, -2, -2, -2
 											},
-									"",data.getConfigurationModel(confId));
+									"",data.getConfigurationModel(confId));*/
 						}
 					} catch (NumberFormatException ex) {
 					}

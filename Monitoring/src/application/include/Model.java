@@ -28,6 +28,7 @@ import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
 import monitoring.elements.Configuration;
 import monitoring.elements.Connector;
+import monitoring.elements.Csp;
 //import monitoring.elements.Method;
 import monitoring.elements.Port;
 import nfattribute.ExecutionTime;
@@ -351,9 +352,9 @@ public class Model {
 	 * @param label The label to be passed to the ConnectionModel constructor.
 	 * @return the index of the new ConnectionModel object
 	 */
-	public int addLinkModel(int[] ints, String label, Configuration config) {
+	public int addLinkModel(int[] ints, String label, Configuration config,Csp csp,int bandwidth,Port in,Port out) {
 		if (ints.length == 8) {
-			linkList.add(new Connector(ints, label, config));
+			linkList.add(new Connector(ints, label, config,csp,bandwidth,in,out));
 		}
 		return (linkList.size() - 1);
 	}
@@ -633,7 +634,8 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label, null));
+				////////////////////////////////////////////////////////
+				linkList.add(new Connector(ints, label, null,null,0,null,null));
 			}
 		}
 
@@ -669,7 +671,7 @@ public class Model {
 						lstate.intData[4], lstate.intData[5], lstate.intData[6], lstate.intData[7] };
 
 				String label = lstate.label;
-				linkList.add(new Connector(ints, label, null));
+				linkList.add(new Connector(ints, label, null,null,0,null,null));
 			}
 		}
 		duringRedo = false;
@@ -959,7 +961,7 @@ public class Model {
 			String label = reader.next().trim();
 			int confId = appPanel.getSelectionModel().getSelectedIndex()-1;
 
-			linkList.add(new Connector(ints, label, configurationList.get(confId)));
+			linkList.add(new Connector(ints, label, configurationList.get(confId),null,0,null,null));
 		}
 
 		reader.close();

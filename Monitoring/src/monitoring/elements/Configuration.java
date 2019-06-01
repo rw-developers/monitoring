@@ -6,6 +6,7 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+
 public class Configuration extends ArchitectureElement {
 
 	/*
@@ -17,10 +18,20 @@ public class Configuration extends ArchitectureElement {
 	 * so they should adhere to the grid as well. stringData: [Name]
 	 */
 	private int index;
-	private StringProperty name = new SimpleStringProperty();
-	private List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
-	private List<Connector> connectors = new ArrayList<Connector>();
+	public StringProperty name = new SimpleStringProperty();
+	List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
+	public List<Connector> connectors = new ArrayList<Connector>();
 	private List<Configuration> configurations = new ArrayList<Configuration>();
+	
+	
+	    public Component parent;
+	    public Csp fomule;
+	    public String TextConfig ="";
+	    private Boolean bool=false;
+
+
+
+	    private Configuration motherConfig=null;
 	
 
 	public Configuration(int id,String nameIn) {

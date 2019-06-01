@@ -1,13 +1,8 @@
-channel p1 : {0} 
 channel p2 : {0} 
-channel p3 : {0} 
 
-znn_p1 = p1?x->znn_p1
-znn_p2 = p2?x->znn_p2
-znn_p3 = p3!0->znn_p3
+dv_p2 = p2!0->dv_p2
 
-egdgb=p2?x->p2?y->(znn_p1|||znn_p3;p2?x->SKIP)
+autoFormula  = dv_p2
+GlobFormulla = dv_p2
 
-GlobFormulla = znn_p1|||znn_p2|||znn_p3
-
-assert GlobFormulla[T=egdgb
+assert GlobFormulla[T= autoFormula
