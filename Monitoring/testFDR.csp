@@ -1,8 +1,8 @@
 channel p2 : {0} 
 
-dv_p2 = p2!0->dv_p2
+c2_p2 = p2!0->c2_p2
 
-autoFormula  = dv_p2
-GlobFormulla = dv_p2
+autoFormula  = c2_p2
+GlobFormulla = c2_p2
 
 assert GlobFormulla[T= autoFormula

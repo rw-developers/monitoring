@@ -129,6 +129,7 @@ private final int STEP = 1;
 		}
 		 else if(this.element instanceof ComponentImplementation) {
 			 this.instanceParent = ((ComponentImplementation) element).getName();
+			 this.parent = ((ComponentImplementation) element);
 			 ((ComponentImplementation) element).setPorts(this);
 		 }
 		

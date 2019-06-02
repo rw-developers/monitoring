@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import monitoring.elements.Configuration;
+import monitoring.elements.VerificationFDR;
 
 public  class ReconfigurationWindow extends Stage {
 
@@ -76,6 +77,9 @@ public  class ReconfigurationWindow extends Stage {
 				public void handle(ActionEvent e) {
 				String total="";
 				Configuration c = data.getConfigurationModel(0);
+				VerificationFDR f = new VerificationFDR();
+				f.ValidateConfiguration(c);
+				/*
 				for(int i = 0 ; i<c.getComponents().size();i++) {
 				total+=	c.getComponents().get(i).getName()+"\n";
 				total+=	c.getComponents().get(i).getComponentType().expGlobale.getExpression()+"\n";
@@ -88,6 +92,7 @@ public  class ReconfigurationWindow extends Stage {
 					total += c.getConnectors().get(h).formule.getExpression()+"\n";
 				}
 				Alert.display("", total);
+				*/
 				
 					//closeWindow();
 					e.consume();

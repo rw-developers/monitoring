@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import application.include.Alert;
-
+import application.include.Model;
 import uk.ac.ox.cs.fdr.Assertion;
 import uk.ac.ox.cs.fdr.FileLoadError;
 import uk.ac.ox.cs.fdr.InputFileError;
@@ -92,6 +92,9 @@ public class VerificationFDR {
 	            //pour chaque instance on recupere les csp des prots de son composant type
 	            for(int i =0;i<conf.implementations.size();i++){
 	                String nameComposant =conf.implementations.get(i).getComponentType().getName();
+	               // Alert.display("", nameComposant);
+	                
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	                
 	                for (int j = 0;j<conf.implementations.get(i).getComponentType().getPorts().size()-1;j++) {
 	                    Port p = conf.implementations.get(i).getComponentType().getPorts().get(j);
 	                    // recuperer la formulle du port
@@ -134,6 +137,7 @@ public class VerificationFDR {
 
 	                    allformulaConf += conf.name+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + p.getCspExpression().getName()+"="+restTabConf+modBoucleConf+"\n";
 	                }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                    // modifer le nom des channels  de l'exp globale de l'instance
 	                    ArrayList<String> list1= new ArrayList<>();
 	                    ArrayList<String> list2= new ArrayList<>();
@@ -176,10 +180,12 @@ public class VerificationFDR {
 	                        }
 	                    }
 
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                    for (int z = 0; z < list1.size(); z++) {
 	                        formuleGlobalUser = formuleGlobalUser.replaceAll(list1.get(z), list2.get(z));
-	                        formuleGlobalUserConf = formuleGlobalUserConf.replaceAll(list1.get(z), list6.get(z));                    }
+	                        formuleGlobalUserConf = formuleGlobalUserConf.replaceAll(list1.get(z), list6.get(z));         
+	                        }
+	                //////////////////////////////////////////////////////////////////////////////////////////////////////////////    
 	                    System.out.println("\n\n\n\n");
 
 	                }
@@ -203,12 +209,16 @@ public class VerificationFDR {
 	                        + "= "+formuleGlobalUserConf +"\n");
 
 	                // fin de modification
-
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                /// arcs des ports des implementations
+	             
 	                for (int s = 0 ;s< conf.implementations.get(i).getPorts().size()-1;s++) {
 	                    Port port = conf.implementations.get(i).getPorts().get(s);
+	                    Addconnector(port,conf);
+	                    
 	                    for (int m = 0; m < port.getListArc2().size(); m++) {
 	                        Connector arc = port.getListArc2().get(m);
+	                        Alert.display("", arc.toString());
 	                        // modifier dans l exp de binding pour remplacer !x par !0
 	                        // String default1="znn_p2!x->znn_p1?x->znn_p1!x->znn_p2?x->bind";
 	                        String[] splitbind2 = arc.getCSpArc().getExpression().split("->");
@@ -317,7 +327,8 @@ public class VerificationFDR {
 	                        ComActionConf="";
 	                    }
 	                }
-
+	                
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                AllFormulla +="\n\n\n\n";
 	                allformulaConf+="\n\n\n\n";
 
@@ -622,6 +633,23 @@ public class VerificationFDR {
 	            }
 	        }
 	        return bool;
+	    }
+	    public void Addconnector(Port p,Configuration c) {
+	    	ArrayList<Connector> listArc = new ArrayList<>();
+	    	ArrayList<Connector> tmp = (ArrayList<Connector>) c.getConnectors();
+	    	for(int i=0;i<tmp.size();i++) {
+	    		
+	    	if(tmp.get(i).inPort.equals(p)||tmp.get(i).outPort.equals(p)) {
+	    		p.listArc.add(tmp.get(i));
+	    		p.listArc2.add(tmp.get(i));
+	    	}	
+	    		
+	    		
+	    		
+	    		
+	    		
+	    	}
+	    	
 	    }
 
 }
