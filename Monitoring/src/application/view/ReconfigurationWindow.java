@@ -1,6 +1,7 @@
 package application.view;
 
 
+import java.io.IOException;
 import java.lang.*;
 import java.util.*;
 
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import monitoring.elements.Configuration;
+import monitoring.elements.Reconfiguration;
 import monitoring.elements.VerificationFDR;
 
 public  class ReconfigurationWindow extends Stage {
@@ -76,9 +78,45 @@ public  class ReconfigurationWindow extends Stage {
 				@Override
 				public void handle(ActionEvent e) {
 				String total="";
-				Configuration c = data.getConfigurationModel(0);
+				Configuration Source = choiceBox.getValue();
+				Configuration distination  = choiceBox0.getValue();
+				
+				
+				
 				VerificationFDR f = new VerificationFDR();
-				f.ValidateConfiguration(c);
+				
+				
+				if((distination == null)&&(Source == null)) {  Alert.display("Error","You must choose Configuration");
+			//	data.getConfigurationModel(0).name.setValue("confi");
+				
+			//	f.ValidateConfiguration(data.getConfigurationModel(0));
+				
+			/*	Reconfiguration r = new Reconfiguration(Source , distination);
+				try {
+					f.reconfig(r);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				*/
+				
+				}
+				if(distination == null) {  f.ValidateConfiguration(Source);   }else {
+					Reconfiguration r = new Reconfiguration(Source , distination);
+					try {
+						f.reconfig(r);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+					
+					
+				}
+				
+				
+			
 				/*
 				for(int i = 0 ; i<c.getComponents().size();i++) {
 				total+=	c.getComponents().get(i).getName()+"\n";

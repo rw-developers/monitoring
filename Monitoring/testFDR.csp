@@ -1,8 +1,36 @@
-channel p2 : {0} 
+channel ins1_p1 : {0} 
+channel ins3_p2 : {0} 
+channel ins4_p3 : {0} 
 
-c2_p2 = p2!0->c2_p2
+znn_ins1_p1 = ins1_p1?x->znn_ins1_p1
+znn_ins1_autoFormula= znn_ins1_p1
+ins1_bind=ins3_p2!0->ins1_p1?x->ins1_bind
+ins1_bind2=ins4_p3!0->ins1_p1?x->ins1_bind2
 
-autoFormula  = c2_p2
-GlobFormulla = c2_p2
 
-assert GlobFormulla[T= autoFormula
+
+
+app_ins3_p2 = ins3_p2!0->app_ins3_p2
+app_ins3_autoFormula= app_ins3_p2
+
+
+
+
+client_ins4_p3 = ins4_p3!0->client_ins4_p3
+client_ins4_autoFormula= client_ins4_p3
+
+
+
+
+
+formula0=(znn_ins1_autoFormula|||app_ins3_autoFormula)[|{ins3_p2.0,ins1_p1.0}|]ins1_bind
+formula1=(znn_ins1_autoFormula|||client_ins4_autoFormula)[|{ins4_p3.0,ins1_p1.0}|]ins1_bind2
+
+
+GlobaleFormulla = formula0|||formula1
+
+assert  GlobaleFormulla :[deadlock free [F]]
+
+sequentiel=znn_ins1_autoFormula;app_ins3_autoFormula;client_ins4_autoFormula
+
+assert  sequentiel :[deadlock free [F]]

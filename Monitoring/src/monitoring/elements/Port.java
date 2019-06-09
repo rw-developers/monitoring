@@ -72,7 +72,7 @@ private final int STEP = 1;
 	private ArchitectureElement element;
 	    String nom ;
 	    public String getNom() {
-			return nom;
+			return name.getValue();
 		}
 
 		public void setNom(String nom) {

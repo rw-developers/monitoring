@@ -8,4 +8,12 @@ public class ArbreSyntaxique {
 	public final String skip = "SKIP";
 	public String EXPR = "@[DF][a-zA-Z]+[0-9]*@->";
 
+	
+	
+	
+	public void Hendle() {
+		
+		
+		
+	}
 }

@@ -1,6 +1,7 @@
 package application.view;
 
 
+
 import java.lang.*;
 import java.util.*;
 
@@ -11,57 +12,64 @@ import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import monitoring.elements.Component;
+import monitoring.elements.Configuration;
 
-public  class ConstraintWindow extends Stage {
+public  class ConstraintWindowI extends Stage {
+	 protected  AnchorPane p;
+    protected  Label label;
+    protected  TabPane tabPane;
+    protected  Tab tab;
+    protected  AnchorPane anchorPane;
+    protected  ComboBox comboBox;
+    protected  ComboBox comboBox0;
+    protected  ComboBox comboBox1;
+    protected  Button button;
+    protected  TextField textField;
+    protected  TextField textField0;
+    protected  Button button0;
+    protected  Separator separator;
+    protected  TableView tableView;
+    protected  TableColumn tableColumn;
+    protected  TableColumn tableColumn0;
+    protected  Tab tab0;
+    protected  AnchorPane anchorPane0;
+    protected  Separator separator0;
+    protected  TableView tableView0;
+    protected  TableColumn tableColumn1;
+    protected  TableColumn tableColumn2;
+    protected  TextField textField1;
+    protected  ChoiceBox comboBox2;
+    protected  ChoiceBox<Component> comboBox3;
+    protected  Label label0;
+    protected  Button button1;
+    protected  Button button2;
+    protected  Button button3;
+    protected  ComboBox<Component> comboBox4;
+    protected  ComboBox comboBox5;
+    protected  ComboBox comboBox6;
+    protected  ComboBox comboBox7;
+    protected  ComboBox comboBox8;
+    protected  ComboBox comboBox9;
+    protected  Tab tab1;
+    protected  AnchorPane anchorPane1;
+    protected  Separator separator1;
 
-    protected final AnchorPane p;
-    protected final Label label;
-    protected final TabPane tabPane;
-    protected final Tab tab;
-    protected final AnchorPane anchorPane;
-    protected final ComboBox comboBox;
-    protected final ComboBox comboBox0;
-    protected final ComboBox comboBox1;
-    protected final Button button;
-    protected final TextField textField;
-    protected final TextField textField0;
-    protected final Button button0;
-    protected final Separator separator;
-    protected final TableView tableView;
-    protected final TableColumn tableColumn;
-    protected final TableColumn tableColumn0;
-    protected final Tab tab0;
-    protected final AnchorPane anchorPane0;
-    protected final Separator separator0;
-    protected final TableView tableView0;
-    protected final TableColumn tableColumn1;
-    protected final TableColumn tableColumn2;
-    protected final TextField textField1;
-    protected final ComboBox comboBox2;
-    protected final ComboBox comboBox3;
-    protected final TextField textField2;
-    protected final TextField textField3;
-    protected final Label label0;
-    protected final Button button1;
-    protected final Button button2;
-    protected final Button button3;
-    protected final Tab tab1;
-    protected final AnchorPane anchorPane1;
-    protected final Separator separator1;
-
-    public ConstraintWindow(int index , Model data) {
-         p = new AnchorPane();
+    public ConstraintWindowI(Model data) {
+    	 p = new AnchorPane();
         label = new Label();
         tabPane = new TabPane();
         tab = new Tab();
         anchorPane = new AnchorPane();
         
     	ObservableList<String> options = FXCollections.observableArrayList("HARD", "BEST EFFORT","Lite");
-    	 comboBox = new ComboBox(options);
-    	 ObservableList<String> options2 = FXCollections.observableArrayList("SOMME", "AVG","DIFF","MIN","MAX");
-        comboBox0 = new ComboBox(options2);
-        ObservableList<String> options3 = FXCollections.observableArrayList("==", "<",">","<=",">=");
-        comboBox1 = new ComboBox(options3);
+   	 comboBox = new ComboBox(options);
+   	 ObservableList<String> options2 = FXCollections.observableArrayList("SOMME", "AVG","DIFF","MIN","MAX");
+       comboBox0 = new ComboBox(options2);
+       ObservableList<String> options3 = FXCollections.observableArrayList("==", "<",">","<=",">=");
+       comboBox1 = new ComboBox(options3);
+       
+      
         button = new Button();
         textField = new TextField();
         textField0 = new TextField();
@@ -77,31 +85,37 @@ public  class ConstraintWindow extends Stage {
         tableColumn1 = new TableColumn();
         tableColumn2 = new TableColumn();
         textField1 = new TextField();
-        ObservableList<String> options4 = FXCollections.observableArrayList("+", "-","*");
-        comboBox2 = new ComboBox(options3);
         
-        comboBox3 = new ComboBox(options4);
-        textField2 = new TextField();
-        textField3 = new TextField();
+        
+        
+        comboBox2 =  new ChoiceBox<Component>(data.getComponentProperty()); 
+        comboBox3 =  new ChoiceBox<Component>(data.getComponentProperty());
         label0 = new Label();
         button1 = new Button();
         button2 = new Button();
         button3 = new Button();
+        ObservableList<Component> optionsc = data.getComponentProperty();
+        comboBox4 = new ComboBox(optionsc);
+        comboBox5 = new ComboBox();
+        comboBox6 = new ComboBox();
+        comboBox7 = new ComboBox();
+        comboBox8 = new ComboBox();
+        comboBox9 = new ComboBox();
         tab1 = new Tab();
         anchorPane1 = new AnchorPane();
         separator1 = new Separator();
 
         p.setId("AnchorPane");
-        p.setPrefHeight(552.0);
+        p.setPrefHeight(591.0);
         p.setPrefWidth(653.0);
 
         label.setLayoutX(238.0);
         label.setLayoutY(14.0);
-        label.setText("Non-Functional Constraint");
+        label.setText("Constraint NON Fonctionnel");
 
         tabPane.setLayoutX(3.0);
         tabPane.setLayoutY(61.0);
-        tabPane.setPrefHeight(483.0);
+        tabPane.setPrefHeight(528.0);
         tabPane.setPrefWidth(646.0);
         tabPane.setTabClosingPolicy(javafx.scene.control.TabPane.TabClosingPolicy.UNAVAILABLE);
 
@@ -182,12 +196,12 @@ public  class ConstraintWindow extends Stage {
         anchorPane0.setPrefWidth(200.0);
 
         separator0.setLayoutX(4.0);
-        separator0.setLayoutY(169.0);
+        separator0.setLayoutY(211.0);
         separator0.setPrefHeight(6.0);
         separator0.setPrefWidth(639.0);
 
         tableView0.setLayoutX(6.0);
-        tableView0.setLayoutY(190.0);
+        tableView0.setLayoutY(227.0);
         tableView0.setPrefHeight(258.0);
         tableView0.setPrefWidth(635.0);
 
@@ -197,32 +211,23 @@ public  class ConstraintWindow extends Stage {
         tableColumn2.setPrefWidth(580.0);
         tableColumn2.setText("Constraint");
 
-        textField1.setLayoutX(557.0);
-        textField1.setLayoutY(68.0);
+        textField1.setLayoutX(159.0);
+        textField1.setLayoutY(166.0);
         textField1.setPrefHeight(25.0);
-        textField1.setPrefWidth(75.0);
+        textField1.setPrefWidth(184.0);
+        textField1.setPromptText("Value");
 
-        comboBox2.setLayoutX(486.0);
-        comboBox2.setLayoutY(68.0);
+        comboBox2.setLayoutX(162.0);
+        comboBox2.setLayoutY(121.0);
         comboBox2.setPrefHeight(25.0);
-        comboBox2.setPrefWidth(68.0);
-        comboBox2.setPromptText("OpL");
+        comboBox2.setPrefWidth(95.0);
+      //  comboBox2.setPromptText("Method2");
 
-        comboBox3.setLayoutX(192.0);
-        comboBox3.setLayoutY(68.0);
+        comboBox3.setLayoutX(14.0);
+        comboBox3.setLayoutY(121.0);
         comboBox3.setPrefHeight(25.0);
-        comboBox3.setPrefWidth(88.0);
-        comboBox3.setPromptText("OpA");
-
-        textField2.setLayoutX(289.0);
-        textField2.setLayoutY(68.0);
-        textField2.setPrefHeight(25.0);
-        textField2.setPrefWidth(184.0);
-
-        textField3.setLayoutX(14.0);
-        textField3.setLayoutY(68.0);
-        textField3.setPrefHeight(25.0);
-        textField3.setPrefWidth(170.0);
+        comboBox3.setPrefWidth(111.0);
+      //  comboBox3.setPromptText("Component2");
 
         label0.setLayoutX(14.0);
         label0.setLayoutY(26.0);
@@ -230,20 +235,56 @@ public  class ConstraintWindow extends Stage {
         label0.setPrefWidth(582.0);
         label0.setText("Syntax :  ComponentName.[S/F].MethodName Op ComponentName.[S/F].MethodName OPLogique Valeur ");
 
-        button1.setLayoutX(570.0);
-        button1.setLayoutY(134.0);
+        button1.setLayoutX(578.0);
+        button1.setLayoutY(178.0);
         button1.setMnemonicParsing(false);
         button1.setText("Submit");
 
-        button2.setLayoutX(505.0);
-        button2.setLayoutY(134.0);
+        button2.setLayoutX(509.0);
+        button2.setLayoutY(178.0);
         button2.setMnemonicParsing(false);
         button2.setText("Exemple");
 
-        button3.setLayoutX(14.0);
-        button3.setLayoutY(109.0);
+        button3.setLayoutX(392.0);
+        button3.setLayoutY(178.0);
         button3.setMnemonicParsing(false);
         button3.setText("Check Connector");
+
+        comboBox4.setLayoutX(14.0);
+        comboBox4.setLayoutY(68.0);
+        comboBox4.setPrefHeight(25.0);
+        comboBox4.setPrefWidth(113.0);
+        comboBox4.setPromptText("Component1");
+
+        comboBox5.setLayoutX(161.0);
+        comboBox5.setLayoutY(68.0);
+        comboBox5.setPrefHeight(25.0);
+        comboBox5.setPrefWidth(96.0);
+        comboBox5.setPromptText("Method1");
+
+        comboBox6.setLayoutX(267.0);
+        comboBox6.setLayoutY(68.0);
+        comboBox6.setPrefHeight(25.0);
+        comboBox6.setPrefWidth(80.0);
+        comboBox6.setPromptText("Event1");
+
+        comboBox7.setLayoutX(267.0);
+        comboBox7.setLayoutY(121.0);
+        comboBox7.setPrefHeight(25.0);
+        comboBox7.setPrefWidth(81.0);
+        comboBox7.setPromptText("Event2");
+
+        comboBox8.setLayoutX(359.0);
+        comboBox8.setLayoutY(93.0);
+        comboBox8.setPrefHeight(25.0);
+        comboBox8.setPrefWidth(100.0);
+        comboBox8.setPromptText("OP");
+
+        comboBox9.setLayoutX(14.0);
+        comboBox9.setLayoutY(166.0);
+        comboBox9.setPrefHeight(25.0);
+        comboBox9.setPrefWidth(111.0);
+        comboBox9.setPromptText("OPLogique");
         tab0.setContent(anchorPane0);
 
         tab1.setText("Untitled Tab 2");
@@ -259,7 +300,7 @@ public  class ConstraintWindow extends Stage {
         separator1.setPrefHeight(6.0);
         separator1.setPrefWidth(646.0);
 
-        p.getChildren().add(label);
+       p.getChildren().add(label);
         anchorPane.getChildren().add(comboBox);
         anchorPane.getChildren().add(comboBox0);
         anchorPane.getChildren().add(comboBox1);
@@ -279,23 +320,24 @@ public  class ConstraintWindow extends Stage {
         anchorPane0.getChildren().add(textField1);
         anchorPane0.getChildren().add(comboBox2);
         anchorPane0.getChildren().add(comboBox3);
-        anchorPane0.getChildren().add(textField2);
-        anchorPane0.getChildren().add(textField3);
         anchorPane0.getChildren().add(label0);
         anchorPane0.getChildren().add(button1);
         anchorPane0.getChildren().add(button2);
         anchorPane0.getChildren().add(button3);
+        anchorPane0.getChildren().add(comboBox4);
+        anchorPane0.getChildren().add(comboBox5);
+        anchorPane0.getChildren().add(comboBox6);
+        anchorPane0.getChildren().add(comboBox7);
+        anchorPane0.getChildren().add(comboBox8);
+        anchorPane0.getChildren().add(comboBox9);
         tabPane.getTabs().add(tab0);
-       // tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab1);
         p.getChildren().add(tabPane);
         p.getChildren().add(separator1);
         
-        
-        
-        
-        
         Scene scene = new Scene(p, 670,460);
-		this.setScene(scene);
+     		this.setScene(scene);
+
 
     }
 }
