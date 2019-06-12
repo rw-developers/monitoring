@@ -199,12 +199,30 @@ public  Component componentType;
         Scene scene = new Scene(p, 670,460);
 		this.setScene(scene);
 
-    }
+    }  
     public void insertGcspExp() {
         String gCspName = textField.getText();
         String gCspFormule = textField0.getText();
         Pattern pFormuleName = Pattern.compile("([a-zA-Z]+[0-9]*)");
         Matcher mFormuleName = pFormuleName.matcher(gCspName);
+  
+String b1 ="([a-zA-Z]+[0-9]*[?!][a-zA-Z]+[0-9]*(?:[-]>[a-zA-Z]+[0-9]*[?!][a-zA-Z]+[0-9]*)*)[-]>(?:[@]+[DF]+[a-zA-Z]+[0-9]*[-][>]*)*\\(";
+
+
+String b2 = "([a-zA-Z]+[0-9]*)(?:[?!][a-zA-Z]+[0-9]*[-]>(?:[@]+[DF]+[a-zA-Z]+[0-9]*[-][>]*)*[A-Z]+)?(?:[@]+[DF]+[a-zA-Z]+[0-9]*)?((?:(?:\\|~\\||\\[\\]|;|[|]{3})";
+
+
+String b3 = "[a-zA-Z]+[0-9]*(?:[@]+[DF]+[a-zA-Z]+[0-9]*)*(?:[?!][a-zA-Z]+[0-9]*[-]>(?:[@]+[DF]+[a-zA-Z]+[0-9]*[-][>]*)*[A-Z]+)?)*)\\)";
+        
+Pattern pm = Pattern.compile(b1+b2+b3);
+Matcher macherm = pm.matcher(gCspFormule); 
+if((!macherm.matches())&& (!checkBox.isSelected())) {Alert.display("Error","expression invalid csp or method");}else {
+componentType.expMethod=getmethodeFormule(gCspFormule);
+gCspFormule = getcspFormule(gCspFormule);        
+        
+        
+        
+        
       
             portName=componentType.getPorts();
         
@@ -215,7 +233,9 @@ public  Component componentType;
             int i;
             for ( i = 0; (i <portName.size()&& portName.get(i).cspExpression!=null); i++);
             if(i < portName.size()) Alert.display("","Please enter CSP expressions of the component's port");
-            else componentType.expGlobale=new Csp(" "," ");
+            else {componentType.expGlobale=new Csp(" "," ");
+            Alert.display("Auto Formula","Csp expression Automatique");
+            }
         }
         else {
             if (!mFormuleName.matches() && (!cspExpressionMatcher.matches()))
@@ -235,7 +255,7 @@ public  Component componentType;
                 ArrayList<String> portsInCspExpression = new ArrayList<>();
                 for (int l = 0; l < portName.size(); l++) {
                     port.add(portName.get(l).name.get());
-                    Alert.display("",portName.get(l).name.get() );
+                   // Alert.display("",portName.get(l).name.get() );
                 }
                 
                 String firstPartExp1 = cspExpressionMatcher.group(1);
@@ -243,7 +263,7 @@ public  Component componentType;
                 Matcher secondGroupPortNameMatcher1 = secondGroupPortNamePattern1.matcher(firstPartExp1);
                 while(secondGroupPortNameMatcher1.find()){
                     secondGroupPart.add(secondGroupPortNameMatcher1.group(1));
-                    Alert.display("",secondGroupPortNameMatcher1.group(1) );
+                   // Alert.display("",secondGroupPortNameMatcher1.group(1) );
                 }
                 int i;
                 for (i=0; (i < secondGroupPart.size()); i++) {
@@ -298,6 +318,7 @@ public  Component componentType;
                 
             }
         }
+}
     }
     
     private void closeWindow() {
@@ -315,6 +336,17 @@ public  Component componentType;
         	 tableColumn.setCellValueFactory(cellData -> cellData.getValue().getMethodeName());
         }
     	
+    }
+    public String getcspFormule(String s) {
+   	 String csp = s.replaceAll("(?:[@]+[DF]+[a-zA-Z]+[0-9]*[-][>]*)*", "");
+   	 csp = csp.replaceAll("(?:[@]+[DF]+[a-zA-Z]*)*", "");
+   	 return csp;
+    }
+    public String getmethodeFormule(String s) {
+   	 String methode = s.replaceAll("([a-zA-Z]+[0-9]*[?!][a-zA-Z]+[0-9]*(?:[-]>[a-zA-Z]+[0-9]*[?!][a-zA-Z]+[0-9]*)*)[-]>", "");
+   	        methode = methode.replaceAll("([a-zA-Z]+[0-9]*[@])", "");
+   	        methode = methode.replaceAll("@", "");
+   	        return methode;
     }
     
 

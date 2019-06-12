@@ -96,6 +96,17 @@ public class Configuration extends ArchitectureElement {
 	public String toString() {
 		return this.getName();
 	}
+	public String methodFormula(int choice) {
+		
+		   String GlobaleformulaMethod="("+this.implementations.get(0).getComponentType().expMethod+")";
+	        String GlobaleFormulaSEQmethod="("+this.implementations.get(0).getComponentType().expMethod+")";
+	        for(int i =1;i<this.implementations.size();i++){
+            	GlobaleformulaMethod += "|||("+this.implementations.get(i).getComponentType().expMethod+")";
+            	GlobaleFormulaSEQmethod += ";("+this.implementations.get(i).getComponentType().expMethod+")";
+	        }
+	        if(choice == 1 ) {return GlobaleformulaMethod; }else return GlobaleFormulaSEQmethod;
+	        
+	}
 	
 	
 

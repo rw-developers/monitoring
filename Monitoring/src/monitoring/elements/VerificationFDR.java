@@ -87,6 +87,7 @@ public class VerificationFDR {
 	        String AllFormullaSeqConf="";
 	        String globalFormulaSeqConf="";
 	        ArrayList<String> arrayChannel = new ArrayList<>();
+	    
 
 
 	        // liste pour diffirencier les arcs
@@ -95,13 +96,14 @@ public class VerificationFDR {
 	        try{
 	            //pour chaque instance on recupere les csp des prots de son composant type
 	            for(int i =0;i<conf.implementations.size();i++){
-	            	 Alert.display("", "ITERATION "+i);
+	            	
+	            	// Alert.display("", "ITERATION "+i);
 	                String nameComposant =conf.implementations.get(i).getComponentType().getName();
 	               // Alert.display("", nameComposant);
 	                
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	                
 	                for (int j = 0;j<conf.implementations.get(i).getComponentType().getPorts().size();j++) {
-	                	 Alert.display("", "IMPLEMENTATION "+i+"   port  "+j);
+	                	// Alert.display("", "IMPLEMENTATION "+i+"   port  "+j);
 	                    Port p = conf.implementations.get(i).getComponentType().getPorts().get(j);
 	                    // recuperer la formulle du port
 	                    formullaPort = p.getCspExpression();
@@ -129,7 +131,7 @@ public class VerificationFDR {
 	                    arrayChannel.add(formulaConf);
 	                    // recuperer tt les formulles csp
 	                    // si le port out ou in je fait des modif sur la formulla csp
-	                    Alert.display("", "csp port");
+	                  //  Alert.display("", "csp port");
 	                    String[] tabOut = p.getCspExpressionModify().getExpression().split("->");
 	                    String[]split3 = tabOut[tabOut.length-1].split("_");
 	                    String modBoucle = nameComposant+"_"+conf.implementations.get(i).getName() + "_" + split3[1];//reste a verifier
@@ -140,7 +142,7 @@ public class VerificationFDR {
 	                        restTab+=conf.implementations.get(i).getName() + "_"+tabOut[d]+"->";
 	                        restTabConf+=tabOut[d]+"->";
 	                    }
-	                    Alert.display("", "ALLFORMULA");
+	                   // Alert.display("", "ALLFORMULA");
 	                    AllFormulla += nameComposant+"_"+conf.implementations.get(i).getName() + "_" + p.getCspExpression().getName() + " = " + restTab+modBoucle+ "\n";
 
 	                    allformulaConf += conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + p.getCspExpression().getName()+"="+restTabConf+modBoucleConf+"\n";
@@ -157,7 +159,7 @@ public class VerificationFDR {
 	                    Matcher formulasplitMatcher = formulasplit1.matcher(formuleGlobalUser);
 	                    //ce test pour l autoformula psq il faut prendre la fin $
 	                if(conf.implementations.get(i).getComponentType().getExpGlobale().getName()=="autoFormula"){
-	                	 Alert.display("", "AUTO FORMULA");
+	                	// Alert.display("", "AUTO FORMULA");
 	                    String newAutoFormula ="";
 	                    Pattern formulasplit2 = Pattern.compile("([a-zA-Z]+[0-9]*[_][a-zA-Z]+[0-9]*)(?=\\|~\\||\\[\\]|;|[|]{3}|$)");
 	                    Matcher formulasplitMatcher2 = formulasplit2.matcher(formuleGlobalUser);
@@ -168,7 +170,7 @@ public class VerificationFDR {
 	                    }
 	                }
 	                else {
-	                	 Alert.display("", "USER FORMULA");
+	                	// Alert.display("", "USER FORMULA");
 	                    while (formulasplitMatcher.find()) {
 	                        if (formulasplitMatcher.group(1) != null) {
 	                            String[] nameex = formulasplitMatcher.group(1).split("_");
@@ -221,7 +223,7 @@ public class VerificationFDR {
 	                // fin de modification
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	                /// arcs des ports des implementations
-	                Alert.display("", "ARC BEGIN");
+	               // Alert.display("", "ARC BEGIN");
 	                for (int s = 0 ;s< conf.implementations.get(i).getPorts().size();s++) {
 	                    Port port = conf.implementations.get(i).getPorts().get(s);
 	                    Addconnector(port,conf);

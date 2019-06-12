@@ -237,7 +237,7 @@ public  class NewConnectorWindow extends Stage {
 						
 						if(editIndex == -1)
 						{
-Alert.display("", textField2.getText());
+//Alert.display("", textField2.getText());
 							try {
 
 								int confId = 0;

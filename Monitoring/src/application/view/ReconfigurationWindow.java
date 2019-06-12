@@ -25,6 +25,7 @@ public  class ReconfigurationWindow extends Stage {
     protected  Label label;
     protected  Label label0;
     protected AnchorPane p ;
+    protected  Button button0;
     
     
     public ReconfigurationWindow() {}
@@ -34,7 +35,7 @@ public  class ReconfigurationWindow extends Stage {
 			choiceBox = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
 			choiceBox0 = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
 			
-		
+			 button0 = new Button();
 
         button = new Button();
      
@@ -69,17 +70,34 @@ public  class ReconfigurationWindow extends Stage {
         label0.setText("Target Configuration :");
 
         p.getChildren().add(button);
+        p.getChildren().add(button0);
         p.getChildren().add(choiceBox);
         p.getChildren().add(choiceBox0);
         p.getChildren().add(label);
         p.getChildren().add(label0);
         
+        button0.setLayoutX(384.0);
+        button0.setLayoutY(154.0);
+        button0.setMnemonicParsing(false);
+        button0.setPrefHeight(25.0);
+        button0.setPrefWidth(107.0);
+        button0.setText("methode ");
+        EventHandler<ActionEvent> methode = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+			String total="";
+			Configuration Source = choiceBox.getValue();
+			Configuration distination  = choiceBox0.getValue();
+			 Alert.display("methode",distination.methodFormula(1));
+			 Alert.display("methode",Source.methodFormula(1));
+			}};
+        
          EventHandler<ActionEvent> FDR = new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent e) {
 				String total="";
-				Configuration Source = choiceBox.getValue();
-				Configuration distination  = choiceBox0.getValue();
+				Configuration Source = choiceBox0.getValue();
+				Configuration distination  = choiceBox.getValue();
 				
 				
 				
@@ -143,6 +161,7 @@ public  class ReconfigurationWindow extends Stage {
 		
 		
 		button.setOnAction(FDR);
+		button0.setOnAction(methode);
 		
 		
     }

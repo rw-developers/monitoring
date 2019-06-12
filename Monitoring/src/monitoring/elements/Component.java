@@ -22,7 +22,14 @@ public class Component extends ArchitectureElement {
 	private List<Methode> Methodes = new ArrayList<Methode>();
 	private List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
 	public  Csp expGlobale=new Csp("","");
+	public String expMethod ;
 	
+	public String getExpMethod() {
+		return expMethod;
+	}
+	public void setExpMethod(String expMethod) {
+		this.expMethod = expMethod;
+	}
 	public Csp getExpGlobale() {
 		return expGlobale;
 	}

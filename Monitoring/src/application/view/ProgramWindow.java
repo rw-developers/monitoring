@@ -253,7 +253,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> NFCEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				ConstraintWindowI dialog = new ConstraintWindowI( data);
+				NewConstrain dialog = new NewConstrain( data);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
