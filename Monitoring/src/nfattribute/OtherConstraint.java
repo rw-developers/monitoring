@@ -38,7 +38,7 @@ public class OtherConstraint extends NFConstraint {
 	}
 	public String getFonction() {
 		return fonction;
-	} 
+	}  
 	public void setFonction(String fonction) {
 		this.fonction = fonction;
 	}

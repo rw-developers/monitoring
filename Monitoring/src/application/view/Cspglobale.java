@@ -319,7 +319,7 @@ gCspFormule = getcspFormule(gCspFormule);
             }
         }
 }
-    } 
+    }  
     
     private void closeWindow() {
 		this.close();

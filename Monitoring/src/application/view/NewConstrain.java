@@ -493,7 +493,7 @@ public  class NewConstrain extends Stage {
     }
     private void closeWindow() {
   		this.close();
-  	}    
+  	}     
   public void remplirTable(Model data) {
     	
     	ObservableList<String> oc = FXCollections.observableArrayList();
