@@ -85,7 +85,8 @@ public class Main extends Application {
 			prepare();
 			window.show();
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			Alert.display("", "HHHHHHH");
 		}
 	}
 

@@ -1,29 +1,40 @@
 package nfattribute;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import monitoring.elements.Component;
 import monitoring.elements.Connector;
 import monitoring.elements.Methode;
 
 public class TimedConstraint extends NFConstraint {
-	
+	public StringProperty name = new SimpleStringProperty();
 	public Component COMP1 ;  
 	public Component COMP2 ;
 	public Methode Meth1;
 	public Methode Meth2;
 	public Connector conn; 
-	public float Value;
+	public String event1 ,event2;
+	public int Value;
 	public String part1;
 	public String part2;
 	public String opC ;
 	public String opL;
-	public TimedConstraint(int ID ,float value, String part1, String part2, String opC, String opL) {
-		super(); 
-		IDC = ID;
+	
+	public TimedConstraint(Component cOMP1, Component cOMP2, Methode meth1, Methode meth2, String event1, String event2,
+			int value, String opC, String opL) {
+		IDC += 1;
+		COMP1 = cOMP1;
+		COMP2 = cOMP2;
+		Meth1 = meth1;
+		Meth2 = meth2;
+		this.event1 = event1;
+		this.event2 = event2;
 		Value = value;
-		this.part1 = part1;
-		this.part2 = part2;
 		this.opC = opC;
 		this.opL = opL;
+		 String str = "[ "+this.COMP1.getName()+" "+this.Meth1.getMethodeName().getValue()+" "+this.event1+" ] "+this.opC+" ";
+		 String str2 = " [ "+this.COMP2.getName()+" "+this.Meth2.getMethodeName().getValue()+" "+this.event2+" ] "+this.opL+" "+this.Value+"";
+		 name.set(str+str2);
 	}
 	public Component getCOMP1() {
 		return COMP1;
@@ -58,7 +69,7 @@ public class TimedConstraint extends NFConstraint {
 	public float getValue() {
 		return Value;
 	}
-	public void setValue(float value) {
+	public void setValue(int value) {
 		Value = value;
 	}
 	public String getPart1() {

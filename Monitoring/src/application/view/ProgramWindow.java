@@ -137,7 +137,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		Stage ref = this;
 		Scene scene = new Scene(root, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-		ref.setTitle("CheckIt [beta version]");
+		ref.setTitle("MONTORING TOOL  ");
 		data = dataIn;
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);

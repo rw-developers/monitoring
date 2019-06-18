@@ -110,19 +110,19 @@ public  Component componentType;
         button.setMnemonicParsing(false);
         button.setPrefHeight(25.0);
         button.setPrefWidth(163.0);
-        button.setText("Verefication syntaxique");
+        button.setText("checking syntax ");
 
         button0.setLayoutX(367.0);
         button0.setLayoutY(180.0);
         button0.setMnemonicParsing(false);
         button0.setPrefHeight(25.0);
         button0.setPrefWidth(184.0);
-        button0.setText("Verefication Comportemental");
+        button0.setText("checking behavior");
 
         checkBox.setLayoutX(10.0);
         checkBox.setLayoutY(148.0);
         checkBox.setMnemonicParsing(false);
-        checkBox.setText("Generation Automatique");
+        checkBox.setText("Automatic generation");
 
         label1.setLayoutX(14.0);
         label1.setLayoutY(62.0);
@@ -135,7 +135,7 @@ public  Component componentType;
 
         label2.setLayoutX(14.0);
         label2.setLayoutY(245.0);
-        label2.setText("Liste des Methodes :");
+        label2.setText("Methode List :");
 
         scrollPane.setLayoutX(4.0);
         scrollPane.setLayoutY(262.0);
@@ -146,7 +146,7 @@ public  Component componentType;
         tableView.setPrefWidth(648.0);
 
         tableColumn.setPrefWidth(75.0);
-        tableColumn.setText("Methode");
+        tableColumn.setText("Method");
 
         tableColumn0.setPrefWidth(75.0);
         tableColumn0.setText("....");

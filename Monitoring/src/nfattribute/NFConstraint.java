@@ -1,6 +1,6 @@
 package nfattribute;
 
 public class NFConstraint {
-public int IDC ;
+public static  int IDC ;
 }
  

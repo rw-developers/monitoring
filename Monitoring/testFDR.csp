@@ -1,80 +1,15 @@
-channel ins1_p1 : {0} 
-channel ins1_p2 : {0} 
-channel ins1_p3 : {0} 
-channel ins1_p4 : {0} 
-channel ins2_p9 : {0} 
-channel ins2_P10 : {0} 
-channel ins2_p11 : {0} 
-channel ins2_p12 : {0} 
-channel ins1_p1 : {0} 
-channel ins1_p2 : {0} 
-channel ins1_p3 : {0} 
-channel ins1_p4 : {0} 
-channel ins2_p5 : {0} 
-channel ins2_p6 : {0} 
-channel ins2_p7 : {0} 
-channel ins2_p8 : {0} 
-channel ins3_d1 : {0} 
-channel ins3_d2 : {0} 
-channel ins3_d3 : {0} 
-channel ins3_d4 : {0} 
+channel p1 : {0} 
+channel p2 : {0} 
+channel p3 : {0} 
+channel p4 : {0} 
 
-c1_ins1_p1 = ins1_p1?x->c1_ins1_p1
-c1_ins1_p2 = ins1_p2!0->c1_ins1_p2
-c1_ins1_p3 = ins1_p3?y->c1_ins1_p3
-c1_ins1_p4 = ins1_p4!0->c1_ins1_p4
-c1_ins1_exp1= ins1_p1?x->(c1_ins1_p2[]c1_ins1_p3;ins1_p4!0->SKIP)
+Server_p1 = Server_
+Server_p2 = Server_
+Server_p3 = Server_
+Server_p4 = Server_
 
+=
 
+GlobFormulla = Server_p1|||Server_p2|||Server_p3|||Server_p4
 
-
-c2_ins2_p9 = ins2_p9?t->c2_ins2_P9
-c2_ins2_P10 = ins2_P10!0->c2_ins2_p10
-c2_ins2_p11 = ins2_p11?g->c2_ins2_p11
-c2_ins2_p12 = ins2_p12!0->c2_ins2_p12
-c2_ins2_exp3= ins2_d4!0->(c2_ins2_d1[]c2_ins2_d2;ins2_d3?x->SKIP)
-
-
-
-
-c1_ins1_p1 = ins1_p1?x->c1_ins1_p1
-c1_ins1_p2 = ins1_p2!0->c1_ins1_p2
-c1_ins1_p3 = ins1_p3?y->c1_ins1_p3
-c1_ins1_p4 = ins1_p4!0->c1_ins1_p4
-c1_ins1_exp1= ins1_p1?x->(c1_ins1_p2[]c1_ins1_p3;ins1_p4!0->SKIP)
-ins1_bind1=ins3_d2!0->ins1_p1?x->ins1_bind1
-
-
-
-
-c3_ins2_p5 = ins2_p5?x->c3_ins2_p5
-c3_ins2_p6 = ins2_p6!0->c3_ins2_p6
-c3_ins2_p7 = ins2_p7?s->c3_ins2_p7
-c3_ins2_p8 = ins2_p8!0->c3_ins2_p8
-c3_ins2_exp2= ins2_p6!0->ins2_p6!0->(c3_ins2_p5|||c3_ins2_p7;ins2_p8!0->SKIP)
-ins2_bind2=ins3_d4!0->ins2_p5?x->ins2_bind2
-
-
-
-
-c2_ins3_d1 = ins3_d1?x->c2_ins3_d1
-c2_ins3_d2 = ins3_d2!0->c2_ins3_d2
-c2_ins3_d3 = ins3_d3?t->c2_ins3_d3
-c2_ins3_d4 = ins3_d4!0->c2_ins3_d4
-c2_ins3_exp3= ins3_d4!0->(c2_ins3_d1[]c2_ins3_d2;ins3_d3?x->SKIP)
-
-
-
-
-
-formula0=(c1_ins1_exp1|||c2_ins3_exp3)[|{ins3_d2.0,ins1_p1.0}|]ins1_bind1
-formula1=(c3_ins2_exp2|||c2_ins3_exp3)[|{ins3_d4.0,ins2_p5.0}|]ins2_bind2
-
-
-GlobaleFormulla = formula0|||formula1
-
-assert  GlobaleFormulla :[deadlock free [F]]
-
-sequentiel=c1_ins1_exp1;c2_ins2_exp3;c1_ins1_exp1;c3_ins2_exp2;c2_ins3_exp3
-
-assert  sequentiel :[deadlock free [F]]
+assert GlobFormulla[T=

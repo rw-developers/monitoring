@@ -33,6 +33,9 @@ import monitoring.elements.Csp;
 import monitoring.elements.Port;
 import nfattribute.ExecutionTime;
 import nfattribute.NFAttribute;
+import nfattribute.OtherConstraint;
+import nfattribute.*;
+
 
 public class Model {
 
@@ -68,6 +71,24 @@ public class Model {
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;
 	private ObservableList<ComponentImplementation> implementationList;
+	private ObservableList<OtherConstraint> OtherConstraint =FXCollections.observableArrayList();;
+	private ObservableList<TimedConstraint> TimedConstraint  = FXCollections.observableArrayList();;
+	public ObservableList<OtherConstraint> getOtherConstraint() {
+		return OtherConstraint;
+	}
+
+	public void setOtherConstraint(OtherConstraint otherConstraint) {
+		OtherConstraint.add(otherConstraint);
+	}
+
+	public ObservableList<TimedConstraint> getTimedConstraint() {
+		return TimedConstraint;
+	}
+
+	public void setTimedConstraint(TimedConstraint timedConstraint) {
+		TimedConstraint.add(timedConstraint);
+	}
+
 	//private ObservableList<Method> methodList;
 	private ObservableList<Connector> linkList;
 	private ObservableList<NFAttribute> nFAttributeList;

@@ -1,11 +1,11 @@
 COMPONENT_LIST_START
-2
-0 0 0 100 100 
+4
+0 97 36 100 100 
 
-znn 
+Server 
 
 PORT_LIST_START
-2
+4
 0 240 15 100 100 
 
 p1 IN  
@@ -14,28 +14,96 @@ p1 IN
 
 1 240 40 100 100 
 
-p2 IN  
+p2 OUT  
+
+1 0 
+
+2 240 65 100 100 
+
+p3 IN  
+
+1 0 
+
+3 337 127 100 100 
+
+p4 OUT  
 
 1 0 
 
 PORT_LIST_END
-1 451 56 100 100 
+1 598 48 100 100 
 
-client 
+Data 
 
 PORT_LIST_START
-2
-2 691 71 100 100 
+3
+4 815 48 100 100 
 
-p3 OUT  
+d1 IN  
+
+1 1 
+
+5 815 73 100 100 
+
+d2 OUT  
 
 1 1 
 
-3 691 96 100 100 
+6 838 112 100 100 
 
-p4 OUT  
+d3 IN  
 
 1 1 
+
+PORT_LIST_END
+2 99 256 100 100 
+
+Client 
+
+PORT_LIST_START
+3
+7 568 263 100 100 
+
+t1 IN  
+
+1 2 
+
+8 568 288 100 100 
+
+t2 OUT  
+
+1 2 
+
+9 338 321 100 100 
+
+t3 IN  
+
+1 2 
+
+PORT_LIST_END
+3 603 257 100 100 
+
+Messaging 
+
+PORT_LIST_START
+3
+10 800 269 100 100 
+
+m1 OUT  
+
+1 3 
+
+11 800 294 100 100 
+
+m2 IN  
+
+1 3 
+
+12 842 322 100 100 
+
+m3 OUT  
+
+1 3 
 
 PORT_LIST_END
 COMPONENT_LIST_END

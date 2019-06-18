@@ -1,20 +1,34 @@
 package nfattribute;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class OtherConstraint extends NFConstraint {
 	public String type;
+	public StringProperty name = new SimpleStringProperty();
+	public StringProperty getName() {
+		 String str = " "+this.type+" "+this.fonction+" "+this.attribute+" "+this.value;
+		 name.set(str);
+		return name;
+	}
+	public void setName(StringProperty name) {
+		this.name = name;
+	}
 	public String fonction ;
 	public String attribute ;
 	public String op ;
-	public float value;
+	public int value;
 	public NFAttribute NFattrbute;
-	public OtherConstraint(int ID ,String type, String fonction, String attribute, String op, float value) {
+	public OtherConstraint(String type, String fonction, String attribute, String op, int value) {
 		super();
-		IDC = ID;
+		IDC += 1;
 		this.type = type;
 		this.fonction = fonction;
 		this.attribute = attribute;
 		this.op = op;
 		this.value = value;
+		 String str = " "+this.type+" Constraint [ "+this.fonction+" ( "+this.attribute+" ) "+this.op+" "+this.value+"  ] ";
+		 name.set(str);
 	}
 	public String getType() { 
 		return type;
@@ -43,7 +57,7 @@ public class OtherConstraint extends NFConstraint {
 	public float getValue() {
 		return value;
 	}
-	public void setValue(float value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 	public NFAttribute getNFattrbute() {

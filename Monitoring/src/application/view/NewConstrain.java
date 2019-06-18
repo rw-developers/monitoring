@@ -7,17 +7,23 @@ import java.lang.*;
 import java.util.*;
 
 import application.include.Model;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.*;
+import application.include.Alert;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import monitoring.elements.Component;
 import monitoring.elements.Methode;
+import monitoring.elements.VerificationFDR;
+import nfattribute.OtherConstraint;
+import nfattribute.TimedConstraint;
 
 public  class NewConstrain extends Stage {
 	AnchorPane p = new AnchorPane();
@@ -33,24 +39,25 @@ public  class NewConstrain extends Stage {
     protected  TextField textField0;
     protected  Button button0;
     protected  Separator separator;
-    protected  TableView tableView;
-    protected  TableColumn tableColumn;
-    protected  TableColumn tableColumn0;
+    protected  TableView<OtherConstraint> tableView;
+    protected  TableColumn<OtherConstraint,String> tableColumn;
+    protected  TableColumn <OtherConstraint,String>tableColumn0;
     protected  Tab tab0;
     protected  AnchorPane anchorPane0;
     protected  Separator separator0;
-    protected  TableView tableView0;
+    protected  TableView<TimedConstraint> tableView0;
     protected  TableColumn tableColumn1;
-    protected  TableColumn tableColumn2;
+    protected  TableColumn<TimedConstraint,String> tableColumn2;
     protected  TextField textField1;
     protected  Label label0;
     protected  Button button1;
     protected  Button button2;
     protected  Button button3;
-    protected  ChoiceBox <Component> choiceBox;
-    protected  ChoiceBox <Component> choiceBox0;
-    protected  ChoiceBox choiceBox1;
-    protected  ChoiceBox choiceBox2;
+    protected  ComboBox <Component> choiceBox;
+    protected  ComboBox  comboBox5;
+    protected  ComboBox <Component> choiceBox0;
+    protected ComboBox<Methode> choiceBox1;
+    protected  ComboBox<Methode>choiceBox2;
     protected  ChoiceBox choiceBox3;
     protected  ChoiceBox choiceBox4;
     protected  Label label1;
@@ -63,19 +70,25 @@ public  class NewConstrain extends Stage {
     protected  AnchorPane anchorPane1;
     protected  Separator separator1;
 
-    public NewConstrain(Model data) {
+    @SuppressWarnings("unchecked")
+	public NewConstrain(Model data) {
 
         label = new Label();
         tabPane = new TabPane();
         tab = new Tab();
         anchorPane = new AnchorPane();
+        choiceBox = new ComboBox<Component>( data.getComponentProperty());
+        choiceBox0 = new ComboBox<Component>( data.getComponentProperty());
+     
         
     	ObservableList<String> options = FXCollections.observableArrayList("HARD", "BEST EFFORT","Lite");
       	 comboBox = new ComboBox(options);
-      	 ObservableList<String> options2 = FXCollections.observableArrayList("SOMME", "AVG","DIFF","MIN","MAX");
+      	 ObservableList<String> options2 = FXCollections.observableArrayList("SOMME", "AVG","MIN","MAX");
           comboBox0 = new ComboBox(options2);
           ObservableList<String> options3 = FXCollections.observableArrayList("==", "<",">","<=",">=");
           comboBox1 = new ComboBox(options3);
+          ObservableList<String> options5 = FXCollections.observableArrayList("MemoryComsuption", "BandWidth");
+          comboBox5 = new ComboBox(options5);
      
         button = new Button();
         textField = new TextField();
@@ -96,25 +109,16 @@ public  class NewConstrain extends Stage {
         button1 = new Button();
         button2 = new Button();
         button3 = new Button();
-        choiceBox2 = new ChoiceBox();
-        choiceBox1 = new ChoiceBox();
+        choiceBox2 = new ComboBox<Methode>();
+        choiceBox1 = new ComboBox<Methode>();
       
-        ObservableList<String> optionsevent = FXCollections.observableArrayList("S", "F");
+        ObservableList<String> optionsevent = FXCollections.observableArrayList("D", "F");
         ObservableList<String> optionop = FXCollections.observableArrayList("+", "-");
-        ObservableList<Component> Component = data.getComponentProperty();
-        
-  choiceBox = new ChoiceBox<Component>( Component);
- 
-  if(choiceBox.getValue() != null) {
- 	 Component c = choiceBox.getValue();
-			choiceBox2 = new ChoiceBox(methodlist(c));
- }
      
-        choiceBox0 = new ChoiceBox<Component>( Component);
-        if(choiceBox0.getValue() != null) {
-        	 Component c = choiceBox0.getValue();
-				choiceBox1 = new ChoiceBox(methodlist(c));
-        }
+        
+ 
+ 
+
      
         choiceBox3 = new ChoiceBox(optionsevent);
         choiceBox4 = new ChoiceBox(optionsevent);
@@ -186,12 +190,14 @@ public  class NewConstrain extends Stage {
         textField.setLayoutY(66.0);
         textField.setPrefHeight(25.0);
         textField.setPrefWidth(95.0);
+        textField.setPromptText("Value");
 
-        textField0.setLayoutX(218.0);
-        textField0.setLayoutY(66.0);
-        textField0.setPrefHeight(25.0);
-        textField0.setPrefWidth(165.0);
-        textField0.setPromptText("NF ATTRIBUTE");
+        comboBox5.setLayoutX(218.0);
+        comboBox5.setLayoutY(66.0);
+        comboBox5.setPrefHeight(25.0);
+        comboBox5.setPrefWidth(165.0);
+        comboBox5.setPromptText("NF ATTRIBUTE");
+       
 
         button0.setLayoutX(437.0);
         button0.setLayoutY(121.0);
@@ -251,7 +257,7 @@ public  class NewConstrain extends Stage {
         label0.setLayoutY(26.0);
         label0.setPrefHeight(17.0);
         label0.setPrefWidth(582.0);
-        label0.setText("Syntax :  ComponentName.[S/F].MethodName Op ComponentName.[S/F].MethodName OPLogique Valeur ");
+        label0.setText("Syntax :  ComponentName.[D/F].MethodName Op ComponentName.[D/F].MethodName OPLogique Valeur ");
 
         button1.setLayoutX(578.0);
         button1.setLayoutY(178.0);
@@ -349,15 +355,16 @@ public  class NewConstrain extends Stage {
         anchorPane.getChildren().add(comboBox1);
         anchorPane.getChildren().add(button);
         anchorPane.getChildren().add(textField);
-        anchorPane.getChildren().add(textField0);
+        anchorPane.getChildren().add(comboBox5);
+      //  anchorPane.getChildren().add(textField0);
         anchorPane.getChildren().add(button0);
         anchorPane.getChildren().add(separator);
-        tableView.getColumns().add(tableColumn);
+       // tableView.getColumns().add(tableColumn);
         tableView.getColumns().add(tableColumn0);
         anchorPane.getChildren().add(tableView);
         tabPane.getTabs().add(tab);
         anchorPane0.getChildren().add(separator0);
-        tableView0.getColumns().add(tableColumn1);
+      //  tableView0.getColumns().add(tableColumn1);
         tableView0.getColumns().add(tableColumn2);
         anchorPane0.getChildren().add(tableView0);
         anchorPane0.getChildren().add(textField1);
@@ -382,6 +389,82 @@ public  class NewConstrain extends Stage {
         p.getChildren().add(tabPane);
         p.getChildren().add(separator1);
         
+        
+       
+
+        
+      /*  choiceBox.getSelectionModel().selectedItemProperty().addListener(
+        		( ov, oldVal, newVal ) -> {
+        		   Component c = newVal;
+        		    // change label                
+       choiceBox1 = new ComboBox<Methode>( methodlist(c));
+        		 });
+        */
+        choiceBox0.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+            	Alert.display("", ((Component)t1).getName());
+               ObservableList<Methode> combox2 = FXCollections.observableArrayList( methodlist((monitoring.elements.Component) t1) );
+               choiceBox1.setItems((ObservableList<Methode>)combox2);
+               
+               
+            }
+        });
+        choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+            	Alert.display("", ((Component)t1).getName());
+               ObservableList<Methode> combox2 = FXCollections.observableArrayList( methodlist((monitoring.elements.Component) t1) );
+               choiceBox2.setItems((ObservableList<Methode>)combox2);
+               
+            }
+        });
+
+        
+        EventHandler<ActionEvent> Submit1 = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				// type
+		String s1 = (String) comboBox.getValue();
+				// fonction
+		String s2 = (String)		comboBox0.getValue();
+				// op arithme
+		String s3 = (String)		comboBox1.getValue();
+				// nfattribute
+		String s4 = (String)		comboBox5.getValue();
+		int val =  Integer.parseInt(textField1.getText())  ;
+		OtherConstraint oc = new OtherConstraint(s1,s2,s4,s3,val);
+		data.setOtherConstraint(oc);
+		
+			
+		remplirTable(data);
+		remplirTable2(data);
+				
+				e.consume();
+			}
+		};
+		EventHandler<ActionEvent> Submit2 = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Component c1 = choiceBox0.getValue();
+				Methode  m1 = choiceBox1.getValue();
+				String event1 = (String) choiceBox3.getValue();
+				String op  =  (String)choiceBox5.getValue();
+				Component c2 = choiceBox.getValue();
+				Methode  m2 = choiceBox2.getValue();
+				String event2 = (String)choiceBox4.getValue();
+				String oplogique = (String) choiceBox6.getValue();
+				int value = Integer.parseInt(textField1.getText());
+				TimedConstraint t = new TimedConstraint(c1,c2,m1,m2,event1,event2,value,op,oplogique);
+				data.setTimedConstraint(t);
+				remplirTable2(data);
+			
+				e.consume();
+			}
+		};
+		remplirTable(data);
+		button.setOnAction(Submit1);
+		button1.setOnAction(Submit2);
         Scene scene = new Scene(p, 653,591);
      		this.setScene(scene);
 
@@ -397,4 +480,50 @@ public  class NewConstrain extends Stage {
     	
     	
     }
+    public void NFconstraint() {
+    	
+    	
+    	
+    	
+    }
+    public void NFTimedconstraint() {
+    	
+    	
+    	
+    }
+    private void closeWindow() {
+  		this.close();
+  	}
+  public void remplirTable(Model data) {
+    	
+    	ObservableList<String> oc = FXCollections.observableArrayList();
+    	
+    	 for(int i = 0 ;i< data.getOtherConstraint().size();i++) {
+    		 OtherConstraint c = data.getOtherConstraint().get(i);
+    		 String str = " "+c.type+" "+c.fonction+" "+c.attribute+" "+c.value;
+    		 oc.add(str);
+        }
+    	 tableView.setItems(data.getOtherConstraint());
+        for(int i = 0 ;i< oc.size();i++) {
+        	String s= oc.get(i);
+        	
+        	 tableColumn0.setCellValueFactory(cellData -> cellData.getValue().name);
+        }
+    	
+    }
+  public void remplirTable2(Model data) {
+  	
+  	ObservableList<String> oc = FXCollections.observableArrayList();
+  	
+  	 for(int i = 0 ;i< data.getOtherConstraint().size();i++) {
+  		 OtherConstraint c = data.getOtherConstraint().get(i);
+  		 String str = " "+c.type+" "+c.fonction+" "+c.attribute+" "+c.value;
+  		 oc.add(str);
+      }
+  	 tableView0.setItems(data.getTimedConstraint());
+      for(int i = 0 ;i< data.getTimedConstraint().size();i++) {
+      	 tableColumn2.setCellValueFactory(cellData -> cellData.getValue().name);
+      }
+  	
+  }
 }

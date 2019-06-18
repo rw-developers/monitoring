@@ -57,10 +57,6 @@ public class VerificationFDR {
 	        return new boolean[]{false};
 	    }
 	    
-	    
-	    
-	    
-	    
 	    public void ValidateConfiguration(Configuration conf){
 	        File fichCSP=new File("testFDR.csp");
 	        String Text ="";

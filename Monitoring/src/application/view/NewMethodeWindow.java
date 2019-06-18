@@ -43,7 +43,7 @@ public  class NewMethodeWindow extends Stage {
         button.setMnemonicParsing(false);
         button.setPrefHeight(25.0);
         button.setPrefWidth(149.0);
-        button.setText("ADD Methode");
+        button.setText("ADD Method");
 
         textField.setLayoutX(140.0);
         textField.setLayoutY(66.0);
@@ -52,11 +52,11 @@ public  class NewMethodeWindow extends Stage {
 
         label.setLayoutX(14.0);
         label.setLayoutY(70.0);
-        label.setText("Methode Name :");
+        label.setText("Method Name :");
 
         label0.setLayoutX(237.0);
         label0.setLayoutY(14.0);
-        label0.setText("New Methode ");
+        label0.setText("New Method ");
         label0.setFont(new Font(16.0));
 
         p.getChildren().add(button);
