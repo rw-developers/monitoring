@@ -502,7 +502,7 @@ public  class NewConstrain extends Stage {
     		 OtherConstraint c = data.getOtherConstraint().get(i);
     		 String str = " "+c.type+" "+c.fonction+" "+c.attribute+" "+c.value;
     		 oc.add(str);
-        }
+         }
     	 tableView.setItems(data.getOtherConstraint());
         for(int i = 0 ;i< oc.size();i++) {
         	String s= oc.get(i);
