@@ -1,6 +1,6 @@
 package nfattribute;
 
-public class ArbreSyntaxique {
+public class ArbreSyntaxique { 
 	public final String par = "|||";
 	public final String seq = ";";
 	public final String parsyn = "|[{}]|";
