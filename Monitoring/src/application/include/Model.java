@@ -66,7 +66,7 @@ public class Model {
 		private int[] intData = new int[8];
 		private String label;  
 	}
-
+ 
 	private ObservableList<Configuration> configurationList;
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;

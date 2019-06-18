@@ -323,7 +323,7 @@ gCspFormule = getcspFormule(gCspFormule);
     
     private void closeWindow() {
 		this.close();
-	}
+	} 
     public void remplirTable() {
     	
     	ObservableList<Methode> Methodes = FXCollections.observableArrayList();
