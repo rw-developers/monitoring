@@ -5,7 +5,7 @@ public class NFAttribute {
 	private String name;
 	private String value;
 	
-	
+	 
 	public NFAttribute(int id,String name, String value) {
 		this.name = name;
 		this.value = value;
