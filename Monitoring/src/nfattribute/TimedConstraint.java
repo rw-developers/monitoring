@@ -32,8 +32,8 @@ public class TimedConstraint extends NFConstraint {
 		Value = value;
 		this.opC = opC;
 		this.opL = opL;
-		 String str = "[ "+this.COMP1.getName()+" "+this.Meth1.getMethodeName().getValue()+" "+this.event1+" ] "+this.opC+" ";
-		 String str2 = " [ "+this.COMP2.getName()+" "+this.Meth2.getMethodeName().getValue()+" "+this.event2+" ] "+this.opL+" "+this.Value+"";
+		 String str = "Constraint N° "+this.IDC+" { "+this.COMP1.getName()+".["+this.event1+"]."+this.Meth1.getMethodeName().getValue()+"  "+this.opC+" ";
+		 String str2 = this.COMP2.getName()+".["+this.event2+"]."+this.Meth2.getMethodeName().getValue()+"  "+this.opL+"  "+this.Value+"  }";
 		 name.set(str+str2);
 	} 
 	public Component getCOMP1() {

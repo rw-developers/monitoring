@@ -357,7 +357,7 @@ public  class NewConstrain extends Stage {
         anchorPane.getChildren().add(textField);
         anchorPane.getChildren().add(comboBox5);
       //  anchorPane.getChildren().add(textField0);
-        anchorPane.getChildren().add(button0);
+      //  anchorPane.getChildren().add(button0);
         anchorPane.getChildren().add(separator);
        // tableView.getColumns().add(tableColumn);
         tableView.getColumns().add(tableColumn0);
@@ -370,7 +370,7 @@ public  class NewConstrain extends Stage {
         anchorPane0.getChildren().add(textField1);
         anchorPane0.getChildren().add(label0);
         anchorPane0.getChildren().add(button1);
-        anchorPane0.getChildren().add(button2);
+       // anchorPane0.getChildren().add(button2);
         anchorPane0.getChildren().add(button3);
         anchorPane0.getChildren().add(choiceBox);
         anchorPane0.getChildren().add(choiceBox0);
@@ -385,7 +385,7 @@ public  class NewConstrain extends Stage {
         anchorPane0.getChildren().add(label3);
         anchorPane0.getChildren().add(label4);
         tabPane.getTabs().add(tab0);
-        tabPane.getTabs().add(tab1);
+      //  tabPane.getTabs().add(tab1);
         p.getChildren().add(tabPane);
         p.getChildren().add(separator1);
         
@@ -432,13 +432,13 @@ public  class NewConstrain extends Stage {
 		String s3 = (String)		comboBox1.getValue();
 				// nfattribute
 		String s4 = (String)		comboBox5.getValue();
-		int val =  Integer.parseInt(textField1.getText())  ;
+		int val =  Integer.parseInt(textField.getText())  ;
 		OtherConstraint oc = new OtherConstraint(s1,s2,s4,s3,val);
 		data.setOtherConstraint(oc);
 		
 			
 		remplirTable(data);
-		remplirTable2(data);
+		
 				
 				e.consume();
 			}
@@ -463,6 +463,7 @@ public  class NewConstrain extends Stage {
 			}
 		};
 		remplirTable(data);
+		remplirTable2(data);
 		button.setOnAction(Submit1);
 		button1.setOnAction(Submit2);
         Scene scene = new Scene(p, 653,591);

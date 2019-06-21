@@ -27,7 +27,7 @@ public class OtherConstraint extends NFConstraint {
 		this.attribute = attribute;
 		this.op = op;
 		this.value = value;
-		 String str = " "+this.type+" Constraint [ "+this.fonction+" ( "+this.attribute+" ) "+this.op+" "+this.value+"  ] ";
+		 String str = "Constraint N° "+this.IDC+" Type : "+this.type+"  { "+this.fonction+" [ "+this.attribute+" ] "+this.op+" "+this.value+"  } ";
 		 name.set(str);
 	}
 	public String getType() { 
