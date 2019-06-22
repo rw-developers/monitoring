@@ -6,6 +6,7 @@ import javafx.beans.property.StringProperty;
 public class Methode {
 	public  StringProperty MethodeName ;
 	private StringProperty name = new SimpleStringProperty();
+	public int ExecutionTime =0;
 
 	public Methode(StringProperty methodeName) {
 		super();

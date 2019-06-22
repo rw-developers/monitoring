@@ -28,6 +28,7 @@ public class Connector extends ArchitectureElement {
 	private IntegerProperty srcMax = new SimpleIntegerProperty();
 	private IntegerProperty destMin = new SimpleIntegerProperty();
 	private IntegerProperty destMax = new SimpleIntegerProperty();
+	public static int id =0;
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public    Port outPort;
@@ -90,6 +91,7 @@ public class Connector extends ArchitectureElement {
 			destMax.set(data[7]);
 
 		}
+		id += 1;
 		label.set(l);
 		this.configuration = config;
 		this.configuration.setConnectors(this);

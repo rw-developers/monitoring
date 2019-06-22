@@ -23,6 +23,7 @@ public class Component extends ArchitectureElement {
 	private List<ComponentImplementation> implementations = new ArrayList<ComponentImplementation>();
 	public  Csp expGlobale=new Csp("","");
 	public String expMethod ;
+	public int Memory =0;
 	
 	public String getExpMethod() {
 		return expMethod;

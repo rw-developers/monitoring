@@ -244,7 +244,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> NFEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NFWindow dialog = new NFWindow(-1, data);
+				NFattributWindow dialog = new NFattributWindow( data);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();

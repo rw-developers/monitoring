@@ -371,7 +371,7 @@ public  class NewConstrain extends Stage {
         anchorPane0.getChildren().add(label0);
         anchorPane0.getChildren().add(button1);
        // anchorPane0.getChildren().add(button2);
-        anchorPane0.getChildren().add(button3);
+       // anchorPane0.getChildren().add(button3);
         anchorPane0.getChildren().add(choiceBox);
         anchorPane0.getChildren().add(choiceBox0);
         anchorPane0.getChildren().add(choiceBox1);
@@ -403,7 +403,7 @@ public  class NewConstrain extends Stage {
         choiceBox0.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
-            	Alert.display("", ((Component)t1).getName());
+            	//Alert.display("", ((Component)t1).getName());
                ObservableList<Methode> combox2 = FXCollections.observableArrayList( methodlist((monitoring.elements.Component) t1) );
                choiceBox1.setItems((ObservableList<Methode>)combox2);
                
@@ -413,7 +413,7 @@ public  class NewConstrain extends Stage {
         choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
-            	Alert.display("", ((Component)t1).getName());
+            //	Alert.display("", ((Component)t1).getName());
                ObservableList<Methode> combox2 = FXCollections.observableArrayList( methodlist((monitoring.elements.Component) t1) );
                choiceBox2.setItems((ObservableList<Methode>)combox2);
                
