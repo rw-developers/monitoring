@@ -212,7 +212,7 @@ public  class NFattributWindow extends Stage {
               
               
            }
-       });
+       }); 
         EventHandler<ActionEvent> Submit1 = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
