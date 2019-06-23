@@ -1,6 +1,8 @@
 package monitoring.elements;
 
-public class Csp {
+import java.io.Serializable;
+
+public class Csp implements Serializable {
 	 private String name;
 	    private String expression;
 

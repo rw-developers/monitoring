@@ -4,6 +4,7 @@ package application.view;
 
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import monitoring.elements.Method;
 import monitoring.elements.Methode;
 import application.include.Alert;
 

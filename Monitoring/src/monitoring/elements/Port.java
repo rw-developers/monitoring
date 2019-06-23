@@ -1,11 +1,12 @@
 package monitoring.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Port  {
+public class Port implements Serializable  {
 
 	/*
 	 * intData: [index] [Position (x)] [Position (y)] [Width] [Height] Index is used
@@ -27,8 +28,7 @@ public class Port  {
     public Csp cspExpression=new Csp("","");
     public Csp cspExpressionModify =new Csp("","");
 
-    public static Port firstClickedPort =null;
-    public static Port lastClickedPort =null;
+    
     private Object parent;
     public Object getParent() {
 		return parent;
@@ -57,17 +57,11 @@ public class Port  {
 		this.listArc2 = listArc2;
 	}
 
-	public Arc arc;
 
     String evt;
     
 
 private final int STEP = 1;
-	
-	
-	
-	
-	
 
 	private ArchitectureElement element;
 	    String nom ;

@@ -676,14 +676,11 @@ public class VerificationFDR {
 	            FileWriter ffw=new FileWriter(fichCSP);
 	            ffw.write(Text);
 	            ffw.flush();
-	            if(testFDR("testFDR.csp")[0])  {
-	              
-	               
+	            if(testFDR("testFDR.csp")[0])  {	               
 	                Alert.display("Test FDR", "successful!");
 	            }
 	            else {
 	              
-	               
 	                Alert.display("Test FDR", "error!");
 	            }
 

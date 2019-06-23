@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import org.xml.sax.SAXException;
 
 import application.include.Alert;
+import application.include.Data;
 import application.include.Model;
 import application.include.Validator;
 import application.objects.Arrow;
@@ -182,7 +183,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		file.getItems().addAll(newModel, save, load, export);
 		edit.getItems().addAll(undo, redo, clear, clearLinks);
 		skins.getItems().addAll(normal, night, h4ck3r, winxp);
-		view.getItems().addAll(skins,Shema);
+		view.getItems().addAll(skins, Shema);
 		newModel.getItems().addAll(newConfigMenu, newComponentMenu, newImplementMenu);
 		menu.getMenus().addAll(file, edit, view);
 
@@ -207,7 +208,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		// Button
 		verif.setText("Check Architecture");
-		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif,Conf);
+		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif, Conf);
 
 		// Creates a new configuration dialog upon click
 		EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
@@ -253,7 +254,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> NFCEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NewConstrain dialog = new NewConstrain( data);
+				NewConstrain dialog = new NewConstrain(data);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
@@ -276,8 +277,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.toggleLinkMode();
 				linkMode.setSelected(!linkMode.isSelected());
 			}
-		}; 
-		
+		};
+
 		EventHandler<ActionEvent> ChooseConf = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -291,10 +292,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> verifEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-			
-				
-				
-				
+
 				Text title = new Text("Structural verification report:\n");
 				title.relocate(5, 5);
 				consolPanel.getChildren().clear();
@@ -394,26 +392,9 @@ public class ProgramWindow<MouseEvent> extends Stage {
 					dialog.initModality(Modality.APPLICATION_MODAL);
 					dialog.show();
 				} else {
-					String fileSeparator = System.getProperty("file.separator");
-					File file = new File(data.project_dir + fileSeparator + "mainComponent.comp");
-					if (file != null) {
-						try {
-							data.saveComponent(file);
-							data.getConfigurationProperty().forEach(conf->{
-							try {
-								File file2 = new File(data.project_dir + fileSeparator +conf.getName()+".conf"); 
-								if(file != null) {
-								data.save(file2, conf.getIndex());
-								}
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}	
-							});
-						} catch (IOException ex) {
-							System.err.println("IO Failure: " + ex);
-						}
-					}
+					Data d = new Data();
+					d.save(data.project_dir, data);
+
 				}
 				e.consume();
 			}
@@ -436,25 +417,20 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				chooser.setAcceptAllFileFilterUsed(false);
 				//
 				if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-					data.project_dir = chooser.getSelectedFile()+"" ;
-					File file = new File(data.project_dir+"\\"+"mainComponent.comp");
+					data.project_dir = chooser.getSelectedFile() + "";
 
-				if (file != null) {
 					data.saved = true;
 					mainComponentTabPanel.getChildren().clear();
 					((Pane) appPanel.getTabs().get(1).getContent()).getChildren().clear();
 					for (int i = 1; i < appPanel.getTabs().size(); i++) {
 						appPanel.getTabs().remove(i);
 					}
+
+					Data d = new Data();
+					String dir = data.project_dir;
 					data.clear();
-					try {
-						data.loadComponent(file);
-						data.load(new File(data.project_dir+"\\"+"Main Configuration.conf"),appPanel);
-						
-					} catch (IOException  | NumberFormatException ex) {
-						System.err.println("IO Failure: " + ex);
-					}
-				}
+					d.load(dir, data);
+
 				}
 				e.consume();
 			}
@@ -495,8 +471,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				ShemaWindow dialog = new ShemaWindow();
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
-			
-				
+
 			}
 		};
 
@@ -645,7 +620,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 					File file = dialog.showSaveDialog(ref);
 					if (file != null) {
 						try {
-							data.save(file,0);
+							data.save(file, 0);
 						} catch (IOException ex) {
 							System.err.println("IO Failure: " + ex);
 						}

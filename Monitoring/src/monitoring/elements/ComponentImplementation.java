@@ -1,12 +1,13 @@
 package monitoring.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class ComponentImplementation extends ArchitectureElement {
+public class ComponentImplementation extends ArchitectureElement implements Serializable {
 
 	private int[] intData = new int[5];
 	private StringProperty name = new SimpleStringProperty();
@@ -20,7 +21,7 @@ public class ComponentImplementation extends ArchitectureElement {
 	public ComponentImplementation(int[] intsIn, String nameIn,Component parent,Configuration conf) {
 		if (intsIn.length == 5) {
 			intData = intsIn;
-		}
+		}	
 		name.set(nameIn);
 		this.componentType = parent;
 		this.componentType.setImplementations(this);

@@ -728,7 +728,7 @@ public class Model {
 						writer.write(p.getHeight() + " \n\n");
 						writer.write(p.getName() + " ");
 						writer.write(p.getType() + " ");
-						writer.write(p.getCsp() + " \n\n");
+						writer.write(p.getCspExpression().getExpression() + " \n\n");
 						writer.write("1 ");
 						writer.write(((Component) p.getElement()).getIndex() + " \n\n");
 					} catch (IOException e) {
@@ -984,9 +984,7 @@ public class Model {
 
 			linkList.add(new Connector(ints, label, configurationList.get(confId),null,0,null,null));
 		}
-
 		reader.close();
-
 	}
 
 	public void saveXml(File file, Configuration conf) throws IOException {

@@ -1,13 +1,14 @@
 package monitoring.elements;
 
+import java.io.Serializable;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.shape.Line;
 
-
-public class Connector extends ArchitectureElement {
+public class Connector extends ArchitectureElement implements Serializable {
 	/*
 	 * intData: [Connection index] [Connection type] [Source] [Dest] [Source
 	 * minimum][Source maximum] [Destination minimum] [Destination Maximum] Index is
@@ -28,49 +29,49 @@ public class Connector extends ArchitectureElement {
 	private IntegerProperty srcMax = new SimpleIntegerProperty();
 	private IntegerProperty destMin = new SimpleIntegerProperty();
 	private IntegerProperty destMax = new SimpleIntegerProperty();
+<<<<<<< HEAD
+
+=======
 	public static int id =0;
 	
+>>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
-	public    Port outPort;
-	public    Port inPort;
+	public Port outPort;
+	public Port inPort;
 	public int Bandwidth;
-	 
+	public Csp formule = new Csp("", "");
 
+	public void setOutPort(Port outPort) {
+		this.outPort = outPort;
 
+	}
 
-	    public Csp formule=new Csp("","");
-	    public void setOutPort(Port outPort){
-	        this.outPort = outPort;
+	public Csp getFormule() {
+		return formule;
+	}
 
-	    }
+	public Csp getCSpArc() {
+		return formule;
+	}
 
-	    public Csp getFormule() {
-			return formule;
-		}
-	    public Csp getCSpArc() {return formule;}
+	public void setFormule(Csp formule) {
+		this.formule = formule;
+	}
 
-		public void setFormule(Csp formule) {
-			this.formule = formule;
-		}
+	public Port getOutPort() {
+		return outPort;
+	}
 
-		public Port getOutPort() {
-			return outPort;
-		}
+	public Port getInPort() {
+		return inPort;
+	}
 
-		public Port getInPort() {
-			return inPort;
-		}
-
-		public void setInPort(Port inPort){
-	        this.inPort = inPort;
-	    }
-	
-	
-
-
+	public void setInPort(Port inPort) {
+		this.inPort = inPort;
+	}
 
 	private StringProperty label = new SimpleStringProperty();
-	private Configuration configuration ;
+	private Configuration configuration;
 
 	/**
 	 * Constructs an instance of Connector
@@ -79,7 +80,7 @@ public class Connector extends ArchitectureElement {
 	 * @param data the integral data to be stored
 	 * @param l    the label to be stored
 	 */
-	public Connector(int[] data, String l,Configuration config,Csp csp,int bandwidth,Port in ,Port out) {
+	public Connector(int[] data, String l, Configuration config, Csp csp, int bandwidth, Port in, Port out) {
 		if (data.length == 8) {
 			index = data[0];
 			type.set(data[1]);
@@ -99,7 +100,7 @@ public class Connector extends ArchitectureElement {
 		this.Bandwidth = bandwidth;
 		this.inPort = in;
 		this.outPort = out;
-				
+
 	}
 
 	/*****************************
@@ -349,4 +350,3 @@ public class Connector extends ArchitectureElement {
 	}
 
 }
-

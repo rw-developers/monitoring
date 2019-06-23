@@ -19,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import monitoring.elements.Csp;
+import monitoring.elements.Method;
 import monitoring.elements.Methode;
 
 import java.util.regex.Matcher;
@@ -30,11 +31,6 @@ import monitoring.elements.Component;
 import monitoring.elements.Csp;
 import monitoring.elements.Port;
 import monitoring.elements.VerificationFDR;
-
-
-
-
-
 
 public  class Cspglobale extends Stage {
 
@@ -333,7 +329,7 @@ gCspFormule = getcspFormule(gCspFormule);
         }
     	 tableView.setItems(Methodes);
         for(int i = 0 ;i< componentType.getMethode().size();i++) {
-        	 tableColumn.setCellValueFactory(cellData -> cellData.getValue().getMethodeName());
+        	 tableColumn.setCellValueFactory(cellData -> cellData.getValue().MethodeName);
         }
     	
     }
