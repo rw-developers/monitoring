@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 
 import application.include.Alert;
+import application.include.Data;
 import application.include.Model;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -66,26 +67,8 @@ public class NewProjectWindow extends Stage {
 					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 						boolean success = (new File(chooser.getSelectedFile() +"\\"+ newProjectName.getText())).mkdirs();
 						data.project_dir = chooser.getSelectedFile() + "\\" + newProjectName.getText();
-						String fileSeparator = System.getProperty("file.separator");
-						File file = new File(data.project_dir+fileSeparator+"mainComponent.comp");
-						if (file != null) {
-							try {
-								data.saveComponent(file);
-								data.getConfigurationProperty().forEach(conf->{
-									try {
-										File file2 = new File(data.project_dir + fileSeparator +conf.getName()+".conf"); 
-										if(file != null) {
-										data.save(file2, conf.getIndex());
-										}
-									} catch (IOException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}	
-									});
-							} catch (IOException ex) {
-								System.err.println("IO Failure: " + ex);
-							}
-						}
+						Data d = new Data();
+						d.save(data.project_dir, data);
 					} else {
 						Alert.display("Warning", "No Selection ");
 					}

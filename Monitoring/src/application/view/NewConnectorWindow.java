@@ -16,7 +16,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import monitoring.elements.Arc;
 import monitoring.elements.ComponentImplementation;
 import monitoring.elements.Connector;
 import monitoring.elements.Csp;
@@ -228,12 +227,6 @@ public  class NewConnectorWindow extends Stage {
 				        port2 = secondPort.getName();
 				      instance2=secondPort.instanceParent;	
 				      arc.formule = null;
-					
-					checkCsp();
-					
-						
-						
-						
 						
 						if(editIndex == -1)
 						{
@@ -246,7 +239,7 @@ public  class NewConnectorWindow extends Stage {
 										confId = i - 1;
 									}
 								}
-								if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >= 0) {
+								if (srcIn <= data.maxLink() && srcIn >= 0 && destIn <= data.maxLink() && destIn >=  0 && checkCsp()) {
 									data.addLinkModel(
 											new int[] { data.getLinkTail(), newLinkArrow.getSelectionModel().getSelectedIndex(),
 													srcIn, destIn, -2, -2, -2, -2
@@ -260,13 +253,6 @@ public  class NewConnectorWindow extends Stage {
 							data.getLinkModel(editIndex).setType(newLinkArrow.getSelectionModel().getSelectedIndex());
 						
 						}
-						
-						
-						
-						
-						
-						
-					
 					
 					//closeWindow();
 					e.consume();
@@ -282,16 +268,7 @@ public  class NewConnectorWindow extends Stage {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public void checkCsp() {
+    public boolean checkCsp() {
         String cspName = textField.getText();
         String cspFormule = textField0.getText();
         Pattern pName = Pattern.compile("[a-zA-Z]+[0-9]*");
@@ -301,11 +278,14 @@ public  class NewConnectorWindow extends Stage {
         if (!mName.matches() && (!cspExpressionOutMatcher1.matches())) {
      
            Alert.display("","your CSP formula name and your CSP expression are invalid" );
+           return false;
           
         } else if (!mName.matches()) {
         	  Alert.display("","your CSP formula name is invalid" );
+        	  return false;
         } else if (!cspExpressionOutMatcher1.matches()) {
         	  Alert.display("","your CSP expression are invalid" );
+        	  return false;
         } else if (cspExpressionOutMatcher1.matches() && (mName.matches())) {
             String firstPartExp = cspExpressionOutMatcher1.group(1);
             String secondPartExp = cspExpressionOutMatcher1.group(2);
@@ -313,7 +293,6 @@ public  class NewConnectorWindow extends Stage {
             ArrayList<String> newPortsInCspExpression = new ArrayList<>();
             Pattern firstGroupPortNamePattern1 = Pattern.compile("([a-zA-Z]+[0-9]*)");
             Matcher firstGroupPortNameMatcher = firstGroupPortNamePattern1.matcher(firstPartExp);
-            System.out.println("je suis le group1"+firstPartExp);
             //first group
             if (firstGroupPortNameMatcher.matches()) {
                 portsInCspExpression.add(firstPartExp);
@@ -335,7 +314,7 @@ public  class NewConnectorWindow extends Stage {
             for ( l = 0; l <portsInCspExpression.size()&&(portsInCspExpression.get(l).equals(port1)||portsInCspExpression.get(l).equals(port2)) ; l++);
             if(l <portsInCspExpression.size()){
             	  Alert.display("","Please check your ports name" );
-             
+            	  return false;
             }
             else  {
                 int index1 = portsInCspExpression.indexOf(port1);
@@ -347,12 +326,11 @@ public  class NewConnectorWindow extends Stage {
                 cspFormule = cspFormule.replaceAll(portsInCspExpression.get(index2), instance2 + "_" + port2);
 
                 arc.formule = new Csp(cspName, cspFormule);
-        
-                System.out.println(newPortsInCspExpression);
-                System.out.println(arc.formule.toString());
+                return true;
             }
 
         }
+		return false;
     }
     
 	private void closeWindow() {

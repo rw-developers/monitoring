@@ -1,5 +1,6 @@
 package monitoring.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 
-public class Configuration extends ArchitectureElement {
+public class Configuration extends ArchitectureElement implements Serializable {
 
 	/*
 	 * intData: [index] [Position (x)] [Position (y)] [Width] [Height] Index is used
@@ -24,14 +25,13 @@ public class Configuration extends ArchitectureElement {
 	private List<Configuration> configurations = new ArrayList<Configuration>();
 	
 	
-	    public Component parent;
 	    public Csp fomule;
 	    public String TextConfig ="";
 	    private Boolean bool=false;
 
 
 
-	    private Configuration motherConfig=null;
+	    public Configuration motherConfig = null;
 	
 
 	public Configuration(int id,String nameIn) {
@@ -92,6 +92,10 @@ public class Configuration extends ArchitectureElement {
 		return connectors;
 	}
 	
+	public List<ComponentImplementation> getImplementations() {
+		return implementations;
+	}
+	
 	@Override
 	public String toString() {
 		return this.getName();
@@ -105,9 +109,5 @@ public class Configuration extends ArchitectureElement {
             	GlobaleFormulaSEQmethod += ";("+this.implementations.get(i).getComponentType().expMethod+")";
 	        }
 	        if(choice == 1 ) {return GlobaleformulaMethod; }else return GlobaleFormulaSEQmethod;
-	        
 	}
-	
-	
-
 }

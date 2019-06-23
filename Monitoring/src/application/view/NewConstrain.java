@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import monitoring.elements.Component;
+import monitoring.elements.Method;
 import monitoring.elements.Methode;
 import monitoring.elements.VerificationFDR;
 import nfattribute.OtherConstraint;

@@ -1,12 +1,13 @@
 package monitoring.elements;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Component extends ArchitectureElement {
+public class Component extends ArchitectureElement implements Serializable {
 	/*
 	 * intData: [index] [Position (x)] [Position (y)] [Width] [Height] Index is used
 	 * for reference. Positions x & y are used for Component placement. I have

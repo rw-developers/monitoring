@@ -1,25 +1,32 @@
 package monitoring.elements;
 
-public class Method {
+
+import javafx.beans.property.StringProperty;
+
+public class Method  {
 	
-	private String name;
+	private StringProperty name;
 	private Component component;
 	
-	public Method(String name, Component component) {
+	public Method(StringProperty n, Component component) {
 		super();
-		this.name = name;
+		this.name = n;
 		this.component = component;
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 	public void setComponent(Component component) {
 		this.component = component;
 	}
 	
 	public String getName() {
-		return name;
+		return this.name.get();
+	}
+	
+	public StringProperty getNameProp() {
+		return this.name;
 	}
 	
 	public Component getComponent() {

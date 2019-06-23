@@ -58,6 +58,10 @@ public class NewComponentWindow extends Stage {
 			newComponentInterface.add(newComponentName, 0, 1, 2, 1);
 
 		} else {
+			if(data.getComponentModel(editIndex).expGlobale != null) {
+				cspGExp.setText(data.getComponentModel(editIndex).expGlobale.getExpression());
+				cspGName.setText(data.getComponentModel(editIndex).expGlobale.getName());
+			}
 			cspGExp.setPromptText("CSP Exprission");
 			cspGName.setPromptText("CSP NAME");
 			newComponentName.setText(data.getComponentModel(editIndex).getName());

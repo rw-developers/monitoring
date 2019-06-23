@@ -1407,7 +1407,7 @@ public class Main extends Application {
 	
 	private void prepare() {
 		//
-		data.addConfigurationModel(data.getConfigurationTail(), "Main Configuration");				
+		data.addConfigurationModel(data.getConfigurationTail(),"Main_Configuration");				
 		((Pane) window.mainComponentTab.getContent()).setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
@@ -1429,6 +1429,8 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		
 		launch(args);
+
 	}
 }
