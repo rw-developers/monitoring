@@ -29,13 +29,9 @@ public class Connector extends ArchitectureElement implements Serializable {
 	private IntegerProperty srcMax = new SimpleIntegerProperty();
 	private IntegerProperty destMin = new SimpleIntegerProperty();
 	private IntegerProperty destMax = new SimpleIntegerProperty();
-<<<<<<< HEAD
 
-=======
 	public static int id =0;
 	
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
-	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	public Port outPort;
 	public Port inPort;
 	public int Bandwidth;

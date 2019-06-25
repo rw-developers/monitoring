@@ -8,20 +8,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
+import application.view.ProgramWindow;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
-import monitoring.elements.Component;
-import monitoring.elements.ComponentImplementation;
-import monitoring.elements.Configuration;
-import monitoring.elements.Connector;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import monitoring.elements.Csp;
 import monitoring.elements.Methode;
-import monitoring.elements.Port;
-import nfattribute.NFAttribute;
+
 
 public class Data implements Serializable {
 	/**
@@ -83,15 +78,7 @@ public class Data implements Serializable {
 					
 					configurationList.get(configurationList.size()-1).connectors.get(configurationList.get(configurationList.size()-1).connectors.size()-1)
 					.formule = c.getFormule();
-					
-					
-
-
-		
 				});
-				
-				
-				
 			});
 			
 			ObjectOutputStream dataFile = new ObjectOutputStream(new FileOutputStream(dir+ fileSeparator +"data.obj"));
@@ -109,7 +96,7 @@ public class Data implements Serializable {
 		
 	}
 	
-	public void load(String dir,Model data) {
+	public void load(String dir,Model data,TabPane window) {
 		
 		try {
 			String fileSeparator = System.getProperty("file.separator");
@@ -119,7 +106,7 @@ public class Data implements Serializable {
 			Data d = (Data) dataFile.readObject();
 			dataFile.close();
 	
-			d.loadData(data);
+			d.loadData(data,window);
 			
 			
 		}
@@ -137,7 +124,7 @@ public class Data implements Serializable {
 		
 	}
 	
-	public void loadData(Model data) {
+	public void loadData(Model data, TabPane window) {
 		componentList.forEach(cp->{
 			data.addComponentModel(cp.intData,cp.name);
 			data.getComponentModel(cp.intData[0]).setExpGlobale(cp.expGlobale);
@@ -151,23 +138,24 @@ public class Data implements Serializable {
 			});
 			
 		});
-		
 		configurationList.forEach(conf->{
+			
 			data.addConfigurationModel(conf.index,conf.name);
 			data.getConfigurationModel(conf.index).fomule = conf.fomule;
 			data.getConfigurationModel(conf.index).TextConfig = conf.TextConfig;
+		
+			SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
+			singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
+
 			conf.implementations.forEach(impl->{
 				data.addImplementationModel(impl.intData,impl.name,data.getComponentModel(impl.componentType.intData[0]),data.getConfigurationModel(conf.index));
 				impl.ports.forEach(p->{
 					data.addPortModel(p.intData, new String[] {p.name,p.type,p.cspExpression.getExpression()},data.getImplementationModel(impl.intData[0]));
 				});
-			
 			});
 			conf.connectors.forEach(c->{
 				data.addLinkModel(new int[] {c.index,c.type,c.src,c.dest,-2,-2,-2,-2},"",data.getConfigurationModel(conf.index),c.formule,
-						c.Bandwidth,data.getPortModel(c.inPort.intData[0]),data.getPortModel(c.outPort.intData[0]));
-				
-				
+						c.Bandwidth,data.getPortModel(c.inPort.intData[0]),data.getPortModel(c.outPort.intData[0]));				
 			});
 		});
 	}

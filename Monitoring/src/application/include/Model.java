@@ -897,7 +897,6 @@ public class Model {
 		configurationList.add(new Configuration(index, n));
 		
 		SingleSelectionModel<Tab> singleselectionModel = appPanel.getSelectionModel();
-		System.out.println(appPanel.getTabs().size());
 		singleselectionModel.select(appPanel.getTabs().get(index+1));
 
 		

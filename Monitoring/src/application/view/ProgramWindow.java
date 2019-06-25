@@ -428,9 +428,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 					Data d = new Data();
 					String dir = data.project_dir;
-					data.clear();
-					d.load(dir, data);
-
+					data.getConfigurationProperty().clear();
+					d.load(dir, data,new ProgramWindow<MouseEvent>(data).appPanel);
 				}
 				e.consume();
 			}
@@ -611,22 +610,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
-				boolean b = Alert.displayMultiple("Save File", "Do want to save ?");
-				if (!b) {
-					ref.close();
-				} else {
-					FileChooser dialog = new FileChooser();
-					dialog.setTitle("Save file...");
-					File file = dialog.showSaveDialog(ref);
-					if (file != null) {
-						try {
-							data.save(file, 0);
-						} catch (IOException ex) {
-							System.err.println("IO Failure: " + ex);
-						}
-					}
-					ref.close();
-				}
+				
 			}
 		});
 
@@ -892,5 +876,4 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			System.out.println("No Selection ");
 		}
 	}
-
 }
