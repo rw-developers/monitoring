@@ -78,6 +78,8 @@ public  class NewConnectorWindow extends Stage {
       secondPort = s2 ;
         textField2.setText(data.getPortModel(s1.getIndex()).getCspExpression().getExpression());
 		textField3.setText(data.getPortModel(s2.getIndex()).getCspExpression().getExpression());
+		
+		getexpcsp(data,s1,s2);
         p.setId("AnchorPane");
         p.setPrefHeight(344.0);
         p.setPrefWidth(600.0);
@@ -344,4 +346,16 @@ public  class NewConnectorWindow extends Stage {
 	public void setDest(int d) {
 		destIn = d;
 	}
+	
+
+	public void getexpcsp(Model data , Port s1 , Port s2) {
+String cspname = "Bind"+s1.getIndex()+""+s2.getIndex();
+textField.setText(cspname);
+String p1 = data.getPortModel(s1.getIndex()).getCspExpression().getExpression().split("-")[0];
+String p2 = data.getPortModel(s2.getIndex()).getCspExpression().getExpression().split("-")[0];
+String t = p1+"->"+p2+"->"+cspname;
+textField0.setText(t);
+
+
+}
 }
