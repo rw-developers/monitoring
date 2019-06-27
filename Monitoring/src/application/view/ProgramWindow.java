@@ -32,6 +32,7 @@ import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -58,6 +59,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+import monitoring.elements.Configuration;
 import nfattribute.VerificationNF;
 
 //
@@ -72,6 +74,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public int i = 0;
 
 	// Main Window elements
+	  protected  ChoiceBox<Configuration> source;
+	    protected  ChoiceBox<Configuration> target;
 	private BorderPane root = new BorderPane();
 	private ToolBar tools = new ToolBar();
 	private SplitPane center = new SplitPane();
@@ -115,8 +119,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Button NFAttr = new Button("Non-Functional Attributes");
 	public Button NFConstraint = new Button("Non-Functional Constraint");
 	public SplitMenuButton verif = new SplitMenuButton();
-	public SplitMenuButton source = new SplitMenuButton();
-	public SplitMenuButton target = new SplitMenuButton();
+	//public SplitMenuButton source = new SplitMenuButton();
+	//public SplitMenuButton target = new SplitMenuButton();
 	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
 	public MenuItem fVerif = new MenuItem("Functional Verification");
 	public MenuItem nfVerif = new MenuItem("Non-Functional Verification");
@@ -143,6 +147,9 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		ref.setTitle("MONTORING TOOL  ");
 		data = dataIn;
+		source = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
+		//source.setSelectionModel("S");
+		target = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
 		mainTree.setValue("Project");
@@ -216,8 +223,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		// Button
 		verif.setText("Check Architecture");
-		source.setText("Source Configuration");
-		target.setText("Target Configuration");
+		//((Text) source).setText("Source Configuration");
+		//target.setText("Target Configuration");
 		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif, Conf);
 
 		// Creates a new configuration dialog upon click

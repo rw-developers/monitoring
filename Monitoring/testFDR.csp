@@ -2,10 +2,9 @@
 
 
 
-GlobaleFormulla = 
 
-assert  GlobaleFormulla :[deadlock free [F]]
 
-sequentiel=
 
-assert  sequentiel :[deadlock free [F]]
+assert Main_Configuration_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
+
+
