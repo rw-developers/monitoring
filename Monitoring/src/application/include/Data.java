@@ -144,10 +144,11 @@ public class Data implements Serializable {
 			data.getConfigurationModel(conf.index).fomule = conf.fomule;
 			data.getConfigurationModel(conf.index).TextConfig = conf.TextConfig;
 		
-			SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
-			singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
-
+			
 			conf.implementations.forEach(impl->{
+				SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
+				singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
+
 				data.addImplementationModel(impl.intData,impl.name,data.getComponentModel(impl.componentType.intData[0]),data.getConfigurationModel(conf.index));
 				impl.ports.forEach(p->{
 					data.addPortModel(p.intData, new String[] {p.name,p.type,p.cspExpression.getExpression()},data.getImplementationModel(impl.intData[0]));

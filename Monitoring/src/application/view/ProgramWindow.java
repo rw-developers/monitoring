@@ -299,6 +299,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				i = 0;
 				List<Label> labels = new ArrayList<Label>();
 				data.getConfigurationProperty().forEach(conf -> {
+					System.out.println(conf.methodFormula(1));
 					i += 30;
 					boolean flag = true;
 					String msg = "";

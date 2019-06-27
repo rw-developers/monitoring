@@ -5,13 +5,10 @@ import javafx.beans.property.StringProperty;
 
 public class Methode {
 	public  StringProperty MethodeName ;
-<<<<<<< HEAD
 	private Component component;
 
-=======
 	private StringProperty name = new SimpleStringProperty();
 	public int ExecutionTime =0;
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 
 	public Methode(StringProperty methodeName) {
 		super();
