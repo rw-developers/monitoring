@@ -485,7 +485,10 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 			VerificationNF  nf = new VerificationNF(data);
-			nf.CheckOtherConstraint(data.getConfigurationModel(0));
+			ArrayList<String> resultat = nf.CheckOtherConstraint(data.getConfigurationModel(0));
+			consolother(resultat);
+			
+			
 			}
 		};
 		EventHandler<ActionEvent> ShemaEvent = new EventHandler<ActionEvent>() {
@@ -902,4 +905,44 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			System.out.println("No Selection ");
 		}
 	}
+	
+	public void consolother(ArrayList<String> resultat ) {
+
+		Text title = new Text("Non-Fonctional verification report:\n");
+		title.relocate(5, 5);
+		consolPanel.getChildren().clear();
+		int m = 0;
+		List<Label> labels = new ArrayList<Label>();
+		for(int i=0 ;i<resultat.size();i++) {
+			m+= 30;
+			if(resultat.get(i).startsWith("V")) {
+				
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.GREEN);
+				
+				labels.add(message);
+				
+				
+			}else {
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.RED);
+				
+				labels.add(message);
+				
+				
+			}
+			
+			
+		}
+		
+		
+	
+		consolPanel.getChildren().addAll(title);
+		consolPanel.getChildren().addAll(labels);
+	}
+	
 }
