@@ -86,7 +86,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Pane consolPanel = new Pane();
 	private MenuBar menu = new MenuBar();
 
-	// Define menu elements
+	// Define menu elements 
 	private Menu file = new Menu("File");
 	private Menu edit = new Menu("Edit");
 	private Menu view = new Menu("View");
