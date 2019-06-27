@@ -202,6 +202,8 @@ public  class NFattributWindow extends Stage {
         p.getChildren().add(tabPane);
         p.getChildren().add(label6);
        this.list =    memory(data);
+       for(int i =0 ;i<data.getComponentTail();i++) {  System.out.println("\n"+data.getComponentModel(i).Memory);         }
+       System.out.println();
       
        comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
            @Override
@@ -241,7 +243,7 @@ public  class NFattributWindow extends Stage {
 				 	for(int j =0 ; j<list.size();j++) {
 				 		for(int i = 0 ; i<data.getComponentProperty().size();i++) {
 				 			if(list.get(j).comp.equals(data.getComponentModel(j))) {  
-				 				data.getComponentModel(j).Memory =Integer.parseInt( list.get(i).val.getText());
+				 				data.getComponentModel(j).Memory =Integer.parseInt( list.get(j).val.getText());
 				 			}
 				 		}
 				 		

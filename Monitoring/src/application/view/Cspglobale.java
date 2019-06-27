@@ -72,6 +72,7 @@ public class Cspglobale extends Stage {
 		tableColumn0 = new TableColumn();
 
 		componentType = data.getComponentModel(editIndex);
+		
 
 		label.setLayoutX(126);
 		label.setLayoutY(120);
@@ -159,6 +160,10 @@ public class Cspglobale extends Stage {
 		p.getChildren().add(label2);
 		p.getChildren().add(separator);
 		remplirTable();
+		
+		 if(componentType.expGlobale.getName() != " ") {textField.setText(componentType.expGlobale.getName());}
+	    	if(componentType.expGlobale.getExpression() != " ") {textField0.setText(componentType.expGlobale.getExpression()
+	    			);}
 
 		//////////////////////////////////////////////////////////////// hendler
 		//////////////////////////////////////////////////////////////// ///////////////////////////////

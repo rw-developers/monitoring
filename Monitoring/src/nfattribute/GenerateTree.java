@@ -84,6 +84,9 @@ public class GenerateTree {
 				tree.inserer(this.corrent);
 				// System.out.println(this.corrent);
 			}
+			else if(isPar(s)){
+				this.exp = this.exp.substring(1);
+			}
 		}
 		tree.inserer(stk.pop());
 		this.exp.replaceAll("SKIP))", "SKIP");
@@ -92,9 +95,11 @@ public class GenerateTree {
 	}
 	public ArbreSyntaxique getConfigurationTree(Configuration conf) {
 	   String [] formule = conf.methodFormula(1).split("|||");
+	   ArbreSyntaxique tree = new ArbreSyntaxique();
 	   for(int i=0;i<formule.length;i++) {
-		   
+		   tree.neoud = "|||";
+		   tree.child.add(getComponentTree(formule[i]));
 	   }
-	   return null;
+	   return tree;
 	}
 }

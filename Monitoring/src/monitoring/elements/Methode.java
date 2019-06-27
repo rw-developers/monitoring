@@ -5,7 +5,9 @@ import javafx.beans.property.StringProperty;
 
 public class Methode {
 	public  StringProperty MethodeName ;
+
 	private Component component;
+
 
 	private StringProperty name = new SimpleStringProperty();
 	public int ExecutionTime =0;

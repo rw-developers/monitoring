@@ -32,6 +32,7 @@ import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -58,6 +59,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+import monitoring.elements.Configuration;
+import nfattribute.VerificationNF;
 
 //
 public class ProgramWindow<MouseEvent> extends Stage {
@@ -71,6 +74,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public int i = 0;
 
 	// Main Window elements
+	  protected  ChoiceBox<Configuration> source;
+	    protected  ChoiceBox<Configuration> target;
 	private BorderPane root = new BorderPane();
 	private ToolBar tools = new ToolBar();
 	private SplitPane center = new SplitPane();
@@ -85,7 +90,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Pane consolPanel = new Pane();
 	private MenuBar menu = new MenuBar();
 
-	// Define menu elements
+	// Define menu elements 
 	private Menu file = new Menu("File");
 	private Menu edit = new Menu("Edit");
 	private Menu view = new Menu("View");
@@ -114,6 +119,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Button NFAttr = new Button("Non-Functional Attributes");
 	public Button NFConstraint = new Button("Non-Functional Constraint");
 	public SplitMenuButton verif = new SplitMenuButton();
+	//public SplitMenuButton source = new SplitMenuButton();
+	//public SplitMenuButton target = new SplitMenuButton();
 	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
 	public MenuItem fVerif = new MenuItem("Functional Verification");
 	public MenuItem nfVerif = new MenuItem("Non-Functional Verification");
@@ -140,6 +147,9 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		ref.setTitle("MONTORING TOOL  ");
 		data = dataIn;
+		source = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
+		//source.setSelectionModel("S");
+		target = new ChoiceBox<Configuration>(	data.getConfigurationProperty());
 		this.setMinHeight(DEFAULT_HEIGHT);
 		this.setMinWidth(DEFAULT_WIDTH);
 		mainTree.setValue("Project");
@@ -192,6 +202,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newConfiguration.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		newImplementation.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		verif.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		source.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		target.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		NFAttr.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		NFConstraint.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
@@ -205,9 +217,14 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
 		tools.getItems().add(verif);
+		tools.getItems().add(source);
+		tools.getItems().add(target);
+		
 
 		// Button
 		verif.setText("Check Architecture");
+		//((Text) source).setText("Source Configuration");
+		//target.setText("Target Configuration");
 		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif, Conf);
 
 		// Creates a new configuration dialog upon click
@@ -465,6 +482,16 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.refreshLines();
 			}
 		};
+		EventHandler<ActionEvent> nonfonctionelverif = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+			VerificationNF  nf = new VerificationNF(data);
+			ArrayList<String> resultat = nf.CheckOtherConstraint(data.getConfigurationModel(0));
+			consolother(resultat);
+			
+			
+			}
+		};
 		EventHandler<ActionEvent> ShemaEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -551,6 +578,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		// Apply handlers
 		verif.setOnAction(verifEvent);
+		
 		newComponent.setOnAction(newComponentEvent);
 		newImplementation.setOnAction(newImplementationEvent);
 		newConfiguration.setOnAction(newConfigurationEvent);
@@ -559,6 +587,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		Conf.setOnAction(ChooseConf);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
+		nfVerif.setOnAction(nonfonctionelverif);
 
 		// menu
 		newComponentMenu.setOnAction(newComponentEvent);
@@ -877,4 +906,44 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			System.out.println("No Selection ");
 		}
 	}
+	
+	public void consolother(ArrayList<String> resultat ) {
+
+		Text title = new Text("Non-Fonctional verification report:\n");
+		title.relocate(5, 5);
+		consolPanel.getChildren().clear();
+		int m = 0;
+		List<Label> labels = new ArrayList<Label>();
+		for(int i=0 ;i<resultat.size();i++) {
+			m+= 30;
+			if(resultat.get(i).startsWith("V")) {
+				
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.GREEN);
+				
+				labels.add(message);
+				
+				
+			}else {
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.RED);
+				
+				labels.add(message);
+				
+				
+			}
+			
+			
+		}
+		
+		
+	
+		consolPanel.getChildren().addAll(title);
+		consolPanel.getChildren().addAll(labels);
+	}
+	
 }

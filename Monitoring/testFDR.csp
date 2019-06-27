@@ -1,40 +1,10 @@
-channel p1 : {0} 
-<<<<<<< HEAD
-channel p3 : {0} 
-channel p4 : {0} 
-channel p5 : {0} 
-=======
-channel p2 : {0} 
-channel p3 : {0} 
-channel p4 : {0} 
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 
-<<<<<<< HEAD
-comp1_p1 = p1?x->comp1_p1
-comp1_p3 = p3!0->comp1_p3
-comp1_p4 = p4?x->comp1_p4
-comp1_p5 = p5!0->comp1_p5
-=======
-Server_p1 = Server_
-Server_p2 = Server_
-Server_p3 = Server_
-Server_p4 = Server_
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 
-<<<<<<< HEAD
-exp=p1?x->(comp1_comp1_p3[]comp1_comp1_p3;p4!0->SKIP)
-=======
-=
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 
-<<<<<<< HEAD
-GlobFormulla = comp1_p1|||comp1_p3|||comp1_p4|||comp1_p5
-=======
-GlobFormulla = Server_p1|||Server_p2|||Server_p3|||Server_p4
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
 
-<<<<<<< HEAD
-assert GlobFormulla[T=exp
-=======
-assert GlobFormulla[T=
->>>>>>> branch 'master' of https://github.com/rw-developers/monitoring
+
+
+
+assert Main_Configuration_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
+
+
