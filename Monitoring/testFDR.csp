@@ -1,39 +1,11 @@
-channel wdv_p1 : {0} 
-channel wdv_p2 : {0} 
-channel wdv_p3 : {0} 
-channel wdv_p4 : {0} 
-channel hvhl_p1 : {0} 
-channel hvhl_p2 : {0} 
-channel hvhl_p3 : {0} 
-channel hvhl_p4 : {0} 
-
-srh_wdv_p1 = wdv_p1?x->srh_wdv_p1
-srh_wdv_p2 = wdv_p2!0->srh_wdv_p2
-srh_wdv_p3 = wdv_p3?d->srh_wdv_p3
-srh_wdv_p4 = wdv_p4!0->srh_wdv_p4
-srh_wdv_utyg= wdv_p1?x->(srh_wdv_p2[]srh_wdv_p3;wdv_p4!0->SKIP)
-wdv_Bind94=hvhl_p2!0->wdv_p1?x->wdv_Bind94
 
 
 
 
-srh_hvhl_p1 = hvhl_p1?x->srh_hvhl_p1
-srh_hvhl_p2 = hvhl_p2!0->srh_hvhl_p2
-srh_hvhl_p3 = hvhl_p3?d->srh_hvhl_p3
-srh_hvhl_p4 = hvhl_p4!0->srh_hvhl_p4
-srh_hvhl_utyg= hvhl_p1?x->(srh_hvhl_p2[]srh_hvhl_p3;hvhl_p4!0->SKIP)
-
-
-
-
-
-formula0=(srh_wdv_utyg|||srh_hvhl_utyg)[|{hvhl_p2.0,wdv_p1.0}|]wdv_Bind94
-
-
-GlobaleFormulla = formula0
+GlobaleFormulla = 
 
 assert  GlobaleFormulla :[deadlock free [F]]
 
-sequentiel=srh_wdv_utyg;srh_hvhl_utyg
+sequentiel=
 
 assert  sequentiel :[deadlock free [F]]

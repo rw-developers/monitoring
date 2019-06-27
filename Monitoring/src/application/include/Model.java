@@ -71,8 +71,8 @@ public class Model {
 	private ObservableList<Port> portList;
 	private ObservableList<Component> componentList;
 	private ObservableList<ComponentImplementation> implementationList;
-	private ObservableList<OtherConstraint> OtherConstraint =FXCollections.observableArrayList();;
-	private ObservableList<TimedConstraint> TimedConstraint  = FXCollections.observableArrayList();;
+	private ObservableList<OtherConstraint> OtherConstraint =FXCollections.observableArrayList();
+	private ObservableList<TimedConstraint> TimedConstraint  = FXCollections.observableArrayList();
 	public ObservableList<OtherConstraint> getOtherConstraint() {
 		return OtherConstraint;
 	}

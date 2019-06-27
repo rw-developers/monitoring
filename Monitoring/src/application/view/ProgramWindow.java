@@ -58,6 +58,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+import nfattribute.VerificationNF;
 
 //
 public class ProgramWindow<MouseEvent> extends Stage {
@@ -114,6 +115,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public Button NFAttr = new Button("Non-Functional Attributes");
 	public Button NFConstraint = new Button("Non-Functional Constraint");
 	public SplitMenuButton verif = new SplitMenuButton();
+	public SplitMenuButton source = new SplitMenuButton();
+	public SplitMenuButton target = new SplitMenuButton();
 	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
 	public MenuItem fVerif = new MenuItem("Functional Verification");
 	public MenuItem nfVerif = new MenuItem("Non-Functional Verification");
@@ -192,6 +195,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		newConfiguration.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		newImplementation.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		verif.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		source.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
+		target.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		NFAttr.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		NFConstraint.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
 		dragMode.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
@@ -205,9 +210,14 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
 		tools.getItems().add(verif);
+		tools.getItems().add(source);
+		tools.getItems().add(target);
+		
 
 		// Button
 		verif.setText("Check Architecture");
+		source.setText("Source Configuration");
+		target.setText("Target Configuration");
 		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif, Conf);
 
 		// Creates a new configuration dialog upon click
@@ -464,6 +474,13 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.refreshLines();
 			}
 		};
+		EventHandler<ActionEvent> nonfonctionelverif = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+			VerificationNF  nf = new VerificationNF(data);
+			nf.CheckOtherConstraint(data.getConfigurationModel(0));
+			}
+		};
 		EventHandler<ActionEvent> ShemaEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -550,6 +567,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 		// Apply handlers
 		verif.setOnAction(verifEvent);
+		
 		newComponent.setOnAction(newComponentEvent);
 		newImplementation.setOnAction(newImplementationEvent);
 		newConfiguration.setOnAction(newConfigurationEvent);
@@ -558,6 +576,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		Conf.setOnAction(ChooseConf);
 		linkMode.setOnAction(toggleLinkEvent);
 		dragMode.setOnAction(toggleDragEvent);
+		nfVerif.setOnAction(nonfonctionelverif);
 
 		// menu
 		newComponentMenu.setOnAction(newComponentEvent);
