@@ -38,9 +38,9 @@ public class VerificationNF {
 			
 			if(OtherConstraint.get(i).fonction.compareTo("SOMME")== 0) {
 				boolean result = somme(Attribut,c,value,OtherConstraint.get(i).op);
-				if(result) {Alert.display("VALID",OtherConstraint.get(i).name.getValue());
-				resultat.add("INVALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
-				}else {Alert.display("INVALIDE",OtherConstraint.get(i).name.getValue());
+				if(result) {
+				resultat.add("VALID CONSTRAINT    : "+OtherConstraint.get(i).name.getValue());
+				}else {
 				resultat.add("INVALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
 				}
 				}
@@ -48,19 +48,19 @@ public class VerificationNF {
 			
 			if(OtherConstraint.get(i).fonction.compareTo("MIN")== 0) {
 				boolean result = min(Attribut,c,value,OtherConstraint.get(i).op);
-				if(result) {Alert.display("VALID",OtherConstraint.get(i).name.getValue());
-				resultat.add("VALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
-				}else {Alert.display("INVALIDE",OtherConstraint.get(i).name.getValue());
+				if(result) {
+				resultat.add("VALID CONSTRAINT    : "+OtherConstraint.get(i).name.getValue());
+				}else {
 				resultat.add("INVALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
 				}
 				
 			}
 			if(OtherConstraint.get(i).fonction.compareTo("MAX")== 0) {
 				boolean result = max(Attribut,c,value,OtherConstraint.get(i).op);
-				if(result) {Alert.display("VALID",OtherConstraint.get(i).name.getValue());
-				resultat.add("VALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
+				if(result) {
+				resultat.add("VALID CONSTRAINT    : "+OtherConstraint.get(i).name.getValue());
 				
-				}else {Alert.display("INVALIDE",OtherConstraint.get(i).name.getValue());
+				}else {
 				resultat.add("INVALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
 				}
 				
@@ -68,10 +68,10 @@ public class VerificationNF {
 			}
 			if(OtherConstraint.get(i).fonction.compareTo("AVG")== 0) {
 				boolean result = AVG(Attribut,c,value,OtherConstraint.get(i).op);
-				if(result) {Alert.display("VALID",OtherConstraint.get(i).name.getValue());
-				resultat.add("VALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
+				if(result) {
+				resultat.add("VALID CONSTRAINT    : "+OtherConstraint.get(i).name.getValue());
 				
-				}else {Alert.display("INVALIDE",OtherConstraint.get(i).name.getValue());
+				}else {
 				resultat.add("INVALID CONSTRAINT  : "+OtherConstraint.get(i).name.getValue());
 				}
 				
