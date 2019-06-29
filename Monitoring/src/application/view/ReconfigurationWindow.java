@@ -88,6 +88,7 @@ public  class ReconfigurationWindow extends Stage {
 			String total="";
 			Configuration Source = choiceBox.getValue();
 			Configuration distination  = choiceBox0.getValue();
+			System.out.println(distination.methodFormula(1));
 			 Alert.display("methode",distination.methodFormula(1));
 			 Alert.display("methode",Source.methodFormula(1));
 			}};

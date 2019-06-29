@@ -1,10 +1,37 @@
+channel p1 : {0} 
+channel p2 : {0} 
+channel p3 : {0} 
+channel p4 : {0} 
 
 
 
 
 
+Main_Configuration_comp1_c1_p1=p1?x->Main_Configuration_comp1_c1_p1
+Main_Configuration_comp1_c1_p2=p2!0->Main_Configuration_comp1_c1_p2
+Main_Configuration_comp1_c1_p3=p3?x->Main_Configuration_comp1_c1_p3
+Main_Configuration_comp1_c1_p4=p4!0->Main_Configuration_comp1_c1_p4
+Main_Configuration_comp1_c1_exp= p1?x->(Main_Configuration_comp1_c1_p2[]Main_Configuration_comp1_c1_p3;p4!0->SKIP)
+Main_Configuration_c1_Bind94=p2!0->p1?x->Main_Configuration_c1_Bind94
 
 
-assert Main_Configuration_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
+
+
+Main_Configuration_comp1_c2_p1=p1?x->Main_Configuration_comp1_c2_p1
+Main_Configuration_comp1_c2_p2=p2!0->Main_Configuration_comp1_c2_p2
+Main_Configuration_comp1_c2_p3=p3?x->Main_Configuration_comp1_c2_p3
+Main_Configuration_comp1_c2_p4=p4!0->Main_Configuration_comp1_c2_p4
+Main_Configuration_comp1_c2_exp= p1?x->(Main_Configuration_comp1_c2_p2[]Main_Configuration_comp1_c2_p3;p4!0->SKIP)
+
+
+
+
+
+Main_Configuration_formula0=(Main_Configuration_comp1_c1_exp|||Main_Configuration_comp1_c2_exp)[|{p2.0,p1.0}|]Main_Configuration_c1_Bind94
+Main_Configuration_GlobaleFormulla  = Main_Configuration_formula0
+
+
+
+assert conf1_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
 
 
