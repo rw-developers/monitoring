@@ -33,7 +33,7 @@ public class ArbreBinaire<T extends Comparable> {
 		}
 		else
 		{
-			if(((String)i).charAt(0) == '@' )
+			if(((String)i).charAt(0) == 'D' || ((String)i).charAt(0) == 'F')
 			{
 				if(this.getaBD() != null) {
 					this.getaBD().inserer(i);

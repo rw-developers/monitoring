@@ -44,9 +44,9 @@ public class GenerateTree {
 	}
 
 	boolean isMethod(String s) {
-		if (s.charAt(0) == '@') {
+		if (s.charAt(0) == 'D' || s.charAt(0) == 'F') {
 			int i = 1;
-			while (s.charAt(i) >= 'a' && s.charAt(i) <= 'z'
+			while (s.toLowerCase().charAt(i) >= 'a' && s.toLowerCase().charAt(i) <= 'z'
 					|| s.charAt(i) >= '0' && s.charAt(i) == '9' && i < s.length()) {
 				i++;
 			}

@@ -1,37 +1,39 @@
-channel p1 : {0} 
-channel p2 : {0} 
-channel p3 : {0} 
-channel p4 : {0} 
+channel c1_p1 : {0} 
+channel c1_p2 : {0} 
+channel c1_p3 : {0} 
+channel c1_p4 : {0} 
+channel c2_p1 : {0} 
+channel c2_p2 : {0} 
+channel c2_p3 : {0} 
+channel c2_p4 : {0} 
+
+comp_c1_p1 = c1_p1?x->comp_c1_p1
+comp_c1_p2 = c1_p2!0->comp_c1_p2
+comp_c1_p3 = c1_p3?x->comp_c1_p3
+comp_c1_p4 = c1_p4!0->comp_c1_p4
+comp_c1_exp= c1_p1?x->(comp_c1_p2[]comp_c1_p3;c1_p4!0->SKIP)
+c1_Bind94=c2_p2!0->c1_p1?x->c1_Bind94
+
+
+
+
+comp_c2_p1 = c2_p1?x->comp_c2_p1
+comp_c2_p2 = c2_p2!0->comp_c2_p2
+comp_c2_p3 = c2_p3?x->comp_c2_p3
+comp_c2_p4 = c2_p4!0->comp_c2_p4
+comp_c2_exp= c2_p1?x->(comp_c2_p2[]comp_c2_p3;c2_p4!0->SKIP)
 
 
 
 
 
-Main_Configuration_comp1_c1_p1=p1?x->Main_Configuration_comp1_c1_p1
-Main_Configuration_comp1_c1_p2=p2!0->Main_Configuration_comp1_c1_p2
-Main_Configuration_comp1_c1_p3=p3?x->Main_Configuration_comp1_c1_p3
-Main_Configuration_comp1_c1_p4=p4!0->Main_Configuration_comp1_c1_p4
-Main_Configuration_comp1_c1_exp= p1?x->(Main_Configuration_comp1_c1_p2[]Main_Configuration_comp1_c1_p3;p4!0->SKIP)
-Main_Configuration_c1_Bind94=p2!0->p1?x->Main_Configuration_c1_Bind94
+formula0=(comp_c1_exp|||comp_c2_exp)[|{c2_p2.0,c1_p1.0}|]c1_Bind94
 
 
+GlobaleFormulla = formula0
 
+assert  GlobaleFormulla :[deadlock free [F]]
 
-Main_Configuration_comp1_c2_p1=p1?x->Main_Configuration_comp1_c2_p1
-Main_Configuration_comp1_c2_p2=p2!0->Main_Configuration_comp1_c2_p2
-Main_Configuration_comp1_c2_p3=p3?x->Main_Configuration_comp1_c2_p3
-Main_Configuration_comp1_c2_p4=p4!0->Main_Configuration_comp1_c2_p4
-Main_Configuration_comp1_c2_exp= p1?x->(Main_Configuration_comp1_c2_p2[]Main_Configuration_comp1_c2_p3;p4!0->SKIP)
+sequentiel=comp_c1_exp;comp_c2_exp
 
-
-
-
-
-Main_Configuration_formula0=(Main_Configuration_comp1_c1_exp|||Main_Configuration_comp1_c2_exp)[|{p2.0,p1.0}|]Main_Configuration_c1_Bind94
-Main_Configuration_GlobaleFormulla  = Main_Configuration_formula0
-
-
-
-assert conf1_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
-
-
+assert  sequentiel :[deadlock free [F]]
