@@ -42,15 +42,22 @@ public class Automata {
 	public Automata generateSimpleAutomata(Automata a, ArbreBinaire<String> tree) {
 		if(a.initialState == null) {
 			a.initialState = new Node(tree.getNeoud());
-			a.finalStates.add(new Node(tree.getNeoud()));
 		}
 		else {
-			a.finalStates.forEach(f->{
-				f.transitions.add(new Node(tree.getNeoud()));
-				a.finalStates.add(new Node(tree.getNeoud()));
-				a.states.add(f);
-				a.finalStates.remove(f);
-			});
+			if(a.initialState.transitions.size() == 0) {
+				a.initialState.transitions.add(new Node(tree.getNeoud()));
+			}
+			else {
+				Node n = a.initialState.transitions.get(0);
+				while(n.transitions.size()>0) {
+					n = n.transitions.get(0);
+				}
+				n.transitions.add(new Node(tree.getNeoud()));
+				Node f = n.transitions.get(0);
+				a.finalStates.remove(n);
+				a.finalStates.add(f);
+			}
+			
 		}
 		return a;
 	}
