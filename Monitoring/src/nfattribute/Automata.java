@@ -16,8 +16,8 @@ public class Automata {
 			generateSimpleAutomata(a,tree);
 
 		} else {
-			ArbreBinaire<String> tree1 = tree.getaBD();
-			ArbreBinaire<String> tree2 = tree.getaBG();
+			ArbreBinaire<String> tree1 = tree.getaBG();
+			ArbreBinaire<String> tree2 = tree.getaBD();
 			String op = tree.getNeoud();
 			switch (op) {
 			case "->":
@@ -93,6 +93,11 @@ public class Automata {
 		a.finalStates = a1.finalStates;
 		a.finalStates.addAll(a2.finalStates);
 		return a;
+	}
+	
+	public void afficheAutomata(Node n) {
+		System.out.println(n.name+"->");
+		afficheAutomata(n.transitions.get(0));
 	}
 
 }
