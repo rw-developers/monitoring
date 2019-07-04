@@ -221,7 +221,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		tools.getItems().add(NFConstraint);
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
-		tools.getItems().add(verif);tools.getItems().add(l1);
+		tools.getItems().add(verif);tools.getItems().add(l1); 
 		tools.getItems().add(source);
 		
 		tools.getItems().add(l2);

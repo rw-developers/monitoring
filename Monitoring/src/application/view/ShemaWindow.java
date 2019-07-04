@@ -26,7 +26,7 @@ public  class ShemaWindow extends Stage {
           
         
        // imageView.setImage(new Image(getClass().getResourceAsStream("/application/include/arch.png")));
-        Image dragIcon = new Image(getClass().getResourceAsStream("/application/include/arch.png"));
+        Image dragIcon = new Image(getClass().getResourceAsStream("/application/include/meta.png"));
 		ImageView imageView = new ImageView(dragIcon);
 		 AnchorPane.setRightAnchor(imageView, 8.0);
         AnchorPane.setTopAnchor(imageView, 0.0);
