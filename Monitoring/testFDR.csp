@@ -1,37 +1,37 @@
-channel p1 : {0} 
-channel p2 : {0} 
-channel p3 : {0} 
-channel p4 : {0} 
+channel dvs_p1 : {0} 
+channel dvs_p2 : {0} 
+channel dvs_p3 : {0} 
+channel dvs_p4 : {0} 
+channel dvqsv_t1 : {0} 
+channel dvqsv_t2 : {0} 
+channel dvqsv_t3 : {0} 
+
+Server_dvs_p1 = dvs_p1?x->Server_dvs_p1
+Server_dvs_p2 = dvs_p2!0->Server_dvs_p2
+Server_dvs_p3 = dvs_p3?e->Server_dvs_p3
+Server_dvs_p4 = dvs_p4!0->Server_dvs_p4
+Server_dvs_exp1= dvs_p1?x->(Server_dvs_p2[]Server_dvs_p3;dvs_p4!0->SKIP)
+dvs_Bind=dvqsv_t2!0->dvs_p3?e->dvs_Bind
+
+
+
+
+Client_dvqsv_t1 = dvqsv_t1?x->Client_dvqsv_t1
+Client_dvqsv_t2 = dvqsv_t2!0->Client_dvqsv_t2
+Client_dvqsv_t3 = dvqsv_t3?y->Client_dvqsv_t3
+Client_dvqsv_exp2= dvqsv_t2!0->(Client_dvqsv_t1;dvqsv_t3?x->SKIP)
 
 
 
 
 
-Main_Configuration_comp1_c1_p1=p1?x->Main_Configuration_comp1_c1_p1
-Main_Configuration_comp1_c1_p2=p2!0->Main_Configuration_comp1_c1_p2
-Main_Configuration_comp1_c1_p3=p3?x->Main_Configuration_comp1_c1_p3
-Main_Configuration_comp1_c1_p4=p4!0->Main_Configuration_comp1_c1_p4
-Main_Configuration_comp1_c1_exp= p1?x->(Main_Configuration_comp1_c1_p2[]Main_Configuration_comp1_c1_p3;p4!0->SKIP)
-Main_Configuration_c1_Bind94=p2!0->p1?x->Main_Configuration_c1_Bind94
+formula0=(Server_dvs_exp1|||Client_dvqsv_exp2)[|{dvqsv_t2.0,dvs_p3.0}|]dvs_Bind
 
 
+GlobaleFormulla = formula0
 
+assert  GlobaleFormulla :[deadlock free [F]]
 
-Main_Configuration_comp1_c2_p1=p1?x->Main_Configuration_comp1_c2_p1
-Main_Configuration_comp1_c2_p2=p2!0->Main_Configuration_comp1_c2_p2
-Main_Configuration_comp1_c2_p3=p3?x->Main_Configuration_comp1_c2_p3
-Main_Configuration_comp1_c2_p4=p4!0->Main_Configuration_comp1_c2_p4
-Main_Configuration_comp1_c2_exp= p1?x->(Main_Configuration_comp1_c2_p2[]Main_Configuration_comp1_c2_p3;p4!0->SKIP)
+sequentiel=Server_dvs_exp1;Client_dvqsv_exp2
 
-
-
-
-
-Main_Configuration_formula0=(Main_Configuration_comp1_c1_exp|||Main_Configuration_comp1_c2_exp)[|{p2.0,p1.0}|]Main_Configuration_c1_Bind94
-Main_Configuration_GlobaleFormulla  = Main_Configuration_formula0
-
-
-
-assert conf1_GlobaleFormulla[T=Main_Configuration_GlobaleFormulla
-
-
+assert  sequentiel :[deadlock free [F]]

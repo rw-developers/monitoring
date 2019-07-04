@@ -125,6 +125,7 @@ public class Data implements Serializable {
 	}
 	
 	public void loadData(Model data, TabPane window) {
+		
 		componentList.forEach(cp->{
 			data.addComponentModel(cp.intData,cp.name);
 			data.getComponentModel(cp.intData[0]).setExpGlobale(cp.expGlobale);
@@ -138,26 +139,32 @@ public class Data implements Serializable {
 			});
 			
 		});
+		
 		configurationList.forEach(conf->{
 			
 			data.addConfigurationModel(conf.index,conf.name);
 			data.getConfigurationModel(conf.index).fomule = conf.fomule;
 			data.getConfigurationModel(conf.index).TextConfig = conf.TextConfig;
+			SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
+			
+			singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
+			System.out.println();
+	
 		
 			
 			conf.implementations.forEach(impl->{
-				SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
-				singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
-
+				        
 				data.addImplementationModel(impl.intData,impl.name,data.getComponentModel(impl.componentType.intData[0]),data.getConfigurationModel(conf.index));
 				impl.ports.forEach(p->{
 					data.addPortModel(p.intData, new String[] {p.name,p.type,p.cspExpression.getExpression()},data.getImplementationModel(impl.intData[0]));
 				});
 			});
+			
 			conf.connectors.forEach(c->{
 				data.addLinkModel(new int[] {c.index,c.type,c.src,c.dest,-2,-2,-2,-2},"",data.getConfigurationModel(conf.index),c.formule,
 						c.Bandwidth,data.getPortModel(c.inPort.intData[0]),data.getPortModel(c.outPort.intData[0]));				
 			});
+			
 		});
 	}
 	

@@ -1,12 +1,14 @@
 package nfattribute;
 
+import java.io.Serializable;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import monitoring.elements.Component;
 import monitoring.elements.Connector;
 import monitoring.elements.Methode;
 
-public class TimedConstraint extends NFConstraint {
+public class TimedConstraint extends NFConstraint implements Serializable {
 	public StringProperty name = new SimpleStringProperty();
 	public Component COMP1 ;  
 	public Component COMP2 ;
@@ -19,6 +21,7 @@ public class TimedConstraint extends NFConstraint {
 	public String part2;
 	public String opC ;
 	public String opL;
+	int back = 1;
 	
 	public TimedConstraint(Component cOMP1, Component cOMP2, Methode meth1, Methode meth2, String event1, String event2,
 			int value, String opC, String opL) {

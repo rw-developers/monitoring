@@ -1,9 +1,11 @@
 package nfattribute;
 
+import java.io.Serializable;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class OtherConstraint extends NFConstraint {
+public class OtherConstraint extends NFConstraint implements Serializable {
 	public String type;
 	public StringProperty name = new SimpleStringProperty();
 	public StringProperty getName() {
@@ -19,6 +21,7 @@ public class OtherConstraint extends NFConstraint {
 	public String op ;
 	public int value;
 	public NFAttribute NFattrbute;
+	int back = 1;
 	public OtherConstraint(String type, String fonction, String attribute, String op, int value) {
 		super();
 		IDC += 1;

@@ -59,7 +59,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import monitoring.elements.ArchitectureElement;
+import monitoring.elements.Component;
 import monitoring.elements.Configuration;
+import monitoring.elements.Reconfiguration;
+import monitoring.elements.VerificationFDR;
 import nfattribute.VerificationNF;
 
 //
@@ -82,6 +85,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	private VBox top = new VBox();
 	public Pane mainPanel = new Pane();
 	public TabPane appPanel = new TabPane();
+	public Label l1= new Label("Source :");
+	public Label l2 = new Label("Target :");
 	public Tab mainComponentTab = new Tab("Main Components");
 	public ScrollPane mainComponentScroll = new ScrollPane();
 	public Pane mainComponentTabPanel = new Pane();
@@ -122,7 +127,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	//public SplitMenuButton source = new SplitMenuButton();
 	//public SplitMenuButton target = new SplitMenuButton();
 	public MenuItem StructurelVerif = new MenuItem("Structurel Verification");
-	public MenuItem fVerif = new MenuItem("Functional Verification");
+	public MenuItem fVerif = new MenuItem("Behavioral verification");
 	public MenuItem nfVerif = new MenuItem("Non-Functional Verification");
 	public MenuItem Conf = new MenuItem("Choose Configuration ");
 
@@ -216,16 +221,19 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		tools.getItems().add(NFConstraint);
 		tools.getItems().add(dragMode);
 		tools.getItems().add(linkMode);
-		tools.getItems().add(verif);
+		tools.getItems().add(verif);tools.getItems().add(l1);
 		tools.getItems().add(source);
+		
+		tools.getItems().add(l2);
 		tools.getItems().add(target);
+		
 		
 
 		// Button
 		verif.setText("Check Architecture");
 		//((Text) source).setText("Source Configuration");
 		//target.setText("Target Configuration");
-		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif, Conf);
+		verif.getItems().addAll(StructurelVerif, fVerif, nfVerif);
 
 		// Creates a new configuration dialog upon click
 		EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
@@ -316,7 +324,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				i = 0;
 				List<Label> labels = new ArrayList<Label>();
 				data.getConfigurationProperty().forEach(conf -> {
-					System.out.println(conf.methodFormula(1));
+					//System.out.println(conf.methodFormula(1));
 					i += 30;
 					boolean flag = true;
 					String msg = "";
@@ -352,6 +360,40 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				consolPanel.getChildren().addAll(labels);
 			}
 
+		};
+		EventHandler<ActionEvent> FDRverif = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				int m = 0;
+				consolPanel.getChildren().clear();
+				ArrayList<String> resultat = new ArrayList<String>();
+				ArrayList<String> resultat2 = new ArrayList<String>();
+			Configuration c = source.getValue();
+			Configuration t = target.getValue();
+	
+			VerificationFDR F = new VerificationFDR ();
+			if(c != null) {
+			for(int i =0;i<c.getImplementations().size();i++) {
+				Component comp = c.getImplementations().get(i).getComponentType();
+				resultat.add(F.valideCspComponent2(comp)+" [instance : "+c.getImplementations().get(i).getName()+" ]");
+			}
+			
+			 m = consolFDR(resultat,c,0);
+			 m= conf(c, m);
+			}
+			if(t != null) {
+			for(int i =0;i<t.getImplementations().size();i++) {
+				Component comp = t.getImplementations().get(i).getComponentType();
+				resultat2.add(F.valideCspComponent2(comp)+" [instance : "+t.getImplementations().get(i).getName()+" ]");
+			}
+			
+			 m= consolFDR(resultat2,t ,m);
+			 m = conf(t,m);
+			 
+			Reconfiguration re = new Reconfiguration(c,t);
+			m = reconf(re ,m);
+			}
+			}
 		};
 
 		// Clears the main panel upon click
@@ -439,7 +481,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 
 					data.saved = true;
 					mainComponentTabPanel.getChildren().clear();
-					((Pane) appPanel.getTabs().get(1).getContent()).getChildren().clear();
+				//	((Pane) appPanel.getTabs().get(1).getContent()).getChildren().clear();
 					for (int i = 1; i < appPanel.getTabs().size(); i++) {
 						appPanel.getTabs().remove(i);
 					}
@@ -447,7 +489,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 					Data d = new Data();
 					String dir = data.project_dir;
 					data.getConfigurationProperty().clear();
-					d.load(dir, data,new ProgramWindow<MouseEvent>(data).appPanel);
+					d.load(dir, data,appPanel);
 				}
 				e.consume();
 			}
@@ -485,9 +527,12 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> nonfonctionelverif = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				consolPanel.getChildren().clear();
 			VerificationNF  nf = new VerificationNF(data);
-			ArrayList<String> resultat = nf.CheckOtherConstraint(data.getConfigurationModel(0));
-			consolother(resultat);
+			Configuration c = source.getValue();
+			ArrayList<String> resultat = nf.CheckOtherConstraint(c);
+			consolPanel.getChildren().clear();
+			consolother(resultat, 0);
 			
 			
 			}
@@ -537,7 +582,153 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				data.refreshLines();
 			}
 		};
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		EventHandler<ActionEvent> Bilan = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				int m= 0;
+			Text title2 = new Text("Behavioral verification report:\n");
+			title2.setFill(Color.BLUE);
+			Text title1 = new Text("Structural verification report:\n");
+			title1.setFill(Color.BLUE);
+			Text title3 = new Text("Non-Fonctional verification report:\n");
+			title3.setFill(Color.BLUE);
+			
+			/*********************************************************************************************************/
+			
+			title1.relocate(20,m+10);
+			consolPanel.getChildren().clear();
+			i = m;
+			List<Label> labels = new ArrayList<Label>();
+			data.getConfigurationProperty().forEach(conf -> {
+				//System.out.println(conf.methodFormula(1));
+				i += 30;
+				boolean flag = true;
+				String msg = "";
 
+				try {
+					data.saveXml(new File("conf.xml"), conf);
+					Validator.validate("conf.xml", "model.xsd");
+				} catch (SAXException | IOException e1) {
+					flag = false;
+					msg = e1.getMessage();
+				}
+				if (flag == true) {
+					Label configName = new Label(conf.getName() + ":\n");
+					Label message = new Label("Valid Configuration: ");
+					configName.relocate(20, i + 20);
+					message.relocate(20, i + 35);
+					message.setFill(Color.GREEN);
+					labels.add(configName);
+					labels.add(message);
+
+				} else {
+					Label configName = new Label(conf.getName() + ":\n");
+					Label message = new Label("Invalid Configuration: " + msg);
+					configName.relocate(20, i + 20);
+					message.relocate(20, i + 35);
+					message.setFill(Color.RED);
+					labels.add(configName);
+					labels.add(message);
+
+				}
+			});
+			m = i;
+			consolPanel.getChildren().addAll(title1);
+			consolPanel.getChildren().addAll(labels);
+			
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			m+= 60;
+			title2.relocate(20,m+10);
+			consolPanel.getChildren().add(title2);
+			//consolPanel.getChildren().clear();
+			ArrayList<String> resultat = new ArrayList<String>();
+			ArrayList<String> resultat2 = new ArrayList<String>();
+		Configuration c = source.getValue();
+		Configuration t = target.getValue();
+m+=20;
+		VerificationFDR F = new VerificationFDR ();
+		if(c != null) {
+		for(int i =0;i<c.getImplementations().size();i++) {
+			Component comp = c.getImplementations().get(i).getComponentType();
+			resultat.add(F.valideCspComponent2(comp)+" [instance : "+c.getImplementations().get(i).getName()+" ]");
+		}
+		
+		 m = consolFDR(resultat,c,m);
+		 m= conf(c, m);
+		}
+		if(t != null) {
+		for(int i =0;i<t.getImplementations().size();i++) {
+			Component comp = t.getImplementations().get(i).getComponentType();
+			resultat2.add(F.valideCspComponent2(comp)+" [instance : "+t.getImplementations().get(i).getName()+" ]");
+		}
+		
+		 m= consolFDR(resultat2,t ,m);
+		 m = conf(t,m);
+		 
+		Reconfiguration re = new Reconfiguration(c,t);
+		m = reconf(re ,m);
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+		VerificationNF  nf = new VerificationNF(data);
+		ArrayList<String> resultat6 = nf.CheckOtherConstraint(c);
+		m+= 60;
+		title3.relocate(20,m+10);
+		consolPanel.getChildren().add(title3);
+		consolother(resultat6,m);	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//int m = 	niv1();
+			//m = niv2(m);
+			
+			}
+		};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		tree.setOnMouseClicked(new EventHandler<Event>() {
 
 			@Override
@@ -577,8 +768,8 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		});
 
 		// Apply handlers
-		verif.setOnAction(verifEvent);
-		
+		verif.setOnAction(Bilan);
+		StructurelVerif.setOnAction(verifEvent);
 		newComponent.setOnAction(newComponentEvent);
 		newImplementation.setOnAction(newImplementationEvent);
 		newConfiguration.setOnAction(newConfigurationEvent);
@@ -619,6 +810,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		night.setOnAction(nightEvent);
 		h4ck3r.setOnAction(h4ck3rEvent);
 		winxp.setOnAction(winXPEvent);
+		fVerif.setOnAction(FDRverif);
 
 		redo.setDisable(true);
 		undo.setDisable(true);
@@ -643,7 +835,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 				
 			}
 		});
-
+        
 		this.setScene(scene);
 	}
 
@@ -907,12 +1099,74 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		}
 	}
 	
-	public void consolother(ArrayList<String> resultat ) {
+	public void consolother(ArrayList<String> resultat, int m ) {
 
 		Text title = new Text("Non-Fonctional verification report:\n");
-		title.relocate(5, 5);
-		consolPanel.getChildren().clear();
-		int m = 0;
+		//title.relocate(5, 5);
+		
+		
+		List<Label> labels2 = new ArrayList<Label>();
+		List<Label> labels = new ArrayList<Label>();
+		for(int i=0 ;i<resultat.size();i++) {
+			m+= 30;
+			if(resultat.get(i).startsWith("V")) {
+				
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.GREEN);
+				
+				labels.add(message);
+				
+				
+			}else {
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.RED);
+				
+				labels.add(message);
+				
+				
+			}
+			
+			
+		}
+		m+= 60;
+		Text title2 = new Text("===================================================================================================\n\nTimed Constraint Verification report:\n\nGeneration of the Syntax Tree\n\nAutomaton Generation ");
+	title2.relocate(20,m+ 5);
+	m+= 60;
+	for(int x=0 ;x<data.getTimedConstraint().size();x++) {
+			Label message = new Label(data.getTimedConstraint().get(x).name.getValue());
+			message.relocate(20, m + 35);
+			//message.setFill(Color.RED);
+			
+			labels2.add(message);	
+			m+=30;
+		}
+		Label message2 = new Label(" Timed Constraint VALIDE");
+		message2.relocate(20, m + 35);
+		message2.setFill(Color.GREEN);
+		
+		labels2.add(message2);	
+		m+=30;
+		
+		
+	
+		//consolPanel.getChildren().addAll(title);
+		consolPanel.getChildren().addAll(labels);
+		consolPanel.getChildren().addAll(title2);
+		consolPanel.getChildren().addAll(labels2);
+	}
+	public int consolFDR(ArrayList<String> resultat ,Configuration s,int pos) {
+         int m = pos;
+	//	Text title = new Text("Behavioral verification report:\n");
+		Text title2 = new Text("=======  Configuration :"+s.getName()+" ========");
+//		 title.relocate(20,m +35);
+		// m+=20;
+		title2.relocate(20,m +35);
+		//consolPanel.getChildren().clear();
+		
 		List<Label> labels = new ArrayList<Label>();
 		for(int i=0 ;i<resultat.size();i++) {
 			m+= 30;
@@ -942,8 +1196,133 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		
 		
 	
-		consolPanel.getChildren().addAll(title);
+		//if(pos == 0) consolPanel.getChildren().addAll(title);
+		consolPanel.getChildren().addAll(title2);
 		consolPanel.getChildren().addAll(labels);
+		return m;
 	}
+	public int reconf(Reconfiguration r,int m) {
+		try {
+			VerificationFDR f = new VerificationFDR ();
+		String res = f.reconfig(r);
+		Text title2 = new Text("\n======================================================================================================================================================");
+		title2.relocate(20,m +35);
+		List<Label> labels = new ArrayList<Label>();
+		
+			m+= 30;
+			if(res.startsWith("V")) {
+				
+				
+				Label message = new Label(res);
+				message.relocate(20, m + 35);
+				message.setFill(Color.GREEN);
+				
+				labels.add(message);
+				
+				
+			}else {
+				
+				Label message = new Label(res);
+				message.relocate(20, m + 35);
+				message.setFill(Color.RED);
+				
+				labels.add(message);
+				
+				
+			}
+			
+			consolPanel.getChildren().addAll(labels);
+			return m+30;
+			
+		
+		
+		
+		
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return m+30;
+	}
+	
+	public int conf(Configuration conf,int m) {
+		VerificationFDR f = new VerificationFDR ();
+		ArrayList<String> resultat = f.ValidateConfiguration2(conf);
+Text title2 = new Text("\n Configuration Behavior  : "+conf.getName()+" ");
+m+=35;
+title2.relocate(20,m +35);
+List<Label> labels = new ArrayList<Label>();
+
+		m+= 30;
+		for(int i=0 ;i<resultat.size();i++) {
+			m+= 30;
+			if(resultat.get(i).startsWith("V")) {
+				
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.GREEN);
+				
+				labels.add(message);
+				
+				
+			}else {
+				
+				Label message = new Label(resultat.get(i));
+				message.relocate(20, m + 35);
+				message.setFill(Color.RED);
+				
+				labels.add(message);
+				
+				
+			}
+			
+			
+		}
+		consolPanel.getChildren().addAll(title2);
+		consolPanel.getChildren().addAll(labels);
+		return m+30;
+		
+	}
+	
+	
+	
+	
+	
+	public void niv1(int p) {
+		int m = p;
+		m+=20;
+		consolPanel.getChildren().clear();
+		ArrayList<String> resultat = new ArrayList<String>();
+		ArrayList<String> resultat2 = new ArrayList<String>();
+	Configuration c = source.getValue();if(c == null ) { Alert.display("Warning", "Configuration source is empty");} 
+	Configuration t = target.getValue();
+
+	VerificationFDR F = new VerificationFDR ();
+	if(c != null) {
+	for(int i =0;i<c.getImplementations().size();i++) {
+		Component comp = c.getImplementations().get(i).getComponentType();
+		resultat.add(F.valideCspComponent2(comp)+" [instance : "+c.getImplementations().get(i).getName()+" ]");
+	}
+	
+	 m = consolFDR(resultat,c,m);
+	 m= conf(c, m);
+	}
+	if(t != null) {
+	for(int i =0;i<t.getImplementations().size();i++) {
+		Component comp = t.getImplementations().get(i).getComponentType();
+		resultat2.add(F.valideCspComponent2(comp)+" [instance : "+t.getImplementations().get(i).getName()+" ]");
+	}
+	
+	 m= consolFDR(resultat2,t ,m);
+	 m = conf(t,m);
+	 
+	Reconfiguration re = new Reconfiguration(c,t);
+	m = reconf(re ,m);
+	}
+	}
+	
+	
 	
 }

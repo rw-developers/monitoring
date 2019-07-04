@@ -1,6 +1,7 @@
 package application.view.context;
 
 import application.include.Model;
+import application.view.CspglobaleImp;
 import application.view.NewImplementationWindow;
 import application.view.ProgramWindow;
 import javafx.event.ActionEvent;
@@ -14,17 +15,17 @@ public class ImplementationMenu extends ContextMenu{
 	int index;
 	Model data;
 	ProgramWindow window;
-	MenuItem edit = new MenuItem("Edit...");
+	MenuItem edit = new MenuItem("Change Behaviore");
 	MenuItem delete = new MenuItem("Delete");
 		
 
 	/**
 	 * Handler to generate an edit class window
 	 */
-	EventHandler<ActionEvent> editEvent = new EventHandler<ActionEvent>() {
+	EventHandler<ActionEvent> csp = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent e) {
-			NewImplementationWindow dialog = new NewImplementationWindow(index, data,window);
+			CspglobaleImp dialog = new CspglobaleImp(index, data);
 			dialog.initModality(Modality.APPLICATION_MODAL);
 			dialog.show();
 			e.consume();
@@ -55,7 +56,7 @@ public class ImplementationMenu extends ContextMenu{
 		data = dataIn;
 		window = w;
 
-		edit.setOnAction(editEvent);
+		edit.setOnAction(csp);
 		delete.setOnAction(deleteEvent);
 
 		this.getItems().add(edit);

@@ -270,7 +270,10 @@ public  class NewConnectorWindow extends Stage {
     }
     
     
-    public boolean checkCsp() {
+   
+
+
+	public boolean checkCsp() {
         String cspName = textField.getText();
         String cspFormule = textField0.getText();
         Pattern pName = Pattern.compile("[a-zA-Z]+[0-9]*");

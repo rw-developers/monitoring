@@ -25,7 +25,7 @@ import application.view.NewPortWindow;
 import application.view.NewComponentWindow;
 import application.view.NewConnectorWindow;
 import application.view.NewImplementationWindow;
-import application.view.NewLinkWindow;
+
 import application.view.ProgramWindow;
 import application.view.context.PortMenu;
 import application.view.context.ComponentMenu;
@@ -38,6 +38,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -83,9 +84,12 @@ public class Main extends Application {
 			 * Make the main window visible
 			 */
 			prepare();
+		
+			//primaryStage.getIcons().add(new Image("/application/include/c.png"));
+			window.getIcons().add(new Image("/application/include/c.png"));
 			window.show();
 		} catch (Exception e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			Alert.display("", "HHHHHHH");
 		}
 	}
@@ -1270,9 +1274,9 @@ public class Main extends Application {
 										if (e.getButton().equals(MouseButton.PRIMARY)) {
 											if (e.getClickCount() == 2) {
 												// Launch link edit window
-												NewLinkWindow dialog = new NewLinkWindow(added.getIndex(), data,window);
-												dialog.initModality(Modality.APPLICATION_MODAL);
-												dialog.show();
+												//NewConnectorWindow dialog = new NewConnectorWindow(added.getIndex(), data,window,null,null);
+												//dialog.initModality(Modality.APPLICATION_MODAL);
+												//dialog.show();
 											}
 											e.consume();
 										}
@@ -1407,7 +1411,7 @@ public class Main extends Application {
 	
 	private void prepare() {
 		//
-		data.addConfigurationModel(data.getConfigurationTail(),"Main_Configuration");				
+		//data.addConfigurationModel(data.getConfigurationTail(),"MainConfiguration");				
 		((Pane) window.mainComponentTab.getContent()).setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
