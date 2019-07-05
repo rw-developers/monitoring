@@ -21,7 +21,7 @@ import monitoring.elements.Csp;
 import monitoring.elements.Port;
 
 public class NewComponentWindow extends Stage {
-
+ 
 	// Dialog box elements
 	private GridPane newComponentInterface = new GridPane();
 	private Text newComponentTitle = new Text();

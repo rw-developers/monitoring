@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public  class ShemaWindow extends Stage {
 
-    
+     
 
     public ShemaWindow() {
     	 

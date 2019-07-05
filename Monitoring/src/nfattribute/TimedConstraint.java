@@ -22,7 +22,7 @@ public class TimedConstraint extends NFConstraint implements Serializable {
 	public String opC ;
 	public String opL;
 	int back = 1;
-	
+	 
 	public TimedConstraint(Component cOMP1, Component cOMP2, Methode meth1, Methode meth2, String event1, String event2,
 			int value, String opC, String opL) {
 		IDC += 1;

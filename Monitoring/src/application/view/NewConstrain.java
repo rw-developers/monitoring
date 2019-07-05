@@ -25,7 +25,7 @@ import monitoring.elements.Methode;
 import monitoring.elements.VerificationFDR;
 import nfattribute.OtherConstraint;
 import nfattribute.TimedConstraint;
-
+ 
 public  class NewConstrain extends Stage {
 	AnchorPane p = new AnchorPane();
     protected  Label label;

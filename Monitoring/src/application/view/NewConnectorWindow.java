@@ -24,7 +24,7 @@ import application.include.Alert;
 import application.include.Model;
 
 public  class NewConnectorWindow extends Stage {
-
+ 
     protected final Label label;
     protected final Label label0;
     protected final Label label1;

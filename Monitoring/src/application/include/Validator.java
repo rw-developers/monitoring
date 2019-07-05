@@ -9,7 +9,7 @@ import org.xml.sax.SAXException;
 
 public class Validator {
 
-	
+	 
 	public static void validate(String xmlFile,String validationFile) throws SAXException, IOException
 	{
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

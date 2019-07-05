@@ -31,7 +31,7 @@ import monitoring.elements.Port;
 import monitoring.elements.VerificationFDR;
 
 public class CspglobaleImp extends Stage {
-
+ 
 	protected final Label label;
 	protected final Label label0;
 	protected final TextField textField;

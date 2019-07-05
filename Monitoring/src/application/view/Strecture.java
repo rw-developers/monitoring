@@ -11,7 +11,7 @@ public class Strecture {
   public   Label c = new Label();
   public  Label f = new Label();
   public Component comp ;
-   
+    
   
   public TextField val2 = new TextField() ;
   public   Label d = new Label();

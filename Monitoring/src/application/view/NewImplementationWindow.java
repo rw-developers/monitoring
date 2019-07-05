@@ -14,7 +14,7 @@ import monitoring.elements.Component;
 import monitoring.elements.ComponentImplementation;
 
 public class NewImplementationWindow extends Stage {
-
+ 
 	// Dialog box elements
 	private GridPane newImplementationInterface = new GridPane();
 	private Text newImplementationTitle = new Text();

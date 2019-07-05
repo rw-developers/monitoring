@@ -25,7 +25,7 @@ public  class NFattributWindow extends Stage {
  	ArrayList<Strecture> list = new ArrayList<Strecture>();
  	ArrayList<Strecture> list2 = new ArrayList<Strecture>();
 	AnchorPane p = new AnchorPane();
-    protected final TabPane tabPane;
+    protected final TabPane tabPane; 
     protected final Tab tab;
     protected final AnchorPane anchorPane;
     protected ComboBox comboBox;

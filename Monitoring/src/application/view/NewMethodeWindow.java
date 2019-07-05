@@ -21,7 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public  class NewMethodeWindow extends Stage {
-
+ 
     protected final Button button;
     protected final TextField textField;
     protected final Label label;

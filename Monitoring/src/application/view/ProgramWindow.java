@@ -75,7 +75,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public ArchitectureElement elem;
 	private int color = 0;
 	public int i = 0;
-
+ 
 	// Main Window elements
 	  protected  ChoiceBox<Configuration> source;
 	    protected  ChoiceBox<Configuration> target;

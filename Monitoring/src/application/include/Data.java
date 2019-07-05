@@ -25,7 +25,7 @@ public class Data implements Serializable {
 	private static final long serialVersionUID = -7469028436759190642L;
 	private ArrayList<DConfiguration> configurationList;
 	private ArrayList<DComponent> componentList;
-
+ 
 
 	
 	public void save(String dir,Model data) {

@@ -30,7 +30,7 @@ public class NewPortWindow extends Stage {
 	private Text csptitle = new Text();
 	private TextField cspexp = new TextField();
 	private Label cspmessage = new Label();
-
+ 
 	public Button newPortSubmit = new Button("Submit");
 	public Button deleteClass = new Button("Delete");
 	public Button cspval = new Button("Check CSP");

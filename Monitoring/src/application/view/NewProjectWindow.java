@@ -24,7 +24,7 @@ public class NewProjectWindow extends Stage {
 	private Text newProjectTitle = new Text();
 	private TextField newProjectName = new TextField();
 	public Button newProjectSubmit = new Button("Submit");
-
+ 
 	// dir
 	public String dir;
 

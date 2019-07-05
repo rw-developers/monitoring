@@ -21,7 +21,7 @@ import monitoring.elements.Configuration;
 import monitoring.elements.Port;
 
 public class NewConfigurationWindow extends Stage{
-	
+	 
 	// Dialog box elements
 		private GridPane newComponentInterface = new GridPane();
 		private Text newComponentTitle = new Text();

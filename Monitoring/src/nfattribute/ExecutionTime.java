@@ -14,7 +14,7 @@ public class ExecutionTime extends NFAttribute {
 	public void setMethod(Method method) {
 		this.method = method;
 	}
-	
+	 
 	public Method getMethod() {
 		return method;
 	}

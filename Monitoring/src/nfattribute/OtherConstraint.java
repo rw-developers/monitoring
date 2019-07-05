@@ -15,7 +15,7 @@ public class OtherConstraint extends NFConstraint implements Serializable {
 	}
 	public void setName(StringProperty name) {
 		this.name = name;
-	}
+	} 
 	public String fonction ;
 	public String attribute ;
 	public String op ;
