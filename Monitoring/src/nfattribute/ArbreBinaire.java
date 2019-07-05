@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package nfattribute;
-
 /**
  *
  * @author Ramzi
@@ -33,7 +32,7 @@ public class ArbreBinaire<T extends Comparable> {
 		}
 		else
 		{
-			if(((String)i).charAt(0) == '@' )
+			if(((String)i).charAt(0) == 'D' || ((String)i).charAt(0) == 'F')
 			{
 				if(this.getaBD() != null) {
 					this.getaBD().inserer(i);
@@ -84,6 +83,7 @@ public class ArbreBinaire<T extends Comparable> {
 		if(this.getaBG() != null)
 		{
 			this.getaBG().afficherArbre();
+			System.out.println("G");
 		}
 		
 		System.out.println(this.getNeoud()+((this.sommet) ? " <== sommet" : ""));
@@ -91,6 +91,7 @@ public class ArbreBinaire<T extends Comparable> {
 		if(this.getaBD() != null)
 		{
 			this.getaBD().afficherArbre();
+			System.out.println("D");
 		}
 	}
 	
