@@ -239,7 +239,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		EventHandler<ActionEvent> newConfigurationEvent = new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				NewConfigurationWindow dialog = new NewConfigurationWindow(-1, data);
+				NewConfigurationWindow dialog = new NewConfigurationWindow(-1, data,appPanel);
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				dialog.show();
 				e.consume();
@@ -673,10 +673,20 @@ m+=20;
 			
 		VerificationNF  nf = new VerificationNF(data);
 		ArrayList<String> resultat6 = nf.CheckOtherConstraint(c);
-		m+= 60;
-		title3.relocate(20,m+10);
+		m+= 30;
+		title3.relocate(20,m+30);
 		consolPanel.getChildren().add(title3);
-		consolother(resultat6,m);	
+		consolother(resultat6,m);
+		if(t != null) {
+			 nf = new VerificationNF(data);
+			ArrayList<String> resultat7 = nf.CheckOtherConstraint(t);
+			m+= 60;
+			title3.relocate(20,m+10);
+			//consolPanel.getChildren().add(title3);
+			m+=30;
+			consolother(resultat6,m);
+			
+		}
 			
 			
 			

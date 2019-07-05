@@ -45,5 +45,16 @@
 <type>IN</type>
 </Port_Out>
 </Connector>
+<Connector>
+<name>p4->t1</name>
+<Port_In>
+<name>t1</name>
+<type>IN</type>
+</Port_In>
+<Port_Out>
+<name>p4</name>
+<type>IN</type>
+</Port_Out>
+</Connector>
 </Configuration>
 </Architecture>

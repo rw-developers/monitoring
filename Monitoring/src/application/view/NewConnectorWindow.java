@@ -249,7 +249,7 @@ public  class NewConnectorWindow extends Stage {
 											"",data.getConfigurationModel(confId),arc.formule,Integer.parseInt(textField1.getText()),s2,s1);
 								}
 							} catch (NumberFormatException ex) {
-								Alert.display("", "bfdbfd");
+								//Alert.display("", "bfdbfd");
 							}
 						} else {
 							data.getLinkModel(editIndex).setType(newLinkArrow.getSelectionModel().getSelectedIndex());

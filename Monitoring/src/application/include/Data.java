@@ -148,7 +148,6 @@ public class Data implements Serializable {
 			SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
 			
 			singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
-			System.out.println();
 	
 		
 			
