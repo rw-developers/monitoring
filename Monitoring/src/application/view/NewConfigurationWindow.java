@@ -1,6 +1,7 @@
 package application.view;
 
 import application.include.Alert;
+import application.include.Data;
 import application.include.Model;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -64,35 +65,16 @@ public class NewConfigurationWindow extends Stage{
 					data.clearRedoState();
 
 					if (editIndex == -1) {
-						data.addConfigurationModel(data.getConfigurationTail(),newComponentName.getText());
+						
 						if(conf.getSelectionModel().getSelectedItem() != null) {
-							SingleSelectionModel<Tab> singleselectionModel = window.getSelectionModel();
-							singleselectionModel.select(window.getTabs().get(window.getTabs().size()-1));
-							Configuration config = conf.getSelectionModel().getSelectedItem(); 
-							config.getImplementations().forEach(impl->{
-						        
-								data.addImplementationModel(new int[] { data.getImplementationTail(), 0, 0, 100, 100 }, impl.getName(),
-										impl.getComponentType(),data.getConfigurationModel(data.getConfigurationTail()-1));
-								
-						impl.getPorts().forEach( p->{
-							data.addPortModel(
-									new int[] { data.getComponentTail(), impl.getXPos() + 240,
-											impl.getYPos() + impl.getPorts().size() * 25 + 15,
-												100, 100 },
-									new String[] { p.getName(),
-											p.getType(), p.cspExpression.getExpression() },
-									data.getConfigurationModel(data.getConfigurationTail()-1).getImplementations().get(config.getImplementations().indexOf(impl)));
-						}) ; 
-							});
+							Data d = new Data();
 							
-							config.getConnectors().forEach(c->{
-								data.addLinkModel(new int[] {data.getLinkTail(),c.getType(),c.getSource(),c.getDest(),-2,-2,-2,-2},"",data.getConfigurationModel(data.getConfigurationTail()-1),c.formule,
-										c.Bandwidth,
-										getPort(c.getInPort(),data.getConfigurationModel(data.getConfigurationTail()-1)),
-										getPort(c.getOutPort(),data.getConfigurationModel(data.getConfigurationTail()-1)));				
-							});
+							
+							
+							Configuration co = conf.getValue();
+							d.loadData2( data, window,co,data.getConfigurationTail(),newComponentName.getText());
 	
-						}
+						}else {data.addConfigurationModel(data.getConfigurationTail(),newComponentName.getText());}
 					} else {
 						data.getConfigurationModel(editIndex).setName(newComponentName.getText());
 					}

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import application.include.Alert;
+
 
 
 import uk.ac.ox.cs.fdr.Assertion;
@@ -21,6 +21,7 @@ import uk.ac.ox.cs.fdr.fdr;
 public class VerificationFDR {
 
 	   private static ArrayList<String> Allchannel =new ArrayList<>();
+	   public ArrayList<String> Allmethode =new ArrayList<>();
 
 	    public static String getAllchannelS() {
 	        return AllchannelS;
@@ -57,7 +58,7 @@ public class VerificationFDR {
 	        return new boolean[]{false};
 	    }
 	    
-	    public void ValidateConfiguration(Configuration conf){
+	    public ArrayList<String> ValidateConfiguration(Configuration conf){
 	        File fichCSP=new File("testFDR.csp");
 	        String Text ="";
 	        String channels ="";
@@ -194,7 +195,7 @@ public class VerificationFDR {
 	                        formuleGlobalUserConf = formuleGlobalUserConf.replaceAll(list1.get(z), list6.get(z));         
 	                        }
 	                //////////////////////////////////////////////////////////////////////////////////////////////////////////////    
-	                    System.out.println("\n\n\n\n");
+	                    //System.out.println("\n\n\n\n");
 
 	                }
 
@@ -210,11 +211,11 @@ public class VerificationFDR {
 	                    AllFormullaSeq += nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName();
 	                   // AllFormullaSeqConf+=conf.name.getValue()+"_"+AllFormullaSeq;
 	                }
-	                System.out.println(AllFormullaSeq);
+	               // System.out.println(AllFormullaSeq);
 	                allformulaConf+=conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
 	                        + "= "+formuleGlobalUserConf +"\n" ;
-	                System.out.println(conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
-	                        + "= "+formuleGlobalUserConf +"\n");
+	              //  System.out.println(conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
+	                      //  + "= "+formuleGlobalUserConf +"\n");
 
 	                // fin de modification
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -310,26 +311,30 @@ public class VerificationFDR {
 	                            String expInstance2Conf ="";
 	                      
 	                          
-	                            Alert.display("", arc.getInPort().name.getValue()+"h1");
-	                            Alert.display("", port.name.getValue()+"h2");
+	                           // Alert.display("", arc.getInPort().name.getValue()+"h1");
+	                          //  Alert.display("", port.name.getValue()+"h2");
 	                         
-
+                                  String khmissa2 ="";
 	                            if(arc.getInPort().getNom().equals(port.getNom()))
-	                            {
+	                            {     khmissa2 = arcOut.getComponentType().expMethod;
 	                                ExpInstance2 =arcOut.getComponentType().getName()+"_"+arcOut.getName()+"_"+arcOut.getComponentType().getExpGlobale().getName();
 	                                expInstance2Conf=conf.name.getValue()+"_"+arcOut.getComponentType().getName()+"_"+arcOut.getName()+"_"+arcOut.getComponentType().getExpGlobale().getName();
 
 	                            }
 	                            else
-	                            {
+	                            {   khmissa2 = arcOut.getComponentType().expMethod;
 	                                ExpInstance2 =arcIn.getComponentType().getName()+"_"+arcIn.getName()+"_"+arcIn.getComponentType().getExpGlobale().getName();
 	                                expInstance2Conf=conf.name.getValue()+"_"+arcIn.getComponentType().getName()+"_"+arcIn.getName()+"_"+arcIn.getComponentType().getExpGlobale().getName();
 	                            }
 	                            
-	                            Alert.display("","arc compture");
+	                           // Alert.display("","arc compture");
 	                            CspArc += "formula" +Compteur+ "="
 	                                    + "(" + nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName() + "|||"
 	                                    +ExpInstance2+")[|{" + ComAction + "}|]" + conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName() + "\n";
+	                            
+	                            String khmissa = "("+conf.implementations.get(i).getComponentType().expMethod+")@("+khmissa2+")";
+	                            Allmethode.add(khmissa);
+	                            
 
 	                            CspArcConf+=conf.name.getValue()+"_"+"formula" +Compteur+ "="
 	                                    + "(" +conf.name.getValue()+"_"+ nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName() + "|||"
@@ -344,8 +349,8 @@ public class VerificationFDR {
 	                }
 	                
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	                AllFormulla +="\n\n\n\n";
-	                allformulaConf+="\n\n\n\n";
+	              //  AllFormulla +="\n\n\n\n";
+	               // allformulaConf+="\n\n\n\n";
 
 
 
@@ -404,27 +409,27 @@ public class VerificationFDR {
 	            FileWriter ffw=new FileWriter(fichCSP);
 	            ffw.write(Text);
 
-	            System.out.println("rahoo yekteb fel fichier");
+	           // System.out.println("rahoo yekteb fel fichier");
 	            ffw.flush();
 	            boolean[] result=testFDR("testFDR.csp");
 
 	            if(result[0])  {
 	            
-	                Alert.display("Test FDR", " parallel: successful !  ");
+	              //  Alert.display("Test FDR", " parallel: successful !  ");
 	                
 	            }
 	            else {
 	            
 	                
-	                Alert.display("Test FDR", " executing configuration intances in parallel can't be done   ");
+	              //  Alert.display("Test FDR", " executing configuration intances in parallel can't be done   ");
 	            }
 	            if(result[1])  {
 	           
-	                Alert.display("Test FDR", " sequential: successful!  ");
+	             //   Alert.display("Test FDR", " sequential: successful!  ");
 	            }
 	            else {
 	              
-	                Alert.display("Test FDR", "executing configuration intances in sequence can't be done ");
+	               // Alert.display("Test FDR", "executing configuration intances in sequence can't be done ");
 	            }
 
 
@@ -432,6 +437,7 @@ public class VerificationFDR {
 	        catch(Exception e1){
 	            e1.printStackTrace();
 	        }
+			return Allmethode;
 
 	    }
 	    
@@ -504,8 +510,10 @@ public class VerificationFDR {
 
 	        //start checking
 	        boolean[] result=testFDR("testFDR.csp");
-	        if(result[0]) {Alert.display("Reconfiguration ", "Reconfiguration Valid");
-	        res ="Valid Reconfiguration [ "+r.getConfDestination().getName()+" Extend "+r.getConfSource().getName()+" ]"; }else {Alert.display("Reconfiguration ", "Reconfiguration InValid");
+	        if(result[0]) {
+	        	//Alert.display("Reconfiguration ", "Reconfiguration Valid");
+	        res ="Valid Reconfiguration [ "+r.getConfDestination().getName()+" Extend "+r.getConfSource().getName()+" ]"; }else {
+	        	//Alert.display("Reconfiguration ", "Reconfiguration InValid");
 	        res = "Invalid Reconfiguration [ "+r.getConfDestination().getName()+" Extend "+r.getConfSource().getName()+" ]";}
 	       
 	    
@@ -643,7 +651,7 @@ public class VerificationFDR {
 	            ArrayList<String> list1 = new ArrayList<>();
 	            ArrayList<String> list2 = new ArrayList<>();
 	            ArrayList<String> list3 = new ArrayList<>();
-	            Alert.display("",formullaConcat );
+	           // Alert.display("",formullaConcat );
 	            if(componenet.getExpGlobale().getExpression()==" "){
 	                System.out.println("hediiiiiiiiiiiiiiiiii "+generatorAuto);
 	                componenet.setExpGlobale(new Csp("autoFormula",generatorAuto));
@@ -681,11 +689,11 @@ public class VerificationFDR {
 	            ffw.write(Text);
 	            ffw.flush();
 	            if(testFDR("testFDR.csp")[0])  {	               
-	                Alert.display("Test FDR", "successful!");
+	              //  Alert.display("Test FDR", "successful!");
 	            }
 	            else {
 	              
-	                Alert.display("Test FDR", "error!");
+	               // Alert.display("Test FDR", "error!");
 	            }
 
 	        }
@@ -783,7 +791,7 @@ public class VerificationFDR {
 	            ArrayList<String> list3 = new ArrayList<>();
 	          
 	            if(componenet.getExpGlobale().getExpression()==" "){
-	                System.out.println("hediiiiiiiiiiiiiiiiii "+generatorAuto);
+	              //  System.out.println("hediiiiiiiiiiiiiiiiii "+generatorAuto);
 	                componenet.setExpGlobale(new Csp("autoFormula",generatorAuto));
 	                GlobalFormComponenet =  "autoFormula  = " +generatorAuto;
 	                Assert = "assert GlobFormulla[T= autoFormula";
@@ -1024,11 +1032,11 @@ public class VerificationFDR {
 	                    AllFormullaSeq += nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName();
 	                   // AllFormullaSeqConf+=conf.name.getValue()+"_"+AllFormullaSeq;
 	                }
-	                System.out.println(AllFormullaSeq);
+	              //  System.out.println(AllFormullaSeq);
 	                allformulaConf+=conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
 	                        + "= "+formuleGlobalUserConf +"\n" ;
-	                System.out.println(conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
-	                        + "= "+formuleGlobalUserConf +"\n");
+	              //  System.out.println(conf.name.getValue()+"_"+nameComposant+"_"+conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName()
+	                  //      + "= "+formuleGlobalUserConf +"\n");
 
 	                // fin de modification
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1140,7 +1148,7 @@ public class VerificationFDR {
 	                                expInstance2Conf=conf.name.getValue()+"_"+arcIn.getComponentType().getName()+"_"+arcIn.getName()+"_"+arcIn.getComponentType().getExpGlobale().getName();
 	                            }
 	                            
-	                            Alert.display("","arc compture");
+	                           // Alert.display("","arc compture");
 	                            CspArc += "formula" +Compteur+ "="
 	                                    + "(" + nameComposant + "_" + conf.implementations.get(i).getName() + "_" + conf.implementations.get(i).getComponentType().getExpGlobale().getName() + "|||"
 	                                    +ExpInstance2+")[|{" + ComAction + "}|]" + conf.implementations.get(i).getName() + "_" + arc.getCSpArc().getName() + "\n";

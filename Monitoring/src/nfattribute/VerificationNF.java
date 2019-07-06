@@ -1,12 +1,14 @@
 package nfattribute;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import application.include.Alert;
 import application.include.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import monitoring.elements.Configuration;
+
 
 
 public class VerificationNF {
@@ -215,7 +217,77 @@ public class VerificationNF {
 		
 		
 	}
-	//public boolean  avg() {}
+///////////////////////////////////////////////////////////////////////////
+
+//	public void SuperAlgo(ObservableList<TimedConstraint> constraints , Configuration c , Automata A) {
+//		ArrayList<Sequence> seqs = GenerateALLsequences( A );
+//		ArrayList<String> result = new ArrayList<String>();
+//		for(int i =0 ;i<constraints.size();i++) {
+//			for(int j=0 ; j<seqs.size();j++) {
+//				result.add(CheckConstraint(constraints.get(i) , seqs.get(j)));
+//				
+//			}
+//		}
+//		
+//		
+//		
+//	}
+
 	
+	
+	public  void parcours_profondeur(Node n,String s,ArrayList<String> k) {
+		 
+	  
+	    s = s+"+"+n.name;
+	    Iterator<Node> list =  n.transitions.iterator();
+	    int m =0;
+	    while(list.hasNext()){
+	    	m++;
+	        parcours_profondeur(list.next(),s,k);
+	    } 
+	   if(m == 0) {
+	   k.add(s);}
+    }
+	
+	public  ArrayList<Sequence> getSequences( Automata a ) {
+		
+
+		    
+		      ArrayList<Sequence> sq2 = new ArrayList<Sequence>();
+		      ArrayList<String> sq3 = new ArrayList<String>();
+		   
+		   
+		      parcours_profondeur(a.initialState, "",sq3);
+		      sq3.forEach(k->{
+		    	   Sequence sss = new Sequence();
+		    	  k = k.substring(1);
+		    	  String []  f = k.split("\\+");
+		    	  for(int i=1;i<f.length;i++) {
+		    		   
+		    		  sss.Seq.add(f[i]);
+		    		 
+		    	  } sq2.add(sss);
+		      });
+		      
+		     
+			return sq2;
+		
+    }
+
+
+
+	public void afficheAutomata(Node n) {
+		System.out.print(n.name + "->");
+		for (int i = 0; i < n.transitions.size(); i++) {
+			if (n.transitions.get(i).transitions.size() > 0) {
+				if (n.transitions.get(i).transitions.size() > 1) {
+					System.out.println("\n");
+				}
+				afficheAutomata(n.transitions.get(i));
+			} else {
+				System.out.println(n.transitions.get(i).name);
+			}
+		}
+	}
 
 }

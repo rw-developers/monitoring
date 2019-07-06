@@ -1258,6 +1258,8 @@ m+=20;
 	
 	public int conf(Configuration conf,int m) {
 		VerificationFDR f = new VerificationFDR ();
+		ArrayList<String> methode = f.ValidateConfiguration(conf);
+		for(int k =0 ; k<methode.size();k++) { System.out.println("\n"+methode.get(k)+"\n");}
 		ArrayList<String> resultat = f.ValidateConfiguration2(conf);
 Text title2 = new Text("\n Configuration Behavior  : "+conf.getName()+" ");
 m+=35;

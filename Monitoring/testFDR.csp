@@ -1,61 +1,84 @@
-channel p1 : {0} 
-channel p2 : {0} 
-channel p3 : {0} 
-channel p4 : {0} 
-channel t1 : {0} 
-channel t2 : {0} 
-channel t3 : {0} 
+channel sfbqdb_p1 : {0} 
+channel sfbqdb_p2 : {0} 
+channel sfbqdb_p3 : {0} 
+channel sfbqdb_p4 : {0} 
+channel sbsdb_d1 : {0} 
+channel sbsdb_d2 : {0} 
+channel sbsdb_d3 : {0} 
+channel fbdv_t1 : {0} 
+channel fbdv_t2 : {0} 
+channel fbdv_t3 : {0} 
+channel wg_d1 : {0} 
+channel wg_d2 : {0} 
+channel wg_d3 : {0} 
+channel sege_t1 : {0} 
+channel sege_t2 : {0} 
+channel sege_t3 : {0} 
+
+Server_sfbqdb_p1 = sfbqdb_p1?x->Server_sfbqdb_p1
+Server_sfbqdb_p2 = sfbqdb_p2!0->Server_sfbqdb_p2
+Server_sfbqdb_p3 = sfbqdb_p3?e->Server_sfbqdb_p3
+Server_sfbqdb_p4 = sfbqdb_p4!0->Server_sfbqdb_p4
+Server_sfbqdb_exp1= sfbqdb_p1?x->(Server_sfbqdb_p2[]Server_sfbqdb_p3;sfbqdb_p4!0->SKIP)
+sfbqdb_Bind=sbsdb_d2!0->sfbqdb_p1?x->sfbqdb_Bind
+sfbqdb_Bindfv=sfbqdb_p4!0->fbdv_t1?x->sfbqdb_Bindfv
+
+
+
+
+Data_sbsdb_d1 = sbsdb_d1?t->Data_sbsdb_d1
+Data_sbsdb_d2 = sbsdb_d2!0->Data_sbsdb_d2
+Data_sbsdb_d3 = sbsdb_d3?e->Data_sbsdb_d3
+Data_sbsdb_exp3= sbsdb_d2!0->(Data_sbsdb_d1;sbsdb_d3?x->SKIP)
+sbsdb_fg=sbsdb_d2!0->sege_t1?x->sbsdb_fg
+sbsdb_Bindd=fbdv_t2!0->sbsdb_d3?e->sbsdb_Bindd
+sbsdb_dc=wg_d2!0->sbsdb_d3?e->sbsdb_dc
+
+
+
+
+Client_fbdv_t1 = fbdv_t1?x->Client_fbdv_t1
+Client_fbdv_t2 = fbdv_t2!0->Client_fbdv_t2
+Client_fbdv_t3 = fbdv_t3?y->Client_fbdv_t3
+Client_fbdv_exp2= fbdv_t2!0->(Client_fbdv_t1;fbdv_t3?x->SKIP)
+fbdv_Bin=wg_d2!0->fbdv_t3?y->fbdv_Bin
+
+
+
+
+Data_wg_d1 = wg_d1?t->Data_wg_d1
+Data_wg_d2 = wg_d2!0->Data_wg_d2
+Data_wg_d3 = wg_d3?e->Data_wg_d3
+Data_wg_exp3= wg_d2!0->(Data_wg_d1;wg_d3?x->SKIP)
+wg_Bindb=sege_t2!0->wg_d1?t->wg_Bindb
+wg_Bindjk=wg_d2!0->sege_t3?y->wg_Bindjk
+
+
+
+
+Client_sege_t1 = sege_t1?x->Client_sege_t1
+Client_sege_t2 = sege_t2!0->Client_sege_t2
+Client_sege_t3 = sege_t3?y->Client_sege_t3
+Client_sege_exp2= sege_t2!0->(Client_sege_t1;sege_t3?x->SKIP)
 
 
 
 
 
-drh_Server_dvs_p1=p1?x->drh_Server_dvs_p1
-drh_Server_dvs_p2=p2!0->drh_Server_dvs_p2
-drh_Server_dvs_p3=p3?e->drh_Server_dvs_p3
-drh_Server_dvs_p4=p4!0->drh_Server_dvs_p4
-drh_Server_dvs_exp1= p1?x->(drh_Server_dvs_p2[]drh_Server_dvs_p3;p4!0->SKIP)
-drh_dvs_Bind=t2!0->p3?e->drh_dvs_Bind
+formula0=(Server_sfbqdb_exp1|||Data_sbsdb_exp3)[|{sbsdb_d2.0,sfbqdb_p1.0}|]sfbqdb_Bind
+formula1=(Server_sfbqdb_exp1|||Client_fbdv_exp2)[|{sfbqdb_p4.0,fbdv_t1.0}|]sfbqdb_Bindfv
+formula2=(Data_sbsdb_exp3|||Client_sege_exp2)[|{sbsdb_d2.0,sege_t1.0}|]sbsdb_fg
+formula3=(Data_sbsdb_exp3|||Client_fbdv_exp2)[|{fbdv_t2.0,sbsdb_d3.0}|]sbsdb_Bindd
+formula4=(Data_sbsdb_exp3|||Data_wg_exp3)[|{wg_d2.0,sbsdb_d3.0}|]sbsdb_dc
+formula5=(Client_fbdv_exp2|||Data_wg_exp3)[|{wg_d2.0,fbdv_t3.0}|]fbdv_Bin
+formula6=(Data_wg_exp3|||Client_sege_exp2)[|{sege_t2.0,wg_d1.0}|]wg_Bindb
+formula7=(Data_wg_exp3|||Client_sege_exp2)[|{wg_d2.0,sege_t3.0}|]wg_Bindjk
 
 
+GlobaleFormulla = formula0|||formula1|||formula2|||formula3|||formula4|||formula5|||formula6|||formula7
 
+assert  GlobaleFormulla :[deadlock free [F]]
 
-drh_Client_dvqsv_t1=t1?x->drh_Client_dvqsv_t1
-drh_Client_dvqsv_t2=t2!0->drh_Client_dvqsv_t2
-drh_Client_dvqsv_t3=t3?y->drh_Client_dvqsv_t3
-drh_Client_dvqsv_exp2= t2!0->(drh_Client_dvqsv_t1;t3?x->SKIP)
+sequentiel=Server_sfbqdb_exp1;Data_sbsdb_exp3;Client_fbdv_exp2;Data_wg_exp3;Client_sege_exp2
 
-
-
-
-
-drh_formula0=(drh_Server_dvs_exp1|||drh_Client_dvqsv_exp2)[|{t2.0,p3.0}|]drh_dvs_Bind
-drh_GlobaleFormulla  = drh_formula0
-
-
-dvs_Server_dvs_p1=p1?x->dvs_Server_dvs_p1
-dvs_Server_dvs_p2=p2!0->dvs_Server_dvs_p2
-dvs_Server_dvs_p3=p3?e->dvs_Server_dvs_p3
-dvs_Server_dvs_p4=p4!0->dvs_Server_dvs_p4
-dvs_Server_dvs_exp1= p1?x->(dvs_Server_dvs_p2[]dvs_Server_dvs_p3;p4!0->SKIP)
-dvs_dvs_Bind=t2!0->p3?e->dvs_dvs_Bind
-
-
-
-
-dvs_Client_dvqsv_t1=t1?x->dvs_Client_dvqsv_t1
-dvs_Client_dvqsv_t2=t2!0->dvs_Client_dvqsv_t2
-dvs_Client_dvqsv_t3=t3?y->dvs_Client_dvqsv_t3
-dvs_Client_dvqsv_exp2= t2!0->(dvs_Client_dvqsv_t1;t3?x->SKIP)
-
-
-
-
-
-dvs_formula0=(dvs_Server_dvs_exp1|||dvs_Client_dvqsv_exp2)[|{t2.0,p3.0}|]dvs_dvs_Bind
-dvs_GlobaleFormulla  = dvs_formula0
-
-
-assert dvs_GlobaleFormulla[T=drh_GlobaleFormulla
-
-
+assert  sequentiel :[deadlock free [F]]

@@ -14,7 +14,7 @@ public class TimedConstraint extends NFConstraint implements Serializable {
 	public Component COMP2 ;
 	public Methode Meth1;
 	public Methode Meth2;
-	public Connector conn; 
+	//public Connector conn; 
 	public String event1 ,event2;
 	public int Value;
 	public String part1;
@@ -63,12 +63,7 @@ public class TimedConstraint extends NFConstraint implements Serializable {
 	public void setMeth2(Methode meth2) {
 		Meth2 = meth2;
 	}
-	public Connector getConn() {
-		return conn;
-	}
-	public void setConn(Connector conn) {
-		this.conn = conn;
-	}
+	
 	public float getValue() {
 		return Value;
 	}

@@ -1,6 +1,8 @@
 package nfattribute;
 
-public class NFAttribute {
+import java.io.Serializable;
+
+public class NFAttribute implements Serializable {
 	private int id;
 	private String name;
 	private String value;

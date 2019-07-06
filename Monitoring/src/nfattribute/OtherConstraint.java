@@ -8,6 +8,15 @@ import javafx.beans.property.StringProperty;
 public class OtherConstraint extends NFConstraint implements Serializable {
 	public String type;
 	public StringProperty name = new SimpleStringProperty();
+	 
+	public String fonction ;
+	public String attribute ;
+	public String op ;
+	public int value;
+	public NFAttribute NFattrbute;
+	int back = 1;
+	
+	
 	public StringProperty getName() {
 		 String str = " "+this.type+" "+this.fonction+" "+this.attribute+" "+this.value;
 		 name.set(str);
@@ -15,13 +24,7 @@ public class OtherConstraint extends NFConstraint implements Serializable {
 	}
 	public void setName(StringProperty name) {
 		this.name = name;
-	} 
-	public String fonction ;
-	public String attribute ;
-	public String op ;
-	public int value;
-	public NFAttribute NFattrbute;
-	int back = 1;
+	}
 	public OtherConstraint(String type, String fonction, String attribute, String op, int value) {
 		super();
 		IDC += 1;
