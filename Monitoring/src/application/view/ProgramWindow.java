@@ -63,6 +63,8 @@ import monitoring.elements.Component;
 import monitoring.elements.Configuration;
 import monitoring.elements.Reconfiguration;
 import monitoring.elements.VerificationFDR;
+import nfattribute.Automata;
+import nfattribute.Sequence;
 import nfattribute.VerificationNF;
 
 //
@@ -584,6 +586,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		};
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		EventHandler<ActionEvent> Bilan = new EventHandler<ActionEvent>() {
+			
 			@Override
 			public void handle(ActionEvent e) {
 				int m= 0;
@@ -670,7 +673,19 @@ m+=20;
 		m = reconf(re ,m);
 		}
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+		data.getConfigurationProperty().forEach(conf->{
+			Automata at = new Automata();
+			VerificationNF nf = new VerificationNF(new Model());
+			ArrayList<Sequence> sq = at.generateConfSequences(conf);
+			ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
+				System.out.println(conf.getName()+" Sequences");
+				sq2.forEach(o->{
+					System.out.println(o.Seq);
+				});	
+				
+				nf.SuperAlgo(data.getTimedConstraint(), sq2, data);
+		});
+		
 		VerificationNF  nf = new VerificationNF(data);
 		ArrayList<String> resultat6 = nf.CheckOtherConstraint(c);
 		m+= 30;
@@ -685,58 +700,13 @@ m+=20;
 			//consolPanel.getChildren().add(title3);
 			m+=30;
 			consolother(resultat6,m);
-			
+
 		}
 			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			//int m = 	niv1();
-			//m = niv2(m);
+		
 			
 			}
+			
 		};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		tree.setOnMouseClicked(new EventHandler<Event>() {

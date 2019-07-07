@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 package nfattribute;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
 /**
  *
  * @author Ramzi
@@ -83,15 +91,15 @@ public class ArbreBinaire<T extends Comparable> {
 		if(this.getaBG() != null)
 		{
 			this.getaBG().afficherArbre();
-			System.out.println("G");
+			//System.out.println("G");
 		}
 		
-		System.out.println(this.getNeoud()+((this.sommet) ? " <== sommet" : ""));
+		System.out.print(this.getNeoud()+((this.sommet) ? " <== sommet" : ""));
 		
 		if(this.getaBD() != null)
 		{
 			this.getaBD().afficherArbre();
-			System.out.println("D");
+			//System.out.println("D");
 		}
 	}
 	

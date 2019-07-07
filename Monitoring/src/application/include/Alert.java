@@ -5,6 +5,8 @@
  */
 package application.include;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import nfattribute.Sequence;
 
 /**
  *
@@ -47,6 +50,46 @@ public class Alert {
        
         
         layout.getChildren().addAll(button1,label);
+        
+        Scene scene =new Scene(layout,250,125);
+        
+        window.setScene(scene);
+        window.showAndWait();
+        
+        return answer;
+    }
+    public static boolean display(String title,ArrayList<Sequence> sq)
+    {
+        
+        Stage window =new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle(title);
+        
+        GridPane layout =new GridPane();
+        layout.setPadding(new Insets(10,10,10,10));
+        layout.setVgap(10);
+        layout.setHgap(10);
+        ArrayList<Label> labels = new ArrayList<Label>();
+        sq.forEach(s->{
+        	labels.add(new Label(s.Seq+""));
+        });
+       for (int i = 0; i < labels.size(); i++) {
+    	   GridPane.setConstraints(labels.get(i), 1, i);
+	}
+        
+        
+        Button button1 =new Button("OK");
+        GridPane.setConstraints(button1, 1 , 4);
+        
+        
+        button1.setOnAction(e ->{
+       answer=true;
+        window.close();
+        });
+       
+        
+        layout.getChildren().addAll(button1);
+        layout.getChildren().addAll(labels);
         
         Scene scene =new Scene(layout,250,125);
         

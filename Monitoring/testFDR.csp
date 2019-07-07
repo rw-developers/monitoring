@@ -1,84 +1,31 @@
-channel sfbqdb_p1 : {0} 
-channel sfbqdb_p2 : {0} 
-channel sfbqdb_p3 : {0} 
-channel sfbqdb_p4 : {0} 
-channel sbsdb_d1 : {0} 
-channel sbsdb_d2 : {0} 
-channel sbsdb_d3 : {0} 
-channel fbdv_t1 : {0} 
-channel fbdv_t2 : {0} 
-channel fbdv_t3 : {0} 
-channel wg_d1 : {0} 
-channel wg_d2 : {0} 
-channel wg_d3 : {0} 
-channel sege_t1 : {0} 
-channel sege_t2 : {0} 
-channel sege_t3 : {0} 
+channel s1_p1 : {0} 
+channel s1_p2 : {0} 
+channel s1_p3 : {0} 
+channel s1_p4 : {0} 
+channel c1_p5 : {0} 
+channel c1_p6 : {0} 
+channel c1_p7 : {0} 
+channel c1_p8 : {0} 
 
-Server_sfbqdb_p1 = sfbqdb_p1?x->Server_sfbqdb_p1
-Server_sfbqdb_p2 = sfbqdb_p2!0->Server_sfbqdb_p2
-Server_sfbqdb_p3 = sfbqdb_p3?e->Server_sfbqdb_p3
-Server_sfbqdb_p4 = sfbqdb_p4!0->Server_sfbqdb_p4
-Server_sfbqdb_exp1= sfbqdb_p1?x->(Server_sfbqdb_p2[]Server_sfbqdb_p3;sfbqdb_p4!0->SKIP)
-sfbqdb_Bind=sbsdb_d2!0->sfbqdb_p1?x->sfbqdb_Bind
-sfbqdb_Bindfv=sfbqdb_p4!0->fbdv_t1?x->sfbqdb_Bindfv
+Sever_s1_p1 = s1_p1?x->Sever_s1_p1
+Sever_s1_p2 = s1_p2!0->Sever_s1_p2
+Sever_s1_p3 = s1_p3?x->Sever_s1_p3
+Sever_s1_p4 = s1_p4!0->Sever_s1_p4
+Sever_s1_expS= s1_p1?x->(Sever_s1_p2[]Sever_s1_p3;s1_p4!0->SKIP)
+s1_Bind=c1_p6!0->s1_p1?x->s1_Bind
+Client_c1_p5 = c1_p5?x->Client_c1_p5
+Client_c1_p6 = c1_p6!0->Client_c1_p6
+Client_c1_p7 = c1_p7?x->Client_c1_p7
+Client_c1_p8 = c1_p8!0->Client_c1_p8
+Client_c1_expC= c1_p5?x->(Client_c1_p6|||Client_c1_p7;c1_p8!0->SKIP)
+
+formula0=(Sever_s1_expS|||Client_c1_expC)[|{c1_p6.0,s1_p1.0}|]s1_Bind
 
 
-
-
-Data_sbsdb_d1 = sbsdb_d1?t->Data_sbsdb_d1
-Data_sbsdb_d2 = sbsdb_d2!0->Data_sbsdb_d2
-Data_sbsdb_d3 = sbsdb_d3?e->Data_sbsdb_d3
-Data_sbsdb_exp3= sbsdb_d2!0->(Data_sbsdb_d1;sbsdb_d3?x->SKIP)
-sbsdb_fg=sbsdb_d2!0->sege_t1?x->sbsdb_fg
-sbsdb_Bindd=fbdv_t2!0->sbsdb_d3?e->sbsdb_Bindd
-sbsdb_dc=wg_d2!0->sbsdb_d3?e->sbsdb_dc
-
-
-
-
-Client_fbdv_t1 = fbdv_t1?x->Client_fbdv_t1
-Client_fbdv_t2 = fbdv_t2!0->Client_fbdv_t2
-Client_fbdv_t3 = fbdv_t3?y->Client_fbdv_t3
-Client_fbdv_exp2= fbdv_t2!0->(Client_fbdv_t1;fbdv_t3?x->SKIP)
-fbdv_Bin=wg_d2!0->fbdv_t3?y->fbdv_Bin
-
-
-
-
-Data_wg_d1 = wg_d1?t->Data_wg_d1
-Data_wg_d2 = wg_d2!0->Data_wg_d2
-Data_wg_d3 = wg_d3?e->Data_wg_d3
-Data_wg_exp3= wg_d2!0->(Data_wg_d1;wg_d3?x->SKIP)
-wg_Bindb=sege_t2!0->wg_d1?t->wg_Bindb
-wg_Bindjk=wg_d2!0->sege_t3?y->wg_Bindjk
-
-
-
-
-Client_sege_t1 = sege_t1?x->Client_sege_t1
-Client_sege_t2 = sege_t2!0->Client_sege_t2
-Client_sege_t3 = sege_t3?y->Client_sege_t3
-Client_sege_exp2= sege_t2!0->(Client_sege_t1;sege_t3?x->SKIP)
-
-
-
-
-
-formula0=(Server_sfbqdb_exp1|||Data_sbsdb_exp3)[|{sbsdb_d2.0,sfbqdb_p1.0}|]sfbqdb_Bind
-formula1=(Server_sfbqdb_exp1|||Client_fbdv_exp2)[|{sfbqdb_p4.0,fbdv_t1.0}|]sfbqdb_Bindfv
-formula2=(Data_sbsdb_exp3|||Client_sege_exp2)[|{sbsdb_d2.0,sege_t1.0}|]sbsdb_fg
-formula3=(Data_sbsdb_exp3|||Client_fbdv_exp2)[|{fbdv_t2.0,sbsdb_d3.0}|]sbsdb_Bindd
-formula4=(Data_sbsdb_exp3|||Data_wg_exp3)[|{wg_d2.0,sbsdb_d3.0}|]sbsdb_dc
-formula5=(Client_fbdv_exp2|||Data_wg_exp3)[|{wg_d2.0,fbdv_t3.0}|]fbdv_Bin
-formula6=(Data_wg_exp3|||Client_sege_exp2)[|{sege_t2.0,wg_d1.0}|]wg_Bindb
-formula7=(Data_wg_exp3|||Client_sege_exp2)[|{wg_d2.0,sege_t3.0}|]wg_Bindjk
-
-
-GlobaleFormulla = formula0|||formula1|||formula2|||formula3|||formula4|||formula5|||formula6|||formula7
+GlobaleFormulla = formula0
 
 assert  GlobaleFormulla :[deadlock free [F]]
 
-sequentiel=Server_sfbqdb_exp1;Data_sbsdb_exp3;Client_fbdv_exp2;Data_wg_exp3;Client_sege_exp2
+sequentiel=Sever_s1_expS;Client_c1_expC
 
 assert  sequentiel :[deadlock free [F]]
