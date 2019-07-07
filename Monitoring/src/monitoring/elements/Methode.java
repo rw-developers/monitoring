@@ -4,6 +4,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Methode {
+	public Methode(StringProperty methodeName, int executionTime) {
+		super();
+		MethodeName = methodeName;
+		ExecutionTime = executionTime;
+	}
 	public  StringProperty MethodeName ;
 
 	private Component component;

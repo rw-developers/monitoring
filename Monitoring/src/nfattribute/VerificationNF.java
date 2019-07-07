@@ -348,8 +348,9 @@ public boolean checktimedconstraint(TimedConstraint t , Sequence s,Model data) {
 	Hseq met1 = null ;
 	Hseq met2 = null ;
 	ArrayList<Hseq> hor = gethorloge( s,data);
+	
 	for (int i = 0; i < hor.size(); i++) {
-		System.out.println(t.event1+""+t.Meth1.getName().get()); System.out.println(""+hor.get(i).methode);
+		//System.out.println(t.event1+""+t.Meth1.getName().get()); System.out.println(""+hor.get(i).methode);
 	if((t.event1+""+t.Meth1.getName().get()).compareTo(hor.get(i).methode)==0) {System.out.println("dd"); met1 = hor.get(i);}
 	if((t.event2+""+t.Meth2.getName().get()).compareTo(hor.get(i).methode)==0) { met1 = hor.get(i);}	
 	}

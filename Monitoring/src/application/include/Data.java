@@ -56,7 +56,7 @@ public class Data implements Serializable {
 							p.getName(),p.getType(),p.getCspExpression(),p.getCspExpressionModify()));	
 				});
 				comp.getMethode().forEach(m->{
-					componentList.get(componentList.size()-1).methods.add(new DMethod(m.MethodeName.get()));
+					componentList.get(componentList.size()-1).methods.add(new DMethod(m.MethodeName.get(),m.ExecutionTime));
 				});
 				
 			});
@@ -163,7 +163,7 @@ public class Data implements Serializable {
 				data.getPortModel(cp.intData[0]).setCspExpressionModify(p.cspExpressionModify);
 			});
 			cp.methods.forEach(m->{
-				data.getComponentModel(cp.intData[0]).ADDMethode(new Methode(new SimpleStringProperty(m.name)));
+				data.getComponentModel(cp.intData[0]).ADDMethode(new Methode(new SimpleStringProperty(m.name),m.ExecutionTime));
 			});
 			
 		});
@@ -328,10 +328,12 @@ public void loadData2(Model data, TabPane window, Configuration f,int idex ,Stri
 	private class DMethod implements Serializable {
 		
 		private String name;
+		private int ExecutionTime;
 		private static final long serialVersionUID = 1L;
 
-		public DMethod(String name) {
+		public DMethod(String name,int e) {
 			this.name = name;
+			this.ExecutionTime = e;
 		}
 	}
 	
