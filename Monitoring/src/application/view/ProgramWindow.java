@@ -654,7 +654,7 @@ m+=20;
 		if(c != null) {
 		for(int i =0;i<c.getImplementations().size();i++) {
 			Component comp = c.getImplementations().get(i).getComponentType();
-			resultat.add(F.valideCspComponent2(comp)+" [instance : "+c.getImplementations().get(i).getName()+" ]");
+			resultat.add(F.valideCspComponent2(comp)+" [ "+c.getImplementations().get(i).getName()+" :instance of "+comp.getName()+" ]");
 		}
 		
 		 m = consolFDR(resultat,c,m);
@@ -663,7 +663,7 @@ m+=20;
 		if(t != null) {
 		for(int i =0;i<t.getImplementations().size();i++) {
 			Component comp = t.getImplementations().get(i).getComponentType();
-			resultat2.add(F.valideCspComponent2(comp)+" [instance : "+t.getImplementations().get(i).getName()+" ]");
+			resultat2.add(F.valideCspComponent2(comp)+" [ "+t.getImplementations().get(i).getName()+" :instance of "+comp.getName()+" ]");
 		}
 		
 		 m= consolFDR(resultat2,t ,m);

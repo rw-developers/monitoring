@@ -56,7 +56,7 @@ public class Data implements Serializable {
 							p.getName(),p.getType(),p.getCspExpression(),p.getCspExpressionModify()));	
 				});
 				comp.getMethode().forEach(m->{
-					componentList.get(componentList.size()-1).methods.add(new DMethod(m.MethodeName.get(),m.ExecutionTime));
+					componentList.get(componentList.size()-1).methods.add(new DMethod(m.getMethodeName().get(),m.ExecutionTime));
 				});
 				
 			});
@@ -468,7 +468,7 @@ private class Timed implements Serializable {
 	}
 	public Methode getmeth(Component c , String M) {
 		for(int i = 0 ; i<c.getMethode().size();i++) {
-			if(c.getMethode().get(i).getName().getValue().compareTo(M) == 0) return c.getMethode().get(i);
+			if(c.getMethode().get(i).getMethodeName().get().compareTo(M) == 0) return c.getMethode().get(i);
 			
 		}
 		return null;

@@ -14,13 +14,13 @@ public class Methode {
 	private Component component;
 
 
-	private StringProperty name = new SimpleStringProperty();
+	//private StringProperty name = new SimpleStringProperty();
 	public int ExecutionTime =0;
 
 	public Methode(StringProperty methodeName) {
 		super();
 		MethodeName = methodeName;
-		name =methodeName ;
+	//	name =methodeName ;
 	}
 
 	public StringProperty getMethodeName() {
@@ -31,16 +31,12 @@ public class Methode {
 		MethodeName = methodeName;
 	}
 
-	public StringProperty getName() {
-		return name;
-	}
+	
 
-	public void setName(StringProperty name) {
-		this.name = name;
-	}
+	
 	@Override
 	public String toString() {
-		return this.getName().get();
+		return this.getMethodeName().get();
 	}
 
 	

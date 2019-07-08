@@ -348,15 +348,16 @@ public boolean checktimedconstraint(TimedConstraint t , Sequence s,Model data) {
 	Hseq met1 = null ;
 	Hseq met2 = null ;
 	ArrayList<Hseq> hor = gethorloge( s,data);
-	
+	boolean b1 = true;
+	boolean b2 = true;
 	for (int i = 0; i < hor.size(); i++) {
 		//System.out.println(t.event1+""+t.Meth1.getName().get()); System.out.println(""+hor.get(i).methode);
-	if((t.event1+""+t.Meth1.getName().get()).compareTo(hor.get(i).methode)==0) {System.out.println("dd"); met1 = hor.get(i);}
-	if((t.event2+""+t.Meth2.getName().get()).compareTo(hor.get(i).methode)==0) { met1 = hor.get(i);}	
+	if((t.event1+""+t.Meth1.getMethodeName().get()).compareTo(hor.get(i).methode)==0 & b1 ) { met1 = hor.get(i); b1 = false;}
+	if((t.event2+""+t.Meth2.getMethodeName().get()).compareTo(hor.get(i).methode)==0  & b2) { met2 = hor.get(i); b2 = false;}	
 	}
-	System.out.println(met1.methode);
-	System.out.println(met1.methode);
-	if(met1 != null & met2 != null) {
+	//System.out.println(met1.methode);
+	//System.out.println(met2.methode);
+	if((met1 != null) & (met2 != null) ) {
 		
 	boolean res =	check(met1,met2,t);
 	if(res) {
@@ -372,8 +373,12 @@ public boolean check(Hseq h1 ,Hseq h2 ,TimedConstraint t) {
 	String op = t.opL;
 	int val = t.Value;
 	int r =0;
-	if(t.opC.compareTo("\\+")== 0) { r = h1.horloge + h2.horloge; System.out.println("r:"+r+"h1:"+h1+"h2:"+h2);}
-	if(t.opC.compareTo("\\-")== 0) { r = h1.horloge - h2.horloge ;System.out.println("r:"+r+"h1:"+h1+"h2:"+h2);}
+	if(t.opC.compareTo("\\+")== 0) { r = h1.horloge + h2.horloge; 
+	//System.out.println("r:"+r+"h1:"+h1+"h2:"+h2);
+	}
+	if(t.opC.compareTo("-")== 0) { r = h1.horloge - h2.horloge ;
+	//System.out.println("r:"+r+"h1:"+h1+"h2:"+h2);
+	}
 	
 	
 	if(op.compareTo("==")== 0) { 
@@ -403,25 +408,35 @@ public ArrayList<Hseq> gethorloge(Sequence s,Model data){
 	String event = "";
 	String method ="";
 	
+
 	for (int i = 0; i < s.Seq.size(); i++) {
+		
 		Hseq t = new Hseq();
-		if(s.Seq.get(i).compareTo("SKIP")==0) {   }else {
+		if(s.Seq.get(i).compareTo("SKIP")!= 0) { 
 			event = s.Seq.get(i).charAt(0)+"";
 		
 			//System.out.println(event);
-			method = s.Seq.get(i).substring(0);
+			method = s.Seq.get(i).substring(1);
 			
 			//System.out.println(method);
 			Methode m = getmethode(method , data);
-			if(m == null ) { Alert.display("", "methode null");}
-			if(event == "D") {    t.methode = s.Seq.get(i); t.horloge=horloge; }
-			if(event == "F") {  horloge += m.ExecutionTime;  t.methode = s.Seq.get(i); t.horloge=horloge; }
+			//System.out.println(method+"   et la methode est    "+m.getMethodeName().get());
+			
+			if(event.compareTo("D")==0) {    t.methode = "D"+method; t.horloge=horloge; }
+			else
+		{  horloge += m.ExecutionTime;  t.methode = "F"+method; t.horloge=horloge; }
 			temp.add(t);
 			
 			
 		}
 		
+		
+		
 	}
+//	for (int j = 0; j <temp.size(); j++) {
+//		System.out.println(temp.get(j).methode+"  "+temp.get(j).horloge);
+//		
+//	}
 	return temp;
 	
 	
@@ -429,12 +444,12 @@ public ArrayList<Hseq> gethorloge(Sequence s,Model data){
 }
 
 public Methode getmethode(String m ,Model data) {
-	m = m.substring(1);
+	
 	for (int i = 0; i < data.getComponentTail(); i++) {
 		for (int j = 0; j < data.getComponentModel(i).getMethode().size(); j++) {
 			
 			Methode s = data.getComponentModel(i).getMethode().get(j);
-			if(m.compareTo(s.getMethodeName().getValue())==0) return s;
+			if(m.compareTo(s.getMethodeName().get())==0) return s;
 		}
 		
 	}
