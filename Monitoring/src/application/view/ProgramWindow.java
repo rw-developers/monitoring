@@ -699,7 +699,7 @@ m+=20;
 			title3.relocate(20,m+10);
 			//consolPanel.getChildren().add(title3);
 			m+=30;
-			consolother(resultat6,m);
+			//consolother(resultat6,m);
 
 		}
 			
@@ -1082,7 +1082,7 @@ m+=20;
 	public void consolother(ArrayList<String> resultat, int m ) {
 
 		Text title = new Text("Non-Fonctional verification report:\n");
-		//title.relocate(5, 5);
+		title.relocate(20, m+35);
 		
 		
 		List<Label> labels2 = new ArrayList<Label>();
@@ -1113,23 +1113,85 @@ m+=20;
 			
 		}
 		m+= 60;
-		Text title2 = new Text("===================================================================================================\n\nTimed Constraint Verification report:\n\nGeneration of the Syntax Tree\n\nAutomaton Generation ");
-	title2.relocate(20,m+ 5);
-	m+= 60;
+		
+		Text title2 = new Text("===================================================================================================\n\nTimed Constraint Verification report:\n");
+		title2.relocate(20,m+ 5);
+		m+= 70;
+		ArrayList<Text> automataResult = new ArrayList<Text>();
+		ArrayList<Text> confTitle = new ArrayList<Text>();
+		for (int j = 0; j < data.getConfigurationProperty().size(); j++) {
+			confTitle.add(new Text("======= "+data.getConfigurationProperty().get(j).getName()+": =======")) ;
+			confTitle.get(j).relocate(20,m+ 5);
+			m+= 10;
+			int sqnumber =0;
+			Automata at = new Automata();
+			VerificationNF nf = new VerificationNF(new Model());
+			ArrayList<Sequence> sq = at.generateConfSequences(data.getConfigurationProperty().get(j));
+			ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
+			sqnumber =sq2.size();
+				System.out.println(data.getConfigurationProperty().get(j).getName()+" Sequences");
+				sq2.forEach(o->{
+					System.out.println(o.Seq);
+				});
+				if(sqnumber > 0) {
+				automataResult.add(new Text("\nSyntax Tree generated \n\nAutomata Generated \nAutomata Sequences number: "+sqnumber));
+				automataResult.get(j).relocate(20,m+ 5);
+				automataResult.get(j).setFill(Color.GREEN);
+				m+= 70;
+				}
+				else {
+					automataResult.add(new Text("\n No Syntax Tree \n\n No Automata \nAutomata Sequences number: "+sqnumber));
+					automataResult.get(j).relocate(20,m+ 5);
+					automataResult.get(j).setFill(Color.RED);
+					m+= 70;
+				}
+		}
+		
+		Text constTl = new Text("==== Timed Constraints ==== :\n");
+		constTl.relocate(20,m+ 15);
+		m+= 30;
 	for(int x=0 ;x<data.getTimedConstraint().size();x++) {
 			Label message = new Label(data.getTimedConstraint().get(x).name.getValue());
-			message.relocate(20, m + 35);
+			message.relocate(20, m + 5);
 			//message.setFill(Color.RED);
 			
 			labels2.add(message);	
 			m+=30;
 		}
-		Label message2 = new Label(" Timed Constraint VALIDE");
-		message2.relocate(20, m + 35);
-		message2.setFill(Color.GREEN);
-		
-		labels2.add(message2);	
-		m+=30;
+	m+=20;
+	Text valTl = new Text("==== Timed Constraints Validity ==== :\n");
+	valTl.relocate(20,m+ 5);
+	m+= 30;
+	ArrayList<Text> automataResult2 = new ArrayList<Text>();
+	ArrayList<Text> confTitle2 = new ArrayList<Text>();
+	for (int j = 0; j < data.getConfigurationProperty().size(); j++) {
+		confTitle2.add(new Text("======= "+data.getConfigurationProperty().get(j).getName()+": =======")) ;
+		confTitle2.get(j).relocate(20,m+ 5);
+		m+= 20;
+		Automata at = new Automata();
+		VerificationNF nf = new VerificationNF(new Model());
+		ArrayList<Sequence> sq = at.generateConfSequences(data.getConfigurationProperty().get(j));
+		ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
+		ArrayList<String> r = nf.SuperAlgo(data.getTimedConstraint(), sq2, data);
+		for (int a = 0; a < r.size(); a++) {
+			if(r.get(a).contains("Valid")) {
+				automataResult2.add(new Text(r.get(a)));
+				automataResult2.get(j).relocate(20,m+ 5);
+				automataResult2.get(j).setFill(Color.GREEN);
+				
+			}
+			else {
+				automataResult2.add(new Text(r.get(a)));
+				automataResult2.get(j).relocate(20,m+ 5);
+				automataResult2.get(j).setFill(Color.RED);
+			}
+			m+= 50;
+
+		}
+				
+			
+	}
+	
 		
 		
 	
@@ -1137,6 +1199,11 @@ m+=20;
 		consolPanel.getChildren().addAll(labels);
 		consolPanel.getChildren().addAll(title2);
 		consolPanel.getChildren().addAll(labels2);
+		consolPanel.getChildren().addAll(confTitle);
+		consolPanel.getChildren().addAll(automataResult);
+		consolPanel.getChildren().addAll(confTitle2);
+		consolPanel.getChildren().addAll(automataResult2);
+		consolPanel.getChildren().addAll(constTl,valTl);
 	}
 	public int consolFDR(ArrayList<String> resultat ,Configuration s,int pos) {
          int m = pos;

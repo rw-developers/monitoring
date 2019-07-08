@@ -323,17 +323,23 @@ public class VerificationNF {
 	
 	
 	
-	public void SuperAlgo(ObservableList<TimedConstraint> constraints ,ArrayList<Sequence> seq ,Model data ) {
+	public ArrayList<String> SuperAlgo(ObservableList<TimedConstraint> constraints ,ArrayList<Sequence> seq ,Model data ) {
 		
-		
+		ArrayList<String> result = new ArrayList<String>();
 		for(int i =0 ;i<constraints.size();i++) {
-			for(int j=0 ; j<seq.size();j++) {
-				Alert.display(constraints.get(i).name.getValue(),""+checktimedconstraint(constraints.get(i),seq.get(j),data) );
-				
+				int j=0;
+				while(j<seq.size() && !checktimedconstraint(constraints.get(i),seq.get(j),data)) {
+				j++;
 			}
+				if(j== seq.size()) {
+					result.add(constraints.get(i).name.get()+": Invalid Constraint");
+				}
+				else {
+					result.add(constraints.get(i).name.get()+": Valid Constraint");
+				}
 		}
 		
-		
+		return result;
 		
 	}
 
