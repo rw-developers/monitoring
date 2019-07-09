@@ -25,6 +25,7 @@ public class Component extends ArchitectureElement implements Serializable {
 	public  Csp expGlobale=new Csp("","");
 	public String expMethod ;
 	public int Memory =0;
+	public String exgm= "";
 	
 	public String getExpMethod() {
 		return expMethod;

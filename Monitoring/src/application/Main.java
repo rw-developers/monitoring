@@ -87,6 +87,7 @@ public class Main extends Application {
 		
 			//primaryStage.getIcons().add(new Image("/application/include/c.png"));
 			window.getIcons().add(new Image("/application/include/c.png"));
+			window.setMaximized(true);
 			window.show();
 		} catch (Exception e) {
 			e.printStackTrace();

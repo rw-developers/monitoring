@@ -1,31 +1,13 @@
-channel s1_p1 : {0} 
-channel s1_p2 : {0} 
-channel s1_p3 : {0} 
-channel s1_p4 : {0} 
-channel c1_p5 : {0} 
-channel c1_p6 : {0} 
-channel c1_p7 : {0} 
-channel c1_p8 : {0} 
+channel n1 : {0} 
+channel n2 : {0} 
+channel n3 : {0} 
 
-Sever_s1_p1 = s1_p1?x->Sever_s1_p1
-Sever_s1_p2 = s1_p2!0->Sever_s1_p2
-Sever_s1_p3 = s1_p3?x->Sever_s1_p3
-Sever_s1_p4 = s1_p4!0->Sever_s1_p4
-Sever_s1_expS= s1_p1?x->(Sever_s1_p2[]Sever_s1_p3;s1_p4!0->SKIP)
-s1_Bind=c1_p6!0->s1_p1?x->s1_Bind
-Client_c1_p5 = c1_p5?x->Client_c1_p5
-Client_c1_p6 = c1_p6!0->Client_c1_p6
-Client_c1_p7 = c1_p7?x->Client_c1_p7
-Client_c1_p8 = c1_p8!0->Client_c1_p8
-Client_c1_expC= c1_p5?x->(Client_c1_p6|||Client_c1_p7;c1_p8!0->SKIP)
+Nurse_n1 = n1?a->Nurse_n1
+Nurse_n2 = n2!0->Nurse_n2
+Nurse_n3 = n3?a->Nurse_n3
 
-formula0=(Sever_s1_expS|||Client_c1_expC)[|{c1_p6.0,s1_p1.0}|]s1_Bind
+nur=n2!0->(Nurse_n1;Nurse_n1[]Nurse_n3;Nurse_n3|||Nurse_n1;Nurse_n1;n2!0->SKIP)
 
+GlobFormulla = Nurse_n1|||Nurse_n2|||Nurse_n3
 
-GlobaleFormulla = formula0
-
-assert  GlobaleFormulla :[deadlock free [F]]
-
-sequentiel=Sever_s1_expS;Client_c1_expC
-
-assert  sequentiel :[deadlock free [F]]
+assert GlobFormulla[T=nur

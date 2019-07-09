@@ -49,7 +49,7 @@ public class Data implements Serializable {
 			componentList = new ArrayList<DComponent>();
 			data.getComponentProperty().forEach(comp->{
 				componentList.add(new DComponent(new int[] {comp.getIndex(),comp.getXPos(),comp.getYPos(),comp.getWidth(),comp.getHeight()},
-						comp.getName(), comp.getExpGlobale(),comp.getExpMethod()));
+						comp.getName(), comp.getExpGlobale(),comp.getExpMethod(),comp.exgm,comp.Memory));
 				comp.getPorts().forEach(p->{
 					componentList.get(componentList.size()-1).ports.add(new DPort(new int[] {p.getIndex(),p.getXPos(),p.getYPos(),p.getWidth(),p.getHeight()},
 
@@ -69,7 +69,7 @@ public class Data implements Serializable {
 				conf.getImplementations().forEach(impl->{
 					configurationList.get(configurationList.size()-1).implementations.add(new DImplementation(new int[] {impl.getIndex(),impl.getXPos(),impl.getYPos(),impl.getWidth(),impl.getHeight()},
 							impl.getName() ,new DComponent(new int[] {impl.getComponentType().getIndex(),impl.getComponentType().getXPos(),impl.getComponentType().getYPos(),impl.getComponentType().getWidth(),impl.getComponentType().getHeight()},
-									impl.getComponentType().getName(), impl.getComponentType().getExpGlobale(), impl.getComponentType().getExpMethod())));
+									impl.getComponentType().getName(), impl.getComponentType().getExpGlobale(), impl.getComponentType().getExpMethod(),impl.getComponentType().exgm,impl.getComponentType().Memory)));
 					impl.getPorts().forEach(p->{
 						configurationList.get(configurationList.size()-1).implementations.get(configurationList.get(configurationList.size()-1).implementations.size()-1)
 						.ports.add(new DPort(new int[] {p.getIndex(),p.getXPos(),p.getYPos(),p.getWidth(),p.getHeight()},
@@ -157,6 +157,8 @@ public class Data implements Serializable {
 		componentList.forEach(cp->{
 			data.addComponentModel(cp.intData,cp.name);
 			data.getComponentModel(cp.intData[0]).setExpGlobale(cp.expGlobale);
+			data.getComponentModel(cp.intData[0]).exgm = cp.exgm;
+			data.getComponentModel(cp.intData[0]).Memory = cp.Memory;
 			data.getComponentModel(cp.intData[0]).setExpMethod(cp.expMethod);;
 			cp.ports.forEach(p->{
 				data.addPortModel(p.intData,new String[] {p.name,p.type,p.cspExpression.getExpression()	}, data.getComponentModel(cp.intData[0]));
@@ -286,15 +288,19 @@ public void loadData2(Model data, TabPane window, Configuration f,int idex ,Stri
 		public ArrayList<DPort> ports = new ArrayList<DPort>();
 		public ArrayList<DMethod> methods = new ArrayList<DMethod>();
 		private static final long serialVersionUID = 1L;
+		public String exgm ="";
+		public int Memory =0;
 	
 		
-		public DComponent(int[] intsIn,String nameIn, Csp expGlobal,String expMethod) {
+		public DComponent(int[] intsIn,String nameIn, Csp expGlobal,String expMethod,String exp ,int m) {
 			if (intsIn.length == 5) {
 				intData = intsIn;
 			}
 			this.name = nameIn;
 			this.expGlobale = expGlobal;
-			this.expMethod = expMethod;			
+			this.expMethod = expMethod;	
+			this.exgm = exp;
+			this.Memory = m;
 		}
 
 		

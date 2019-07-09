@@ -18,12 +18,17 @@
 	-fx-background-color: black, white ;
 	-fx-fill: pink;
 }
-
-.classBlockPanel
+.menu-bar
 {
-	-fx-background-insets: 0, 0 1 1 0 ;
-	-fx-background-color: black, white ;
+	-fx-background-insets: 0 0 -1 0,0,1;
+	-fx-background-color: #808080;
 }
+.menu .label
+{
+	
+	-fx-text-fill: #004000;
+}
+
 
 .text
 {

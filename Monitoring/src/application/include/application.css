@@ -61,6 +61,10 @@
 	-fx-font-family: "Arial Black", Gadget, sans-serif;
 	-fx-text-alignment: center ;
 }
+.tree{
+	-fx-background-color:rgb(153,77,102);
+	-fx-color:rgb(153,77,102);
+}
 
 .componentLabel
 {

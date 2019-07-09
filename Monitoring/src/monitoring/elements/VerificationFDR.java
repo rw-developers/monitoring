@@ -624,9 +624,12 @@ public class VerificationFDR {
 	                        restTab+=tabIn[d]+"->";
 	                    }
 	                }
+	                
 	                restTab+=modBoucle;
+	               // System.out.println(restTab);
 	                p.setCspExpressionModify(new Csp(p.getCspExpression().getName(),restTab));
 	                AllFormulla += componenet.getName() + "_" + p.getCspExpression().getName() + " = "+restTab+"\n";
+	               // System.out.println(AllFormulla);
 
 	            }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	            

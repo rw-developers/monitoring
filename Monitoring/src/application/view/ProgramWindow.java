@@ -808,8 +808,7 @@ m+=20;
 		// mainPanel.prefWidthProperty().bind(scene.widthProperty());
 
 		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
-		scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm());
-
+		scene.getStylesheets().add(getClass().getResource("/application/include/WinXP.css").toExternalForm());
 		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				
@@ -1112,10 +1111,9 @@ m+=20;
 			
 			
 		}
-		m+= 60;
 		
-		Text title2 = new Text("===================================================================================================\n\nTimed Constraint Verification report:\n");
-		title2.relocate(20,m+ 5);
+		
+	
 		m+= 70;
 		ArrayList<Text> automataResult = new ArrayList<Text>();
 		ArrayList<Text> confTitle = new ArrayList<Text>();
@@ -1147,17 +1145,7 @@ m+=20;
 				}
 		}
 		
-		Text constTl = new Text("==== Timed Constraints ==== :\n");
-		constTl.relocate(20,m+ 15);
-		m+= 30;
-	for(int x=0 ;x<data.getTimedConstraint().size();x++) {
-			Label message = new Label(data.getTimedConstraint().get(x).name.getValue());
-			message.relocate(20, m + 5);
-			//message.setFill(Color.RED);
-			
-			labels2.add(message);	
-			m+=30;
-		}
+		
 	m+=20;
 	Text valTl = new Text("==== Timed Constraints Validity ==== :\n");
 	valTl.relocate(20,m+ 5);
@@ -1197,13 +1185,13 @@ m+=20;
 	
 		//consolPanel.getChildren().addAll(title);
 		consolPanel.getChildren().addAll(labels);
-		consolPanel.getChildren().addAll(title2);
+		//consolPanel.getChildren().addAll(title2);
 		consolPanel.getChildren().addAll(labels2);
 		consolPanel.getChildren().addAll(confTitle);
 		consolPanel.getChildren().addAll(automataResult);
 		consolPanel.getChildren().addAll(confTitle2);
 		consolPanel.getChildren().addAll(automataResult2);
-		consolPanel.getChildren().addAll(constTl,valTl);
+		consolPanel.getChildren().addAll(valTl);
 	}
 	public int consolFDR(ArrayList<String> resultat ,Configuration s,int pos) {
          int m = pos;

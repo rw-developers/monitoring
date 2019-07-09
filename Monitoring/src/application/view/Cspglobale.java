@@ -162,7 +162,7 @@ public class Cspglobale extends Stage {
 		remplirTable();
 		
 		 if(componentType.expGlobale.getName() != " ") {textField.setText(componentType.expGlobale.getName());}
-	    	if(componentType.expGlobale.getExpression() != " ") {textField0.setText(componentType.expGlobale.getExpression()
+	    	if(componentType.expGlobale.getExpression() != " ") {textField0.setText(componentType.exgm
 	    			);}
 
 		//////////////////////////////////////////////////////////////// hendler
@@ -213,6 +213,7 @@ public class Cspglobale extends Stage {
 			Alert.display("Error", "expression invalid csp or method");
 		} else {
 			componentType.expMethod = getmethodeFormule(gCspFormule);
+			componentType.exgm = textField0.getText();
 			gCspFormule = getcspFormule(gCspFormule);
 
 			portName = componentType.getPorts();
@@ -283,10 +284,14 @@ public class Cspglobale extends Stage {
 						while (secondGroupPortNameMatcher.find()) {
 							portsInCspExpression.add(secondGroupPortNameMatcher.group(1));
 						}
-						System.out.println(portsInCspExpression);
+						//System.out.println(portsInCspExpression);
 						ArrayList<String> newSecondGroupPart = new ArrayList<>();
 						for (int m = 0; m < portsInCspExpression.size(); m++) {
-							newSecondGroupPart.add(componentType.getName() + "_" + portsInCspExpression.get(m));
+							
+						if( portsInCspExpression.get(m).startsWith(componentType.getName()) ) {
+							
+							newSecondGroupPart.add(portsInCspExpression.get(m));}
+						else {newSecondGroupPart.add(componentType.getName() + "_" + portsInCspExpression.get(m));}
 						}
 						System.out.println("yoo" + newSecondGroupPart);
 
@@ -300,9 +305,15 @@ public class Cspglobale extends Stage {
 
 							Alert.display("", "Valid CSP expression");
 							for (int j = 0; j < portsInCspExpression.size(); j++) {
+								System.out.println(portsInCspExpression.get(j));
+								System.out.println(newSecondGroupPart.get(j));
 								gCspFormule = gCspFormule.replaceAll(portsInCspExpression.get(j),
 										newSecondGroupPart.get(j));
 							}
+							gCspFormule =	gCspFormule.replaceAll(componentType.getName() + "_"+componentType.getName() + "_", componentType.getName() + "_");
+							gCspFormule =	gCspFormule.replaceAll(componentType.getName() + "_"+componentType.getName() + "_", componentType.getName() + "_");
+							gCspFormule =	gCspFormule.replaceAll(componentType.getName() + "_"+componentType.getName() + "_", componentType.getName() + "_");
+							gCspFormule =	gCspFormule.replaceAll(componentType.getName() + "_"+componentType.getName() + "_", componentType.getName() + "_");
 							System.out.println(gCspFormule);
 							componentType.expGlobale = new Csp(gCspName, gCspFormule);
 						} else {

@@ -256,7 +256,7 @@ public  class NewConnectorWindow extends Stage {
 						
 						}
 					
-					//closeWindow();
+					closeWindow();
 					e.consume();
 				}
 			};
@@ -352,7 +352,12 @@ public  class NewConnectorWindow extends Stage {
 	
 
 	public void getexpcsp(Model data , Port s1 , Port s2) {
-String cspname = "Bind"+s1.getIndex()+""+s2.getIndex();
+//String cspname = "Bind"+s1.getIndex()+""+s2.getIndex();
+		int cpt=0;
+		for (int i = 0; i < data.getConfigurationTail(); i++) {
+			cpt += data.getConfigurationModel(i).connectors.size();
+		}
+		String cspname = "Bind"+cpt;
 textField.setText(cspname);
 String p1 = data.getPortModel(s1.getIndex()).getCspExpression().getExpression().split("-")[0];
 String p2 = data.getPortModel(s2.getIndex()).getCspExpression().getExpression().split("-")[0];

@@ -196,6 +196,9 @@ public class Automata {
 		VerificationNF nf = new VerificationNF(new Model());
 		VerificationFDR f = new VerificationFDR();
 		ArrayList<String> methodForm = f.ValidateConfiguration(conf);
+		for (int i = 0; i < methodForm.size(); i++) {
+			System.out.println(methodForm.get(i));
+		}
 		ArrayList<Sequence> sq = new ArrayList<Sequence>();
 	
 		for (int i = 0; i < methodForm.size(); i++) {
