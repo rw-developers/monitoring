@@ -101,6 +101,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	private Menu file = new Menu("File");
 	private Menu edit = new Menu("Edit");
 	private Menu view = new Menu("View");
+	private Menu exemples = new Menu("Exemples");
 	private Menu newModel = new Menu("New ...");
 	public MenuItem save = new MenuItem("Save...");
 	public MenuItem load = new MenuItem("Load...");
@@ -118,6 +119,9 @@ public class ProgramWindow<MouseEvent> extends Stage {
 	public MenuItem winxp = new MenuItem("Windows XP");
 	public MenuItem undo = new MenuItem("Undo...");
 	public MenuItem redo = new MenuItem("Redo...");
+	public Menu hospitalExemple = new Menu("Hospital Management...");
+	public MenuItem hospitalComponents = new MenuItem("Components");
+	public MenuItem hospitalConfigurations = new MenuItem("Configurations");
 
 	// Define tool panel elements
 	public Button newComponent = new Button("Add component");
@@ -201,8 +205,11 @@ public class ProgramWindow<MouseEvent> extends Stage {
 		edit.getItems().addAll(undo, redo, clear, clearLinks);
 		skins.getItems().addAll(normal, night, h4ck3r, winxp);
 		view.getItems().addAll(skins, Shema);
+		hospitalExemple.getItems().addAll(hospitalComponents,hospitalConfigurations);
+		exemples.getItems().add(hospitalExemple);
 		newModel.getItems().addAll(newConfigMenu, newComponentMenu, newImplementMenu);
-		menu.getMenus().addAll(file, edit, view);
+		menu.getMenus().addAll(file, edit, view,exemples);
+		
 
 		// Construct tool panel
 		newComponent.getStyleClass().addAll("toolbarButtonsHalf", "toolbarButtonsColor");
@@ -492,7 +499,43 @@ public class ProgramWindow<MouseEvent> extends Stage {
 					String dir = data.project_dir;
 					data.getConfigurationProperty().clear();
 					d.load(dir, data,appPanel);
+					System.out.println(dir);
 				}
+				e.consume();
+			}
+		};
+
+		EventHandler<ActionEvent> loadExp1 = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+
+				
+					data.saved = true;
+					mainComponentTabPanel.getChildren().clear();
+					for (int i = 1; i < appPanel.getTabs().size(); i++) {
+						appPanel.getTabs().remove(i);
+					}
+					Data d = new Data();
+					data.getConfigurationProperty().clear();
+					d.load("C:\\Users\\ramzi\\git\\monitoring\\Monitoring\\Exemple1\\Hospital",data,appPanel);
+				
+				e.consume();
+			}
+		};
+		EventHandler<ActionEvent> loadExp2 = new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+
+				
+					data.saved = true;
+					mainComponentTabPanel.getChildren().clear();
+					for (int i = 1; i < appPanel.getTabs().size(); i++) {
+						appPanel.getTabs().remove(i);
+					}
+					Data d = new Data();
+					data.getConfigurationProperty().clear();
+					d.load("C:\\Users\\ramzi\\git\\monitoring\\Monitoring\\Exemple2\\Hospital",data,appPanel);
+				
 				e.consume();
 			}
 		};
@@ -715,23 +758,23 @@ m+=20;
 							singleselectionModel.select(t);
 						}
 					});
-//                            data.getComponentProperty().forEach(c->{
-//                            	if(c.getName().equals(selectedTreeItem.getValue())) {
-//                            		NewComponentWindow dialog = new NewComponentWindow(c.getIndex(), data);
-//                        			dialog.initModality(Modality.APPLICATION_MODAL);
-//                        			dialog.show();
-//                        			event.consume();
-//                            	}
-//                            });
-//                            
-//                            data.getImplementationProperty().forEach(c->{
-//                            	if(c.getName().equals(selectedTreeItem.getValue())) {
-//                            		NewImplementationWindow dialog = new NewImplementationWindow(c.getIndex(), data);
-//                        			dialog.initModality(Modality.APPLICATION_MODAL);
-//                        			dialog.show();
-//                        			event.consume();
-//                            	}
-//                            });
+                            data.getComponentProperty().forEach(c->{
+                            	if(c.getName().equals(selectedTreeItem.getValue())) {
+                            		NewComponentWindow dialog = new NewComponentWindow(c.getIndex(), data);
+                        			dialog.initModality(Modality.APPLICATION_MODAL);
+                        			dialog.show();
+                        			event.consume();
+                            	}
+                            });
+                            
+                            data.getImplementationProperty().forEach(c->{
+                            	if(c.getName().equals(selectedTreeItem.getValue())) {
+                            		NewImplementationWindow dialog = new NewImplementationWindow(c.getIndex(), data,new ProgramWindow<>(data));
+                        			dialog.initModality(Modality.APPLICATION_MODAL);
+                        			dialog.show();
+                        			event.consume();
+                            	}
+                            });
 				} catch (Exception e) {
 
 				}
@@ -783,6 +826,8 @@ m+=20;
 		h4ck3r.setOnAction(h4ck3rEvent);
 		winxp.setOnAction(winXPEvent);
 		fVerif.setOnAction(FDRverif);
+		hospitalComponents.setOnAction(loadExp1);
+		hospitalConfigurations.setOnAction(loadExp2);
 
 		redo.setDisable(true);
 		undo.setDisable(true);
@@ -800,7 +845,7 @@ m+=20;
 		// mainPanel.prefWidthProperty().bind(scene.widthProperty());
 
 		scene.getStylesheets().add(getClass().getResource("/application/include/application.css").toExternalForm());
-		scene.getStylesheets().add(getClass().getResource("/application/include/WinXP.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/application/include/normal.css").toExternalForm());
 		this.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				
