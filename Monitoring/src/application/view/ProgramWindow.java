@@ -377,7 +377,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			if(c != null) {
 			for(int i =0;i<c.getImplementations().size();i++) {
 				Component comp = c.getImplementations().get(i).getComponentType();
-				resultat.add(F.valideCspComponent2(comp)+" [instance : "+c.getImplementations().get(i).getName()+" ]");
+				resultat.add(F.valideCspComponent2(comp)+c.getImplementations().get(i).getName()+" :instance of "+comp.getName()+" ]");
 			}
 			
 			 m = consolFDR(resultat,c,0);
@@ -386,7 +386,7 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			if(t != null) {
 			for(int i =0;i<t.getImplementations().size();i++) {
 				Component comp = t.getImplementations().get(i).getComponentType();
-				resultat2.add(F.valideCspComponent2(comp)+" [instance : "+t.getImplementations().get(i).getName()+" ]");
+				resultat2.add(F.valideCspComponent2(comp)+c.getImplementations().get(i).getName()+" :instance of "+comp.getName()+" ]");
 			}
 			
 			 m= consolFDR(resultat2,t ,m);
@@ -590,6 +590,9 @@ public class ProgramWindow<MouseEvent> extends Stage {
 			@Override
 			public void handle(ActionEvent e) {
 				int m= 0;
+				ProgressDemo demo = new ProgressDemo() ;
+				demo.initModality(Modality.APPLICATION_MODAL);
+				demo.show();
 			Text title2 = new Text("Behavioral verification report:\n");
 			title2.setFill(Color.BLUE);
 			Text title1 = new Text("Structural verification report:\n");
@@ -673,18 +676,7 @@ m+=20;
 		m = reconf(re ,m);
 		}
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		data.getConfigurationProperty().forEach(conf->{
-			Automata at = new Automata();
-			VerificationNF nf = new VerificationNF(new Model());
-			ArrayList<Sequence> sq = at.generateConfSequences(conf);
-			ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
-				System.out.println(conf.getName()+" Sequences");
-				sq2.forEach(o->{
-					System.out.println(o.Seq);
-				});	
-				
-				nf.SuperAlgo(data.getTimedConstraint(), sq2, data);
-		});
+	
 		
 		VerificationNF  nf = new VerificationNF(data);
 		ArrayList<String> resultat6 = nf.CheckOtherConstraint(c);
@@ -704,7 +696,7 @@ m+=20;
 		}
 			
 		
-			
+				demo.close();
 			}
 			
 		};
@@ -1082,12 +1074,13 @@ m+=20;
 
 		Text title = new Text("Non-Fonctional verification report:\n");
 		title.relocate(20, m+35);
+		m+=30;
 		
 		
 		List<Label> labels2 = new ArrayList<Label>();
 		List<Label> labels = new ArrayList<Label>();
 		for(int i=0 ;i<resultat.size();i++) {
-			m+= 30;
+			m+= 90;
 			if(resultat.get(i).startsWith("V")) {
 				
 				
@@ -1117,6 +1110,7 @@ m+=20;
 		m+= 70;
 		ArrayList<Text> automataResult = new ArrayList<Text>();
 		ArrayList<Text> confTitle = new ArrayList<Text>();
+		ArrayList<ArrayList<Sequence>> tmp = new ArrayList<ArrayList<Sequence>>();
 		for (int j = 0; j < data.getConfigurationProperty().size(); j++) {
 			confTitle.add(new Text("======= "+data.getConfigurationProperty().get(j).getName()+": =======")) ;
 			confTitle.get(j).relocate(20,m+ 5);
@@ -1126,11 +1120,10 @@ m+=20;
 			VerificationNF nf = new VerificationNF(new Model());
 			ArrayList<Sequence> sq = at.generateConfSequences(data.getConfigurationProperty().get(j));
 			ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
+			tmp.add(sq2);
+		                                                                                                                                                                                                                                                           	sqnumber *=27;                                                                                                                                                                                                                                                               sqnumber*= 27 ;
 			sqnumber =sq2.size();
-				System.out.println(data.getConfigurationProperty().get(j).getName()+" Sequences");
-				sq2.forEach(o->{
-					System.out.println(o.Seq);
-				});
+				
 				if(sqnumber > 0) {
 				automataResult.add(new Text("\nSyntax Tree generated \n\nAutomata Generated \nAutomata Sequences number: "+sqnumber));
 				automataResult.get(j).relocate(20,m+ 5);
@@ -1158,8 +1151,8 @@ m+=20;
 		m+= 20;
 		Automata at = new Automata();
 		VerificationNF nf = new VerificationNF(new Model());
-		ArrayList<Sequence> sq = at.generateConfSequences(data.getConfigurationProperty().get(j));
-		ArrayList<Sequence> sq2 = nf.generateAllSequence(sq);
+		
+		ArrayList<Sequence> sq2 = tmp.get(j);
 		ArrayList<String> r = nf.SuperAlgo(data.getTimedConstraint(), sq2, data);
 		for (int a = 0; a < r.size(); a++) {
 			if(r.get(a).contains("Valid")) {

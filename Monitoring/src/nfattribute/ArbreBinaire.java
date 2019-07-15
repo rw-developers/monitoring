@@ -36,7 +36,7 @@ public class ArbreBinaire<T extends Comparable> {
 		{
 			this.construireArbre(i);
 			this.sommet = true;
-			System.out.println("sommet fait sa valeur est : "+i+"\n");
+			//System.out.println("sommet fait sa valeur est : "+i+"\n");
 		}
 		else
 		{

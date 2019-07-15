@@ -37,7 +37,7 @@ public  class ShemaWindow extends Stage {
         imageView.setPreserveRatio(true);
 		
 		
-        application.include.Alert.display("", "fbff");
+       // application.include.Alert.display("", "fbff");
         p.getChildren().add(imageView);
         Scene scene = new Scene(p, 1108,531);
 		this.setScene(scene);

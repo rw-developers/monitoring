@@ -58,7 +58,7 @@ public class VerificationFDR {
 	        return new boolean[]{false};
 	    }
 	    
-	    public ArrayList<String> ValidateConfiguration(Configuration conf){
+	    public ArrayList<String> ValidateConfiguration(Configuration conf)throws ArrayIndexOutOfBoundsException {
 	        File fichCSP=new File("testFDR.csp");
 	        String Text ="";
 	        String channels ="";
@@ -131,7 +131,12 @@ public class VerificationFDR {
 	                  //  Alert.display("", "csp port");
 	                    String[] tabOut = p.getCspExpressionModify().getExpression().split("->");
 	                    String[]split3 = tabOut[tabOut.length-1].split("_");
-	                    String modBoucle = nameComposant+"_"+conf.implementations.get(i).getName() + "_" + split3[1];//reste a verifier
+	                    
+	                    
+	                    String modBoucle = nameComposant+"_"+conf.implementations.get(i).getName() + "_" + split3[1];
+	                    
+	                 //   System.out.println("dgnnnnnnnnnnn");
+	                    //reste a verifier
 	                    modBoucleConf=conf.name.getValue()+"_"+modBoucle;
 	                    String restTab ="";
 	                    String restTabConf="";

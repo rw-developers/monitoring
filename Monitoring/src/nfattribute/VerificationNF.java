@@ -1,5 +1,9 @@
 package nfattribute;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -289,7 +293,10 @@ public class VerificationNF {
 
 	}
 
-	public ArrayList<Sequence> generateAllSequence(ArrayList<Sequence> sq) {
+	public ArrayList<Sequence> generateAllSequence(ArrayList<Sequence> sq)   {
+		 File f2 = new File("SequenceLOG.txt");try {
+		    BufferedWriter bw1 = new BufferedWriter(new FileWriter(f2,true));
+		    
 		ArrayList<Sequence> sq2 = new ArrayList<Sequence>();
 		for (int i = 0; i < sq.size(); i++) {
 			for (int j = 0; j < sq.size(); j++) {
@@ -298,11 +305,22 @@ public class VerificationNF {
 					Sequence cpt = new Sequence();
 					cpt.Seq.addAll(tmp);
 					cpt.Seq.addAll(sq.get(j).Seq);
+					
+						bw1.newLine();
+						bw1.write(cpt.Seq+"");
+					
 					sq2.add(cpt);
 				}
 			}
-		}		
-		return sq2;
+		}	
+		sq2.forEach(s->{
+			System.out.println(s.Seq);
+		});
+		return sq2;} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		return null;
 	}
 
 	

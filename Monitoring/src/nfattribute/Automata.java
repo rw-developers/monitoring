@@ -169,13 +169,8 @@ public class Automata {
 	
 	
 
-	public void afficheAutomata(Automata n) {
-		System.out.println(n.initialState.name);
-		System.out.println(n.initialState.transitions.get(0).name);
-		System.out.println(n.initialState.transitions.get(0).transitions.size());
-		System.out.println(n.initialState.transitions.get(0).transitions.get(0).transitions.size());
-		System.out.println(n.initialState.transitions.get(0).transitions.get(0).transitions.get(0).transitions.get(0).name);
-	}
+
+
 
 	public void afficheAutomata(Node n) {
 		System.out.print(n.name+"->");
@@ -195,10 +190,11 @@ public class Automata {
 		Automata a = new Automata();
 		VerificationNF nf = new VerificationNF(new Model());
 		VerificationFDR f = new VerificationFDR();
-		ArrayList<String> methodForm = f.ValidateConfiguration(conf);
-		for (int i = 0; i < methodForm.size(); i++) {
-			System.out.println(methodForm.get(i));
-		}
+		ArrayList<String> methodForm = null;
+		
+			methodForm = f.ValidateConfiguration(conf);
+		
+		
 		ArrayList<Sequence> sq = new ArrayList<Sequence>();
 	
 		for (int i = 0; i < methodForm.size(); i++) {

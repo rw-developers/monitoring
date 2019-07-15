@@ -1,13 +1,41 @@
-channel n1 : {0} 
-channel n2 : {0} 
-channel n3 : {0} 
+channel inst1_h1 : {0} 
+channel inst1_h2 : {0} 
+channel inst2_do1 : {0} 
+channel inst2_do2 : {0} 
+channel inst2_do3 : {0} 
+channel inst3_d1 : {0} 
+channel inst3_d2 : {0} 
+channel inst4_p1 : {0} 
+channel inst4_p2 : {0} 
+channel inst4_p3 : {0} 
 
-Nurse_n1 = n1?a->Nurse_n1
-Nurse_n2 = n2!0->Nurse_n2
-Nurse_n3 = n3?a->Nurse_n3
+HospitalManagmentS_inst1_h1 = inst1_h1?x->HospitalManagmentS_inst1_h1
+HospitalManagmentS_inst1_h2 = inst1_h2!0->HospitalManagmentS_inst1_h2
+HospitalManagmentS_inst1_hmang= inst1_h2!0->(HospitalManagmentS_inst1_h1;HospitalManagmentS_inst1_h1|||HospitalManagmentS_inst1_h1;HospitalManagmentS_inst1_h1|||HospitalManagmentS_inst1_h1;HospitalManagmentS_inst1_h1;inst1_h2!0->SKIP)
+inst1_BindF=inst1_h2!0->inst2_do1?e->inst1_BindF
+Doctor_inst2_do1 = inst2_do1?e->Doctor_inst2_do1
+Doctor_inst2_do2 = inst2_do2!0->Doctor_inst2_do2
+Doctor_inst2_do3 = inst2_do3?s->Doctor_inst2_do3
+Doctor_inst2_doc= inst2_do2!0->(Doctor_inst2_do1;Doctor_inst2_do1[]Doctor_inst2_do3;Doctor_inst2_do3;inst2_do2!0->SKIP)
+inst2_BindG=inst2_do2!0->inst4_p1?x->inst2_BindG
+DataBase_inst3_d1 = inst3_d1?x->DataBase_inst3_d1
+DataBase_inst3_d2 = inst3_d2!0->DataBase_inst3_d2
+DataBase_inst3_dat= inst3_d2!0->(DataBase_inst3_d1;DataBase_inst3_d1[]DataBase_inst3_d1;DataBase_inst3_d1[]DataBase_inst3_d1;DataBase_inst3_d1;inst3_d2!0->SKIP)
+inst3_BindK=inst4_p2!0->inst3_d1?x->inst3_BindK
+Persistance_inst4_p1 = inst4_p1?x->Persistance_inst4_p1
+Persistance_inst4_p2 = inst4_p2!0->Persistance_inst4_p2
+Persistance_inst4_p3 = inst4_p3?x->Persistance_inst4_p3
+Persistance_inst4_per= inst4_p2!0->(Persistance_inst4_p1;Persistance_inst4_p1|||Persistance_inst4_p3;Persistance_inst4_p3[]Persistance_inst4_p1;Persistance_inst4_p1;inst4_p2!0->SKIP)
 
-nur=n2!0->(Nurse_n1;Nurse_n1[]Nurse_n3;Nurse_n3|||Nurse_n1;Nurse_n1;n2!0->SKIP)
+formula0=(HospitalManagmentS_inst1_hmang|||Doctor_inst2_doc)[|{inst1_h2.0,inst2_do1.0}|]inst1_BindF
+formula1=(Doctor_inst2_doc|||Persistance_inst4_per)[|{inst2_do2.0,inst4_p1.0}|]inst2_BindG
+formula2=(DataBase_inst3_dat|||Persistance_inst4_per)[|{inst4_p2.0,inst3_d1.0}|]inst3_BindK
 
-GlobFormulla = Nurse_n1|||Nurse_n2|||Nurse_n3
 
-assert GlobFormulla[T=nur
+GlobaleFormulla = formula0|||formula1|||formula2
+
+assert  GlobaleFormulla :[deadlock free [F]]
+
+sequentiel=HospitalManagmentS_inst1_hmang;Doctor_inst2_doc;DataBase_inst3_dat;Persistance_inst4_per
+
+assert  sequentiel :[deadlock free [F]]
